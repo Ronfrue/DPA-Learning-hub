@@ -1,36 +1,32 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
+</head>
+<body>
 <title>DPA 2020 Learning Hub</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=Figtree:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap">
 <style>
 /* Layout: app shell. Sticky top bar with pill navigation; each view is a focused workspace of soft cards. */
 :root{
-  --bg:#f3f6f5; --surface:#ffffff; --raised:#f8faf9; --line:#e0e7e4; --line-strong:#c9d4d0;
-  --fg:#11201b; --muted:#5a6a65; --faint:#8a9893;
-  --brand:#0f6b5a; --brand-hover:#0c5a4b; --on-brand:#ffffff; --brand-soft:#e1f1ec; --brand-ink:#0b4f42;
-  --accent:#e59a1f; --accent-soft:#fdf0d9;
-  --ok:#1d7a4b; --ok-soft:#e1f3e8; --warn:#9a5b00; --warn-soft:#fdf0d9; --crit:#b42318; --crit-soft:#fde7e4;
-  --shadow:0 1px 2px rgba(17,32,27,.05),0 4px 16px rgba(17,32,27,.06);
-  --display:"Bricolage Grotesque","Figtree",system-ui,sans-serif;
-  --body:"Figtree",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  /* Layout: clean light workspace. White top bar, roomy cards, one green accent with a gold highlight. Light only, by design. */
+  --bg:#f4f6f9; --surface:#ffffff; --raised:#f8fafc; --line:#e5e9f0; --line-strong:#d2d9e3;
+  --fg:#0f172a; --muted:#566275; --faint:#8b95a7;
+  --brand:#0a7c66; --brand-hover:#086855; --on-brand:#ffffff; --brand-soft:#e8f5f1; --brand-ink:#075a4a;
+  --accent:#f0ae2c; --accent-soft:#fef6e3;
+  --ok:#15803d; --ok-soft:#e8f6ee; --warn:#9a5806; --warn-soft:#fef6e3; --crit:#c0362c; --crit-soft:#fdecea;
+  --shadow:0 1px 2px rgba(15,23,42,.04),0 10px 30px -12px rgba(15,23,42,.12);
+  --shadow-lg:0 2px 4px rgba(15,23,42,.04),0 24px 48px -20px rgba(15,23,42,.18);
+  --display:"Plus Jakarta Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --body:"Plus Jakarta Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
   --mono:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;
-  --r-lg:16px; --r:12px; --r-sm:8px;
+  --r-lg:20px; --r:14px; --r-sm:10px;
+  color-scheme:light;
 }
-@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
-  --bg:#0b1210; --surface:#121b18; --raised:#17221f; --line:#24322d; --line-strong:#33443e;
-  --fg:#e5eeeb; --muted:#97a8a2; --faint:#6f817b;
-  --brand:#46c2a3; --brand-hover:#5fd0b3; --on-brand:#06201a; --brand-soft:#123129; --brand-ink:#7fdcc4;
-  --accent:#f2b350; --accent-soft:#2d2414;
-  --ok:#5cc28c; --ok-soft:#14301f; --warn:#f0b04f; --warn-soft:#2d2414; --crit:#f2877b; --crit-soft:#3a1c18;
-  --shadow:0 1px 2px rgba(0,0,0,.3),0 6px 20px rgba(0,0,0,.25); color-scheme:dark}}
-:root[data-theme="dark"]{
-  --bg:#0b1210; --surface:#121b18; --raised:#17221f; --line:#24322d; --line-strong:#33443e;
-  --fg:#e5eeeb; --muted:#97a8a2; --faint:#6f817b;
-  --brand:#46c2a3; --brand-hover:#5fd0b3; --on-brand:#06201a; --brand-soft:#123129; --brand-ink:#7fdcc4;
-  --accent:#f2b350; --accent-soft:#2d2414;
-  --ok:#5cc28c; --ok-soft:#14301f; --warn:#f0b04f; --warn-soft:#2d2414; --crit:#f2877b; --crit-soft:#3a1c18;
-  --shadow:0 1px 2px rgba(0,0,0,.3),0 6px 20px rgba(0,0,0,.25); color-scheme:dark}
-
 *{box-sizing:border-box}
 body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:15.5px;line-height:1.6;-webkit-font-smoothing:antialiased}
 body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:20;background:var(--surface)}
@@ -291,10 +287,153 @@ input#search:focus{outline:none;border-color:var(--brand);box-shadow:0 0 0 4px v
 .changes{margin-top:10px;font-size:13.5px}
 .changes li{margin:3px 0}
 .side .live{margin-top:0;border:0;background:none;padding:0}
+/* answer zone */
+.answer-zone{margin-top:28px;border:2px solid var(--brand);overflow:hidden;scroll-margin-top:84px}
+.az-band{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;padding:16px 22px;background:var(--brand-soft);border-bottom:1px solid var(--line)}
+.az-band h2{font-size:22px}
+.az-label{color:var(--brand-ink)}
+.az-meta{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.btn.small{padding:6px 12px;font-size:13.5px}
+.az-empty{padding:28px 22px;color:var(--muted)}
+#az-body{padding:20px 22px 22px}
+.az-scenario{margin:0 0 18px;padding:12px 16px;border-left:4px solid var(--accent);background:var(--raised);border-radius:0 var(--r-sm) var(--r-sm) 0}
+.az-scenario blockquote{margin:4px 0 2px;font-size:15.5px;font-weight:500;white-space:pre-wrap}
+.az-scenario figcaption{font-size:13px;color:var(--muted)}
+.az-grid{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(0,1fr);gap:24px;align-items:start}
+@media (max-width:920px){.az-grid{grid-template-columns:1fr}}
+.az-main{min-width:0;overflow-wrap:anywhere}
+.a-block{padding:14px 0;border-top:1px solid var(--line)}
+.a-block:first-child{border-top:0;padding-top:0}
+.az-main h3{font-size:17px;margin:0 0 8px}
+.az-main h3:not(:first-child){margin-top:18px;padding-top:14px;border-top:1px solid var(--line)}
+.a-block h3{margin-top:0!important;padding-top:0!important;border-top:0!important}
+.az-main p{margin:6px 0;max-width:74ch}
+.az-main ul{margin:6px 0;padding-left:22px}
+.az-main li{margin:5px 0}
+.a-short p{font-size:16.5px;line-height:1.55}
+.az-refs{position:sticky;top:calc(env(safe-area-inset-top,0px) + 84px);max-height:calc(100vh - 110px);overflow:auto;background:var(--raised);border:1px solid var(--line);border-radius:var(--r);padding:14px}
+@media (max-width:920px){.az-refs{position:static;max-height:none}}
+.az-refs-head{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.az-refs-head h3{font-size:16px;display:flex;align-items:center;gap:8px}
+.az-refs > p{margin:4px 0 10px}
+.cite{display:inline;font-family:var(--mono);font-size:12px;font-weight:500;background:var(--brand-soft);color:var(--brand-ink);border:1px solid transparent;padding:1px 6px;border-radius:6px;cursor:pointer;white-space:nowrap;line-height:1.5;vertical-align:baseline}
+.cite sup{font-family:var(--body);font-weight:700;font-size:10px;margin-left:4px;background:var(--brand);color:var(--on-brand);border-radius:999px;display:inline-block;min-width:15px;line-height:15px;text-align:center;padding:0 3px;vertical-align:1px}
+.cite:hover{border-color:var(--brand)}
+.cite.plain{cursor:pointer}
+.rc{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-sm);padding:12px 13px;margin-top:10px;scroll-margin:12px;transition:box-shadow .3s}
+.rc.rc-g{background:transparent}
+.rc-top{display:flex;gap:10px;align-items:flex-start}
+.rc-n{flex:none;width:24px;height:24px;border-radius:50%;background:var(--brand);color:var(--on-brand);display:grid;place-items:center;font-weight:700;font-size:12.5px}
+.rc.rc-g .rc-n{background:var(--faint)}
+.rc-doc{font-size:12px;font-weight:600;color:var(--muted)}
+.rc-head{font-weight:700;font-size:14.5px;line-height:1.35}
+.rc-cited{margin-top:8px;font-size:12.5px;color:var(--muted);display:flex;flex-wrap:wrap;gap:4px;align-items:center}
+.rc-text{font-size:13.5px;margin-top:6px!important;line-height:1.5}
+.rc-g{font-size:12.5px;color:var(--muted);margin-top:6px}
+.rc-uses{font-size:12.5px;margin-top:6px;color:var(--muted)}
+.rc-uses .link{font-size:12.5px}
+.rc-foot{display:flex;flex-wrap:wrap;gap:6px 14px;align-items:center;margin-top:8px;font-size:12.5px;font-weight:600}
+.rc-foot span{color:var(--muted);font-weight:500}
+.rc-foot a{display:inline-flex;align-items:center;gap:4px}
+.rc-foot svg{width:13px;height:13px}
+.rc-foot .link{font-size:12.5px}
+.rc-sep{margin-top:16px;font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.flash{animation:fl 1.6s ease-out}
+@keyframes fl{0%,40%{box-shadow:0 0 0 3px var(--accent);background:var(--accent-soft)}100%{box-shadow:0 0 0 0 transparent}}
+.az-note{margin-top:14px;font-size:12.5px;color:var(--muted)}
+.history{margin-top:18px;padding:16px 18px}
+.history h3{font-size:15px;margin-bottom:6px}
+.history ul{list-style:none;margin:0;padding:0}
+.hist{display:flex;gap:10px;align-items:center;width:100%;text-align:left;background:none;border:0;border-top:1px solid var(--line);padding:9px 0;cursor:pointer}
+.history li:first-child .hist{border-top:0}
+.hist .hq{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:500}
+.hist:hover .hq{color:var(--brand-ink)}
+.src-line{display:flex;flex-wrap:wrap;gap:4px 12px;margin-top:10px;font-size:12.5px;color:var(--muted)}
+.src-line a{display:inline-flex;align-items:center;gap:4px;font-weight:600}
+.src-line svg{width:13px;height:13px}
 footer{border-top:1px solid var(--line);color:var(--muted);font-size:13px}
 footer .wrap{padding-block:20px}
 .toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--fg);color:var(--bg);padding:10px 16px;border-radius:999px;font-weight:600;font-size:14px;box-shadow:var(--shadow);z-index:30}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+
+/* ===== modern light overrides ===== */
+[hidden]{display:none!important}
+body{background:var(--bg);font-size:15.5px;letter-spacing:-.003em}
+h1,h2,h3{letter-spacing:-.02em}
+.top{background:rgba(255,255,255,.88);border-bottom:1px solid var(--line);box-shadow:0 1px 12px -6px rgba(15,23,42,.08)}
+.top .wrap{min-height:68px}
+.mark{border-radius:12px;background:linear-gradient(140deg,var(--brand),#12a585);box-shadow:0 6px 14px -6px rgba(10,124,102,.6)}
+.brand b{font-weight:800;letter-spacing:-.02em}
+nav.tabs a{border-radius:10px;padding:9px 13px;color:var(--muted)}
+nav.tabs a:hover{background:var(--raised);color:var(--fg)}
+nav.tabs a[aria-current="page"]{background:var(--fg);color:#fff}
+.card{border-radius:var(--r-lg);border:1px solid var(--line);box-shadow:var(--shadow)}
+main .wrap{padding-block:36px 80px}
+.head h1{font-size:clamp(30px,4.2vw,44px);font-weight:800;letter-spacing:-.03em}
+.head p{font-size:16.5px;line-height:1.6}
+.eyebrow-pill{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:700;color:var(--brand-ink);background:var(--brand-soft);border:1px solid #cfe9e1;padding:5px 11px;border-radius:999px;margin-bottom:12px}
+.eyebrow-pill svg{width:14px;height:14px}
+#v-ask > .head{flex-direction:column;align-items:stretch;gap:20px}
+.how{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+@media (max-width:720px){.how{grid-template-columns:1fr}}
+.how li{display:flex;gap:12px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:12px 14px}
+.how li > span{flex:none;width:32px;height:32px;border-radius:10px;background:var(--brand-soft);color:var(--brand-ink);display:grid;place-items:center;font-weight:800}
+.how b{display:block;font-size:14.5px}
+.how small{display:block;color:var(--muted);font-size:13px}
+.composer{padding:24px}
+.composer-top label{font-size:17px;font-weight:700}
+textarea#q{background:var(--surface);border:1.5px solid var(--line-strong);border-radius:var(--r);font-size:16px;min-height:150px;padding:16px 18px}
+textarea#q::placeholder{color:var(--faint)}
+textarea#q:focus{border-color:var(--brand);box-shadow:0 0 0 5px var(--brand-soft)}
+select{border:1.5px solid var(--line-strong);border-radius:12px;padding:11px 12px;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%23566275' stroke-width='1.6' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;padding-right:36px}
+select:focus{outline:none;border-color:var(--brand);box-shadow:0 0 0 4px var(--brand-soft)}
+.field label{font-size:13.5px;color:var(--fg)}
+.seg button{border-radius:12px;border:1.5px solid var(--line-strong);padding:11px 14px}
+.seg button[aria-pressed="true"]{border-color:var(--brand);background:var(--brand-soft);box-shadow:none}
+.btn{border-radius:12px;font-weight:700}
+.btn.primary{box-shadow:0 8px 18px -8px rgba(10,124,102,.7)}
+.btn.primary.big{padding:14px 26px;font-size:16px}
+.btn.primary:hover{transform:translateY(-1px)}
+.submit-row{border-top:1px dashed var(--line-strong)}
+.ex{border-radius:var(--r);padding:14px 16px;box-shadow:0 1px 2px rgba(15,23,42,.03)}
+.ex:hover{border-color:var(--brand);background:var(--surface);box-shadow:var(--shadow)}
+.side .card{padding:18px 20px}
+.answer-zone{border:1px solid var(--line);border-top:4px solid var(--brand);box-shadow:var(--shadow-lg)}
+.az-band{background:var(--surface);padding:20px 24px}
+.az-band h2{font-size:24px;font-weight:800}
+.az-label{display:inline-block;background:var(--brand);color:#fff;padding:3px 10px;border-radius:999px;font-size:11px;margin-bottom:6px}
+#az-body{padding:22px 24px 24px}
+.az-scenario{background:var(--accent-soft);border-left-color:var(--accent)}
+.az-refs{background:var(--raised);border-radius:var(--r)}
+.rc{border-radius:12px}
+.cite{border-radius:7px}
+.sec,.cmp,.case{border-radius:var(--r-lg)}
+.parts{border-radius:var(--r-lg)}
+.parts button[aria-pressed="true"]{background:var(--fg);color:#fff}
+.parts button[aria-pressed="true"] span{color:rgba(255,255,255,.7)}
+.filter button[aria-pressed="true"]{background:var(--fg);border-color:var(--fg);color:#fff}
+input#search{border:1.5px solid var(--line-strong);border-radius:var(--r);padding:14px 16px 14px 44px}
+.qcard{border-radius:var(--r-lg)}
+.opt{border-radius:12px;border-width:1.5px}
+.status{border-radius:var(--r)}
+footer{background:var(--surface)}
+.toast{border-radius:12px}
+/* phones: app-style bottom menu */
+@media (max-width:720px){
+  .top{backdrop-filter:none;-webkit-backdrop-filter:none;background:var(--surface)}
+  .top .wrap{min-height:58px}
+  nav.tabs{position:fixed;left:0;right:0;bottom:0;z-index:15;margin:0;gap:0;justify-content:space-between;background:rgba(255,255,255,.96);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-top:1px solid var(--line);box-shadow:0 -6px 20px -12px rgba(15,23,42,.2);padding:6px max(6px,env(safe-area-inset-right,0px)) calc(6px + env(safe-area-inset-bottom,0px)) max(6px,env(safe-area-inset-left,0px));overflow:visible}
+  nav.tabs a{flex:1 1 0;min-width:0;flex-direction:column;gap:3px;padding:6px 2px;font-size:10.5px;border-radius:10px;justify-content:center}
+  nav.tabs a svg{width:20px;height:20px}
+  nav.tabs a[aria-current="page"]{background:var(--brand-soft);color:var(--brand-ink)}
+  body{padding-bottom:calc(72px + env(safe-area-inset-bottom,0px))}
+  .toast{bottom:calc(84px + env(safe-area-inset-bottom,0px))}
+  .composer{padding:18px}
+  .submit-row .hint{display:none}
+  .submit-row .acts{width:100%}
+  .submit-row .acts .btn.primary{flex:1}
+  .az-band,#az-body{padding-left:16px;padding-right:16px}
+}
 </style>
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
@@ -325,7 +464,7 @@ footer .wrap{padding-block:20px}
     <nav class="tabs" aria-label="Sections">
       <a href="#ask"><svg class="i"><use href="#i-chat"/></svg>Ask</a>
       <a href="#act"><svg class="i"><use href="#i-book"/></svg>The Act</a>
-      <a href="#compare"><svg class="i"><use href="#i-scale"/></svg>DPA vs GDPR</a>
+      <a href="#compare"><svg class="i"><use href="#i-scale"/></svg>vs GDPR</a>
       <a href="#reference"><svg class="i"><use href="#i-clock"/></svg>Deadlines</a>
       <a href="#cases"><svg class="i"><use href="#i-case"/></svg>Cases</a>
       <a href="#practice"><svg class="i"><use href="#i-check"/></svg>Quiz</a>
@@ -339,9 +478,15 @@ footer .wrap{padding-block:20px}
 <!-- ASK -->
 <section class="view" id="v-ask">
   <div class="head"><div>
+    <span class="eyebrow-pill"><svg class="i"><use href="#i-spark"/></svg>Data Protection Act, 2020 · Jamaica</span>
     <h1>What's the situation?</h1>
-    <p>Describe what happened or what you're planning. Submit it to see which sections of the Act apply, what to do and by when, and how the GDPR compares.</p>
-  </div></div>
+    <p>Describe what happened or what you're planning. Your answer appears in its own panel below, and every point links to the section or regulation it comes from.</p>
+  </div>
+  <ol class="how" aria-label="How it works">
+    <li><span>1</span><div><b>Describe it</b><small>What happened, what data, who holds it</small></div></li>
+    <li><span>2</span><div><b>Say who you are</b><small>Your role and sector</small></div></li>
+    <li><span>3</span><div><b>Submit</b><small>Read the answer and its sources</small></div></li>
+  </ol></div>
   <div class="ask-grid">
     <div style="min-width:0">
       <form class="card composer" id="composer" novalidate>
@@ -349,7 +494,7 @@ footer .wrap{padding-block:20px}
           <label for="q">Your scenario or question</label>
           <button type="button" class="btn ghost small" id="clear">Clear</button>
         </div>
-        <textarea id="q" placeholder="e.g. A medical lab discovers ransomware has encrypted its patient database. What must it do, and by when?"></textarea>
+        <textarea id="q" placeholder="Describe the situation in your own words. For example: our clinic's patient database was hit by ransomware last night. What do we have to do, and by when?"></textarea>
         <div class="fields">
           <div class="field"><label for="role">I am a…</label>
             <select id="role">
@@ -384,7 +529,6 @@ footer .wrap{padding-block:20px}
         </div>
       </form>
 
-      <div class="results" id="results" aria-live="polite"></div>
 
       <div class="examples" id="examples-wrap">
         <h2>Try an example</h2>
@@ -414,11 +558,37 @@ footer .wrap{padding-block:20px}
       </div>
     </aside>
   </div>
+
+  <section class="answer-zone card" id="answer-zone" aria-labelledby="az-title" aria-live="polite">
+    <div class="az-band">
+      <div><span class="label az-label">Answer</span><h2 id="az-title">Answer for your scenario</h2></div>
+      <div class="az-meta"><span class="badge" id="az-badge"></span><span class="small muted" id="az-time"></span><button class="btn small" type="button" id="az-copy"><svg class="i"><use href="#i-copy"/></svg>Copy with references</button></div>
+    </div>
+    <div id="az-empty" class="az-empty">Submit a scenario above. The answer will appear here, with every point linked to the provision it comes from.</div>
+    <div id="az-body" hidden>
+      <figure class="az-scenario"><span class="label">Scenario</span><blockquote id="az-q"></blockquote><figcaption id="az-ctx"></figcaption></figure>
+      <div class="az-grid">
+        <div class="az-main" id="az-main"></div>
+        <aside class="az-refs" aria-labelledby="az-refs-title">
+          <div class="az-refs-head"><h3 id="az-refs-title"><svg class="i"><use href="#i-book"/></svg>Where this comes from</h3><span class="small muted" id="az-count"></span></div>
+          <p class="small muted">Each numbered citation in the answer points to a source below, with its PDF page in the official OIC text.</p>
+          <div id="az-refs"></div>
+        </aside>
+      </div>
+      <div id="az-live"></div>
+      <p class="az-note">Learning aid, not legal advice. Summaries paraphrase the official texts; check the cited PDF page before relying on a point.</p>
+    </div>
+  </section>
+
+  <div class="history card" id="history" hidden>
+    <h3>Earlier answers this session</h3>
+    <ul id="hist-list"></ul>
+  </div>
 </section>
 
 <!-- ACT -->
 <section class="view" id="v-act" hidden>
-  <div class="head"><div><h1>The Act, section by section</h1><p>Plain-language summaries of all 77 sections and the 2024 Regulations, each with the nearest GDPR provision.</p></div></div>
+  <div class="head"><div><h1>The Act, section by section</h1><p>Plain-language summaries of all 77 sections and the 2024 Regulations, each with its page in the official OIC text and the nearest GDPR provision.</p></div></div>
   <div class="explore">
     <div class="card parts" id="parts" role="group" aria-label="Parts of the Act"></div>
     <div style="min-width:0">
@@ -542,7 +712,7 @@ const S = [
  {n:"13",h:"Rectification",s:"A person may ask for inaccurate data, including errors and omissions, to be corrected. The controller must decide within 30 days and either correct or annotate the record, and where practicable tell anyone it disclosed the data to in the last 12 months. The person may appeal to the Commissioner.",g:"Art. 16, Art. 19",k:"correct rectify inaccurate error update"},
  {n:"14",h:"Interpretation for Part III",s:"Defines registration particulars by reference to s.16(2) and sets address rules for companies and other entities.",k:"registration particulars"},
  {n:"15",h:"No processing without registration",s:"A controller may not process personal data unless its particulars are on the register. The Minister may exempt specified processing or controllers by order, after consulting the Commissioner.",g:"No equivalent (GDPR abolished registration; see Art. 30 records)",bp:"Treat the registration particulars as a living record of processing, aligned with your internal processing inventory.",k:"register registration OIC must register"},
- {n:"16",h:"Registration particulars",s:"Controllers must give and keep current their name and contacts, any representative, the DPO, categories of data and data subjects, purposes, recipients, overseas transfer destinations and whether they are a public authority. The Registration Regulations add trade name, TRN, locations, estimated number of data subjects, joint controllers, processors and where they operate, the lawful conditions relied on, any sensitive data, and any solely automated decision-making (reg. 3(1)). A controller exempt from registration must still give its particulars free of charge within 30 days to anyone who asks in writing; failing to do so is an offence, fine up to $1 million, with a due diligence defence.",g:"Art. 30",k:"particulars registration details update TRN processors"},
+ {n:"16",h:"Registration particulars",s:"Controllers must give and keep current their name and contacts, any representative, the DPO, categories of data and data subjects, purposes, recipients, overseas transfer destinations and whether they are a public authority. The Registration Regulations add trade name, TRN, locations, estimated number of data subjects, joint controllers, processors and where they operate, the lawful conditions relied on, any sensitive data, and any solely automated decision-making (Registration Regs, reg. 3(1)). A controller exempt from registration must still give its particulars free of charge within 30 days to anyone who asks in writing; failing to do so is an offence, fine up to $1 million, with a due diligence defence.",g:"Art. 30",k:"particulars registration details update TRN processors"},
  {n:"17",h:"The register",s:"The Commissioner keeps a public register. Controllers pay an annual fee and an entry lapses after 12 months unless it is paid. Inspection is free; certified copies carry a fee.",k:"public register annual fee renewal lapse"},
  {n:"18",h:"Offence of unregistered processing",s:"Processing without registration is an offence, with a due diligence defence. On summary conviction: fine up to $2 million or up to 6 months' imprisonment.",k:"unregistered offence penalty"},
  {n:"19",h:"Assessment of specified processing",s:"For processing the Minister designates as high-risk, the Commissioner assesses compliance within 30 days of receiving information, extendable once by up to 14 days. Processing may not start until then. Breach is an offence: summary conviction up to $5 million or 5 years; on indictment, a fine or up to 10 years.",g:"Art. 36 (prior consultation)",k:"high risk prior assessment specified processing"},
@@ -614,7 +784,7 @@ const REGS = [
  {n:"R5",l:"reg. 10",h:"Breach reports and notifying individuals",s:"Reports to the Commissioner under s.21(3) use Form 7, with further information sent forthwith as an additional report. Affected data subjects must be notified within 72 hours of awareness, directly in writing or, if that would cause undue hardship or contact details are missing, by public or other indirect means. The notice must explain in plain language what happened and when, likely consequences and data affected, mitigation steps, steps the person can take, and the DPO's contact details.",k:"breach form 7 notify individuals 72 hours public notice"},
  {n:"R6",l:"reg. 11",h:"Fair processing information and legitimate interests",s:"Privacy information must be enough for people to understand the purposes, likely consequences, nature and extent of processing and likely disclosures. A controller relying on legitimate interests must keep a written assessment of the interest, necessity and balancing, linked to the data concerned.",k:"privacy notice legitimate interest assessment LIA written"},
  {n:"R7",l:"regs. 12–13",h:"Appeals to the Appeal Tribunal",s:"File Form 8 within 21 days of being told of the decision (an extension may be requested), with supporting documents, and serve the Commissioner within 5 days. The Commissioner gives written reasons within 14 days. Parties exchange evidence lists at least 14 days before the hearing; the Tribunal decides in writing within 60 days after the hearing. A Commissioner's decision takes effect pending appeal unless ordered otherwise.",k:"appeal tribunal form 8 21 days"},
- {n:"R8",l:"Registration Regs",h:"Data Protection (Data Controller Registration) Regulations, 2024",s:"Made by the Commissioner with the Minister's approval (Gazette, 1 April 2024). Adds registration particulars such as TRN, locations, estimated data subjects, processors abroad, lawful conditions, sensitive data and automated decisions (reg. 3(1)). Particulars are filed on the OIC website at first registration and annually by 1 December, and changes notified within 14 days (regs. 3–4). Fees: first registration $25,000 company or public authority, $15,000 partnership, $7,500 sole trader or individual; annual $15,000, $10,000 and $5,000. Certified register copy: $500 plus $100 per page. Fees are refunded if the application is withdrawn or registration proves unnecessary.",k:"registration fee renewal december 14 days TRN"},
+ {n:"R8",l:"Registration Regs",h:"Data Protection (Data Controller Registration) Regulations, 2024",s:"Made by the Commissioner with the Minister's approval (Gazette, 1 April 2024). Adds registration particulars such as TRN, locations, estimated data subjects, processors abroad, lawful conditions, sensitive data and automated decisions (Registration Regs, reg. 3(1)). Particulars are filed on the OIC website at first registration and annually by 1 December, and changes notified within 14 days (Registration Regs, regs. 3–4). Fees: first registration $25,000 company or public authority, $15,000 partnership, $7,500 sole trader or individual; annual $15,000, $10,000 and $5,000. Certified register copy: $500 plus $100 per page. Fees are refunded if the application is withdrawn or registration proves unnecessary.",k:"registration fee renewal december 14 days TRN"},
  {n:"R9",l:"Disposal Regs",h:"Data Protection (Disposal of Personal Data) Regulations, 2024",s:"Made 4 March 2024 and affirmed by both Houses (Gazette, 17 September 2025). Controllers must regularly review their data and dispose of anything no longer needed for its purpose, legal retention, legal claims or a legitimate purpose recognised by sector standards; adopt retention and disposal policies setting minimum and maximum periods; and keep data used to make a decision about someone long enough for them to request access. Disposal must make the data impossible to process further or link to the person, and be permanent having regard to foreseeable technology, especially for electronic data.",k:"disposal destroy shred delete retention schedule policy wipe"}
 ];
 
@@ -652,8 +822,8 @@ const CLOCKS = [
  ["30 + 14 days","Commissioner's assessment of designated high-risk processing","s.19"],
  ["30 days","Pay and remedy to avoid prosecution under a fixed penalty notice","s.62(5)"],
  ["90 days","File the annual DPIA after the calendar year ends (by 31 March)","s.45"],
- ["1 Dec","Re-submit registration particulars each year","Reg. Regs 3(3)(b)"],
- ["14 days","Notify changes to registration particulars","Reg. Regs 3(4)"],
+ ["1 Dec","Re-submit registration particulars each year","Registration Regs, reg. 3(3)(b)"],
+ ["14 days","Notify changes to registration particulars","Registration Regs, reg. 3(4)"],
  ["12 months","Register entry lapses if the annual fee is unpaid","s.17"],
  ["21 days","File an appeal (Form 8) with the Appeal Tribunal; serve the Commissioner within 5 days","reg. 12"],
  ["60 days","Appeal Tribunal's written decision after the hearing","reg. 12(8)"],
@@ -708,6 +878,92 @@ const esc = t => String(t).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":
 const secById = Object.fromEntries([...S, ...REGS].map(x => [x.n, x]));
 function partOf(n){const i=parseInt(n,10);return PARTS.find(p=>p.r&&i>=p.r[0]&&i<=p.r[1]);}
 const refLabel = x => x.l ? x.l : "s."+x.n;
+/* ================= SOURCE REGISTRY ================= */
+const DOCS = {
+  act:{name:"Data Protection Act, 2020",short:"Act",url:"https://www.oic.gov.jm/page/data-protection-act"},
+  regs:{name:"Data Protection Regulations, 2024",short:"Regulations",url:"https://www.oic.gov.jm/page/data-protection-act-ministers-regulations-2024"},
+  reg:{name:"Data Protection (Data Controller Registration) Regulations, 2024",short:"Registration Regs",url:"https://www.oic.gov.jm/publications/gazette/data-protection-data-controller-registration-regulations-2024"},
+  disp:{name:"Data Protection (Disposal of Personal Data) Regulations, 2024",short:"Disposal Regs",url:"https://www.oic.gov.jm/publications/disposal-personal-data-regulations-2024"},
+  gdpr:{name:"EU General Data Protection Regulation (EU) 2016/679",short:"GDPR",url:"https://eur-lex.europa.eu/eli/reg/2016/679/oj"}
+};
+const ACT_PAGES = {1:1,2:2,3:8,4:9,5:12,6:13,7:15,8:16,9:18,10:19,11:20,12:22,13:23,14:25,15:25,16:25,17:28,18:28,19:29,20:30,21:32,22:34,23:36,24:37,25:40,26:41,27:41,28:41,29:42,30:42,31:45,32:48,33:48,34:49,35:51,36:52,37:54,38:55,39:56,40:56,41:56,42:"56, 104",43:57,44:57,45:60,46:61,47:62,48:65,49:66,50:69,51:69,52:70,53:71,54:71,55:72,56:72,57:73,58:74,59:75,60:76,61:76,62:77,63:81,64:82,65:82,66:83,67:84,68:85,69:86,70:86,71:87,72:87,73:87,74:88,75:89,76:89,77:90};
+const REG_META = {R1:["regs","1–4"],R2:["regs","3, 41"],R3:["regs","5–6"],R4:["regs","6"],R5:["regs","7"],R6:["regs","8"],R7:["regs","9–12"],R8:["reg","1–5"],R9:["disp","2"]};
+const GDPR_TITLES = {3:"Territorial scope",4:"Definitions",5:"Principles relating to processing",6:"Lawfulness of processing",7:"Conditions for consent",8:"Child's consent for online services",9:"Special categories of personal data",10:"Criminal convictions and offences data",12:"Transparent information and how rights are exercised",13:"Information when data is collected from the person",14:"Information when data is not obtained from the person",15:"Right of access",16:"Right to rectification",17:"Right to erasure",18:"Right to restriction of processing",19:"Notifying recipients of rectification or erasure",20:"Right to data portability",21:"Right to object",22:"Automated individual decision-making",23:"Restrictions",27:"Representatives of non-EU controllers",28:"Processors",30:"Records of processing activities",32:"Security of processing",33:"Notifying a breach to the supervisory authority",34:"Communicating a breach to the data subject",35:"Data protection impact assessment",36:"Prior consultation",37:"Designation of the data protection officer",38:"Position of the data protection officer",39:"Tasks of the data protection officer",40:"Codes of conduct",44:"General principle for transfers",45:"Transfers based on an adequacy decision",46:"Transfers subject to appropriate safeguards",49:"Derogations for specific situations",50:"International cooperation",51:"Supervisory authority",58:"Powers of the supervisory authority",77:"Right to lodge a complaint",78:"Judicial remedy against a supervisory authority",82:"Right to compensation and liability",83:"Administrative fines",84:"Penalties",85:"Freedom of expression and information",89:"Archiving, research and statistics"};
+function regKey(n){n=+n;return n<=4?"R1":n===5?"R2":n<=8?"R3":n===9?"R4":n===10?"R5":n===11?"R6":n<=13?"R7":null;}
+function srcOf(key){
+  if(key[0]==="G"){const a=key.slice(1);return {doc:DOCS.gdpr,head:"Article "+a+(GDPR_TITLES[a]?" · "+GDPR_TITLES[a]:""),text:"Comparative source. The GDPR is not law in Jamaica; it is cited to show how the EU treats the same issue.",page:null};}
+  const x=secById[key]; if(!x) return null;
+  if(key[0]==="R"){const m=REG_META[key];const hd=key==="R8"?"Particulars, annual filing and fees":key==="R9"?"Review, retention policy and permanent disposal":x.h;return {doc:DOCS[m[0]],head:(key==="R8"||key==="R9"?"":x.l+" · ")+hd,text:x.s,page:m[1],x};}
+  return {doc:DOCS.act,head:"s."+key+" · "+x.h,text:x.s,page:ACT_PAGES[key],x};
+}
+
+/* ================= CITATIONS ================= */
+const CITE_RE = /(Registration Regs,?\s*regs?\.\s?\d+(?:\([0-9a-z]+\))*(?:\s?[–-]\s?\(?\d+\)?)*|Disposal Regs,?\s*regs?\.\s?\d+(?:\([0-9a-z]+\))*|Disposal Regs|Registration Regs|Regs,?\s*Second Schedule|Second Schedule(?:,\s*para\.\s?\d+)?|\b[Rr]egs?\.\s?\d+(?:\([0-9a-z]+\))*(?:\s?[–-]\s?\(?\d+\)?)*|\bss?\.\s?\d+(?:\([0-9a-z]+\))*(?:\s?[–-]\s?\d+)?|(?:GDPR\s)?\bArts?\.\s?\d+(?:\([0-9a-z]+\))*(?:\s?[–-]\s?\d+)?)/g;
+function resolveCite(label){
+  let m;
+  if(/^Registration Regs/.test(label)) return "R8";
+  if(/^Disposal Regs/.test(label)) return "R9";
+  if(/^Regs,?\s*Second Schedule/.test(label)) return "R2";
+  if(/^Second Schedule/.test(label)) return "42";
+  if(m=label.match(/^[Rr]egs?\.\s?(\d+)/)) return regKey(m[1]);
+  if(m=label.match(/^ss?\.\s?(\d+)/)) return (+m[1]>=1 && +m[1]<=77) ? m[1] : null;
+  if(m=label.match(/Arts?\.\s?(\d+)/)) return "G"+m[1];
+  return null;
+}
+function newRefs(){ return {order:[], map:{}}; }
+function addRef(R, key, label, use){
+  if(!R.map[key]){ R.map[key]={num:R.order.length+1, labels:[], uses:[]}; R.order.push(key); }
+  const e=R.map[key];
+  if(label && !e.labels.includes(label)) e.labels.push(label);
+  if(use && !e.uses.some(u=>u.id===use.id)) e.uses.push(use);
+  return e.num;
+}
+/* text is already HTML-escaped; wraps citations in numbered chips */
+function citeify(html, R, use){
+  return html.replace(CITE_RE, lab => {
+    const key = resolveCite(lab); if(!key || !srcOf(key)) return lab;
+    const n = addRef(R, key, lab.replace(/^GDPR\s/,""), use);
+    return `<button type="button" class="cite" data-ref="§${key}§" title="See the source">${lab}<sup>§${key}§</sup></button>`;
+  });
+}
+/* link mode for the reading tabs: chip opens the section */
+function citeLinks(html){
+  return html.replace(CITE_RE, lab => {
+    const key = resolveCite(lab);
+    if(!key || key[0]==="G" || !secById[key]) return lab;
+    return `<button type="button" class="cite plain" data-go="${key}">${lab}</button>`;
+  });
+}
+function finalize(R, html){
+  const ordered = R.order.filter(k=>k[0]!=="G").concat(R.order.filter(k=>k[0]==="G"));
+  ordered.forEach((k,i)=>{ R.map[k].num = i+1; });
+  R.order = ordered;
+  return html.replace(/§([^§]+)§/g, (m,k)=> R.map[k] ? R.map[k].num : "");
+}
+function refCard(R, key){
+  const e=R.map[key], s=srcOf(key);
+  const cited = e.labels.length ? `<div class="rc-cited">Cited as ${e.labels.map(l=>`<span class="ref">${esc(l)}</span>`).join(" ")}</div>` : `<div class="rc-cited">Related provision</div>`;
+  const uses = e.uses.length ? `<div class="rc-uses">Supports: ${e.uses.map(u=>`<button type="button" class="link" data-jump="${u.id}">${esc(u.label)}</button>`).join(", ")}</div>` : "";
+  const page = s.page!=null ? `<span>PDF ${/[–,]/.test(String(s.page))?"pages":"page"} ${esc(String(s.page))}</span>` : "";
+  const open = key[0]!=="G" ? `<button type="button" class="link" data-go="${key}">Open in hub</button>` : "";
+  return `<article class="rc${key[0]==="G"?" rc-g":""}" id="rc-${e.num}" data-num="${e.num}">
+    <div class="rc-top"><span class="rc-n">${e.num}</span><div><div class="rc-doc">${esc(s.doc.name)}</div><div class="rc-head">${esc(s.head)}</div></div></div>
+    ${cited}
+    <p class="rc-text">${esc(s.text)}</p>
+    ${s.x&&s.x.g?`<div class="rc-g">GDPR equivalent: ${esc(s.x.g)}</div>`:""}
+    ${uses}
+    <div class="rc-foot">${page}<a href="${esc(s.doc.url)}" target="_blank" rel="noopener">Official text <svg class="i"><use href="#i-ext"/></svg></a>${open}</div>
+  </article>`;
+}
+function refsHTML(R){
+  if(!R.order.length) return `<p class="small muted">No provisions cited yet.</p>`;
+  const local = R.order.filter(k=>k[0]!=="G"), comp = R.order.filter(k=>k[0]==="G");
+  let h = local.map(k=>refCard(R,k)).join("");
+  if(comp.length) h += `<div class="rc-sep">Comparative sources</div>` + comp.map(k=>refCard(R,k)).join("");
+  return h;
+}
+
+
 function toast(msg){const t=document.createElement("div");t.className="toast";t.textContent=msg;document.body.append(t);setTimeout(()=>t.remove(),1800);}
 
 /* routing */
@@ -730,6 +986,7 @@ function secHTML(x){
     <div class="sec-head"><span class="ref">${esc(refLabel(x))}</span><h3>${esc(x.h)}</h3></div>
     <p>${esc(x.s)}</p>
     ${x.bp?`<div class="bp"><b>Good practice.</b> ${esc(x.bp)}</div>`:""}
+    ${(()=>{const s=srcOf(x.n);return s?`<div class="src-line"><span>${esc(s.doc.name)}</span><span>PDF ${/[–,]/.test(String(s.page))?"pages":"page"} ${esc(String(s.page))}</span><a href="${esc(s.doc.url)}" target="_blank" rel="noopener">Official text <svg class="i"><use href="#i-ext"/></svg></a></div>`:""})()}
     <div class="sec-foot">${x.g?`<span class="g">GDPR: <b>${esc(x.g)}</b></span>`:""}
     <button class="link" type="button" data-ask="${esc(refLabel(x)+" "+x.h)}">Ask how this applies <svg class="i"><use href="#i-send"/></svg></button></div></article>`;
 }
@@ -766,19 +1023,19 @@ const DL = {stricter:"DPA stricter",similar:"Broadly aligned",lighter:"DPA light
 let cmpF = "all";
 function renderCmp(){
   $("#cmp").innerHTML = CMP.filter(r=>cmpF==="all"||r[3]===cmpF).map(r=>`<article class="card cmp"><div class="cmp-top"><h3>${esc(r[0])}</h3><span class="pill ${r[3]}">${DL[r[3]]}</span></div>
-  <div class="cmp-cols"><div><span class="label">Jamaica DPA</span><p>${esc(r[1])}</p></div><div><span class="label">EU GDPR</span><p class="muted">${esc(r[2])}</p></div></div></article>`).join("");
+  <div class="cmp-cols"><div><span class="label">Jamaica DPA</span><p>${citeLinks(esc(r[1]))}</p></div><div><span class="label">EU GDPR</span><p class="muted">${esc(r[2])}</p></div></div></article>`).join("");
 }
 $("#cmpfilter").addEventListener("click", e=>{const b=e.target.closest("button");if(!b)return;cmpF=b.dataset.f;document.querySelectorAll("#cmpfilter button").forEach(x=>x.setAttribute("aria-pressed",x===b));renderCmp();});
 renderCmp();
-$("#clocks").innerHTML = CLOCKS.map(c=>`<div class="clock"><div class="t">${esc(c[0])}</div><div class="w">${esc(c[1])}<span class="ref">${esc(c[2])}</span></div></div>`).join("");
-$("#pens").innerHTML = PENS.map(p=>`<div class="pen"><div class="w">${esc(p[0])} <span class="ref">${esc(p[1])}</span></div><div class="amt">${esc(p[2])}${p[3]?`<small>${esc(p[3])}</small>`:""}</div></div>`).join("");
+$("#clocks").innerHTML = CLOCKS.map(c=>`<div class="clock"><div class="t">${esc(c[0])}</div><div class="w">${esc(c[1])} ${citeLinks(esc(c[2]))}</div></div>`).join("");
+$("#pens").innerHTML = PENS.map(p=>`<div class="pen"><div class="w">${esc(p[0])} ${citeLinks(esc(p[1]))}</div><div class="amt">${esc(p[2])}${p[3]?`<small>${esc(p[3])}</small>`:""}</div></div>`).join("");
 
 /* ================= CASES ================= */
 const RISK = {high:"High risk",med:"Moderate risk",low:"Lower risk"};
 $("#caselist").innerHTML = CASES.map((c,i)=>`<article class="card case" id="case-${i}">
   <span class="risk ${c.r}">${RISK[c.r]}</span>
   <h3>${esc(c.t)}</h3><p class="facts">${esc(c.f)}</p>
-  <details><summary>Read the analysis</summary><ul>${c.a.map(x=>`<li>${esc(x)}</li>`).join("")}</ul></details>
+  <details><summary>Read the analysis</summary><ul>${c.a.map(x=>`<li>${citeLinks(esc(x))}</li>`).join("")}</ul></details>
   <div class="foot"><button class="link" type="button" data-case="${i}">Try a variation <svg class="i"><use href="#i-send"/></svg></button></div></article>`).join("");
 
 /* ================= QUIZ ================= */
@@ -797,7 +1054,7 @@ function renderQuiz(){
     const j = +b.dataset.j;
     document.querySelectorAll("#quiz .opt").forEach((el,k)=>{el.disabled=true; if(k===x.a) el.classList.add("right"); else if(k===j) el.classList.add("wrong");});
     if(j===x.a) score++;
-    $("#qex").innerHTML = `<div class="explain"><b>${j===x.a?"Correct.":"Not quite."}</b> ${esc(x.e)}</div><div style="margin-top:14px"><button class="btn primary" id="qnext" type="button">${qi===QUIZ.length-1?"See my result":"Next question"} <svg class="i"><use href="#i-send"/></svg></button></div>`;
+    $("#qex").innerHTML = `<div class="explain"><b>${j===x.a?"Correct.":"Not quite."}</b> ${citeLinks(esc(x.e))}</div><div style="margin-top:14px"><button class="btn primary" id="qnext" type="button">${qi===QUIZ.length-1?"See my result":"Next question"} <svg class="i"><use href="#i-send"/></svg></button></div>`;
     $("#qnext").onclick = () => {qi++;renderQuiz();};
   };
 }
@@ -876,7 +1133,7 @@ const TOPICS = [
   steps:["Tell people when a significant decision is made solely by automated means; they may ask for reconsideration within 30 days, and you must respond within 30 days (s.12).","Be ready to explain the logic; the regulated fee is $1,000 per 5 MB (Regs, Second Schedule).","Declare solely automated decision-making in your registration particulars (Registration Regs, reg. 3(1)(o)) and cover it in the annual DPIA (s.45).","Keep a human reviewer who can change the outcome."],
   cmp:["Automated decisions"],clocks:["s.12(4)"]},
  {id:"retention",label:"Retention and disposal",re:/retain|retention|keep (it|them|data|records|scans|copies)|how long|dispos|destroy|shred|archive|for (\d+|five|ten|seven|three) years/,secs:["28","R9","26"],
-  steps:["Keep data only as long as needed for its purpose, a legal retention rule, legal claims or a recognised sector standard (s.28, Disposal Regs reg. 2(1)(a)).","Adopt a written retention and disposal policy with minimum and maximum periods (Disposal Regs, reg. 2(1)(b)).","Keep data used to make a decision about someone long enough for them to request access (reg. 2(1)(c)).","Dispose so the data cannot be processed or linked to the person, permanently (reg. 2(2))."],
+  steps:["Keep data only as long as needed for its purpose, a legal retention rule, legal claims or a recognised sector standard (s.28, Disposal Regs reg. 2(1)(a)).","Adopt a written retention and disposal policy with minimum and maximum periods (Disposal Regs, reg. 2(1)(b)).","Keep data used to make a decision about someone long enough for them to request access (Disposal Regs, reg. 2(1)(c)).","Dispose so the data cannot be processed or linked to the person, permanently (Disposal Regs, reg. 2(2))."],
   cmp:["Right to erasure"]},
  {id:"public",label:"Public authority",re:/ministry|government|agency|public authority|department|municipal|parish council|statutory body|public sector/,secs:["20","72","34"],
   steps:["Appoint a DPO; every public authority must (s.20(6)(a)).","Register with the OIC like any other controller (s.15).","Note that a public authority cannot be prosecuted, but enforcement, assessment and information notices still apply (s.72(3), ss.44–49)."],
@@ -957,36 +1214,75 @@ function renderSideLive(){
 }
 $("#q").addEventListener("input", renderSideLive);
 
-function guideHTML(g){
-  if(!g.provs.length) return `<p>I couldn't match this to specific sections yet. Add a little more detail: what kind of data is involved, who holds it, and what happened or is planned. You can also browse <button class="link" type="button" onclick="location.hash='act'">The Act</button>.</p>`;
+/* ================= INSTANT GUIDE ANSWER ================= */
+const SUMS = {
+ breach:"This is a reportable incident. Report it to the Information Commissioner within 72 hours of becoming aware (s.21(3)), and notify each affected person within 72 hours (reg. 10(4)).",
+ marketing:"You may send direct marketing only with consent or under the existing-customer route, and every message must identify you and offer an opt-out (s.10).",
+ transfer:"Personal data may leave Jamaica only for a place with adequate protection, or under an exception such as contract performance or Commissioner-approved terms (s.31).",
+ access:"You must respond within 30 days (s.6(4)), extendable by up to 45 days for complex requests if you give notice (reg. 4(3)), and may charge only the regulated fees (reg. 5).",
+ objection:"A written notice to stop processing must be answered in writing within 21 days (s.11(4)); a correction request must be decided within 30 days (s.13).",
+ cctv:"Camera footage of identifiable people is personal data. You need a lawful condition, usually legitimate interests backed by a written assessment (s.23, reg. 11(2)), clear signs (s.22) and coverage limited to what is necessary (s.26).",
+ sensitive:"This involves sensitive personal data, so you need a condition under s.24 as well as s.23, and in most cases a data protection officer (s.20).",
+ employment:"Employee and applicant data needs a lawful condition for each purpose (s.23) and a clear privacy notice (s.22). Consent from staff is often not freely given (s.9).",
+ children:"A parent or guardian exercises a child's rights (s.5). Get their informed consent before publishing a child's image or details (s.9, s.22).",
+ automated:"People can require that significant decisions about them are not made solely by automated means, and can ask for reconsideration (s.12).",
+ retention:"Keep the data only as long as its purpose or a legal rule requires, under a written retention policy, then dispose of it permanently (s.28, Disposal Regs, reg. 2).",
+ public:"Public authorities are data controllers under the Act. They must register and appoint a DPO (s.15, s.20), and cannot be prosecuted but can be served with notices (s.72(3)).",
+ registration:"Every controller must register before processing (s.15) and re-file particulars by 1 December each year (Registration Regs, reg. 3(3)).",
+ sharing:"Sharing data for a new purpose must be compatible with the original purpose or have consent (s.25), and needs a lawful condition (s.23).",
+ special:"Journalism and research have specific exemptions, but the security duty still applies (s.36, s.37)."
+};
+function buildGuide(g){
+  const R = newRefs();
+  if(!g.provs.length){
+    return {R, main:`<div class="a-block"><h3>Short answer</h3><p>I couldn't match this to specific provisions yet. Add a little more detail: what kind of data is involved, who holds it, and what happened or is planned.</p></div>`};
+  }
   let h = "";
-  if(g.topics.length) h += `<h2>Issues spotted</h2><div class="chips">${g.topics.map(t=>`<span class="chip">${esc(t.label)}</span>`).join("")}</div>`;
-  h += `<h2>Sections that apply</h2>${g.provs.map((x,i)=>`<details class="prov"${i<2?" open":""}><summary><span class="ref">${esc(refLabel(x))}</span><span>${esc(x.h)}</span></summary><p>${esc(x.s)}</p>${x.g?`<p class="g">GDPR: ${esc(x.g)}</p>`:""}<p><button class="link" type="button" data-go="${x.n}">Open in The Act</button></p></details>`).join("")}`;
-  if(g.steps.length) h += `<h2>What to do</h2><ol class="todo">${g.steps.map(s=>`<li>${esc(s)}</li>`).join("")}</ol>`;
-  if(g.clocks.length) h += `<h2>Time limits</h2><dl class="dl">${g.clocks.map(c=>`<dt>${esc(c[0])}</dt><dd>${esc(c[1])} <span class="ref">${esc(c[2])}</span></dd>`).join("")}</dl>`;
-  if(g.cmpRows.length) h += `<h2>How the GDPR compares</h2>${g.cmpRows.map(r=>`<div class="cmp-mini"><b>${esc(r[0])} · ${DL[r[3]]}</b>DPA: ${esc(r[1])}<br><span class="muted">GDPR: ${esc(r[2])}</span></div>`).join("")}`;
-  if(g.caseHits.length) h += `<h2>Similar worked cases</h2><div class="chips">${g.caseHits.map(o=>`<button class="chip" type="button" style="cursor:pointer" data-opencase="${o.i}">${esc(CASES[o.i].t)}</button>`).join("")}</div>`;
-  h += liveBlock(g.text||"", g.topics);
-  return h;
+  const sums = g.topics.slice(0,2).map(t=>SUMS[t.id]).filter(Boolean);
+  const sumText = sums.length ? sums.join(" ") : `These are the provisions that most closely match the words in your scenario. Add detail for a more specific answer.`;
+  h += `<div class="a-block a-short" id="a-sum"><h3>Short answer</h3><p>${citeify(esc(sumText), R, {id:"a-sum",label:"Short answer"})}</p>`;
+  if(g.topics.length) h += `<div class="chips" style="margin-top:10px">${g.topics.map(t=>`<span class="chip">${esc(t.label)}</span>`).join("")}</div>`;
+  h += `</div>`;
+  if(g.steps.length){
+    h += `<div class="a-block"><h3>What to do</h3><ol class="todo">${g.steps.map((s,i)=>`<li id="a-step-${i+1}">${citeify(esc(s), R, {id:"a-step-"+(i+1),label:"Step "+(i+1)})}</li>`).join("")}</ol></div>`;
+  }
+  // time limits matched by cited or related keys
+  g.provs.forEach(x=>addRef(R, x.n, null, null));
+  const keys = new Set(R.order);
+  const clocks = CLOCKS.filter(c=>(c[2].match(CITE_RE)||[]).some(l=>keys.has(resolveCite(l)))).slice(0,6);
+  if(clocks.length){
+    h += `<div class="a-block" id="a-time"><h3>Time limits</h3><dl class="dl">${clocks.map(c=>`<dt>${esc(c[0])}</dt><dd>${esc(c[1])} ${citeify(esc(c[2]), R, {id:"a-time",label:"Time limits"})}</dd>`).join("")}</dl></div>`;
+  }
+  if(g.cmpRows.length){
+    h += `<div class="a-block" id="a-gdpr"><h3>How the GDPR compares</h3>${g.cmpRows.map(r=>`<div class="cmp-mini"><b>${esc(r[0])} · ${DL[r[3]]}</b>${citeify(esc("DPA: "+r[1]), R, {id:"a-gdpr",label:"GDPR comparison"})}<br><span class="muted">${citeify(esc("GDPR: "+r[2]), R, {id:"a-gdpr",label:"GDPR comparison"})}</span></div>`).join("")}</div>`;
+  }
+  const bps = g.provs.filter(x=>x.bp).slice(0,3);
+  if(bps.length){
+    h += `<div class="a-block" id="a-bp"><h3>Good practice</h3><ul>${bps.map(x=>`<li>${esc(x.bp)} <span class="small muted">Practice note on</span> ${citeify(esc(refLabel(x)), R, {id:"a-bp",label:"Good practice"})}</li>`).join("")}</ul><p class="small muted">Practice notes draw on ISO/IEC 27001 and 27701, EDPB and UK ICO guidance. They go beyond the legal minimum.</p></div>`;
+  }
+  if(g.caseHits.length) h += `<div class="a-block"><h3>Similar worked cases</h3><div class="chips">${g.caseHits.map(o=>`<button class="chip" type="button" style="cursor:pointer" data-opencase="${o.i}">${esc(CASES[o.i].t)}</button>`).join("")}</div></div>`;
+  return {R, main:finalize(R, h)};
 }
 document.addEventListener("click", e=>{const b=e.target.closest("[data-opencase]"); if(!b) return; location.hash="cases"; setTimeout(()=>{const el=document.getElementById("case-"+b.dataset.opencase); if(el){el.querySelector("details").open=true; el.scrollIntoView({block:"start",behavior:"smooth"});}},80);});
 
-/* ================= MARKDOWN (small, safe) ================= */
-function inline(t){
-  return esc(t).replace(/\*\*(.+?)\*\*/g,"<strong>$1</strong>").replace(/`([^`]+)`/g,"<code>$1</code>")
-    .replace(/(^|[\s(])((?:ss?|reg|regs)\.\s?\d+[A-Z]?(?:\(\d+\))*(?:\([a-z]\))?)/g,'$1<code>$2</code>');
+/* ================= MARKDOWN (small, safe) with citations ================= */
+function inline(t, R, use){
+  let s = esc(t).replace(/\*\*(.+?)\*\*/g,"<strong>$1</strong>");
+  s = s.replace(/`([^`]+)`/g,(m,c)=> (c.match(CITE_RE)||[""])[0]===c ? c : `<code>${c}</code>`);
+  return R ? citeify(s, R, use) : s;
 }
-function md(src){
-  const lines = src.replace(/\r/g,"").split("\n"); let out="", list=null, para=[];
-  const flushP=()=>{ if(para.length){ out+="<p>"+inline(para.join(" "))+"</p>"; para=[]; } };
+function md(src, R){
+  const lines = src.replace(/\r/g,"").split("\n"); let out="", list=null, para=[], sec="Answer", secId="m-0", sc=0, li=0;
+  const use = () => ({id:secId,label:sec});
+  const flushP=()=>{ if(para.length){ out+="<p>"+inline(para.join(" "),R,use())+"</p>"; para=[]; } };
   const flushL=()=>{ if(list){ out+=`</${list}>`; list=null; } };
   for(const raw of lines){
     const l = raw.trimEnd(); let m;
     if(!l.trim()){ flushP(); flushL(); continue; }
-    if(m=l.match(/^#{1,2}\s+(.*)/)){ flushP(); flushL(); out+="<h2>"+inline(m[1])+"</h2>"; continue; }
-    if(m=l.match(/^#{3,6}\s+(.*)/)){ flushP(); flushL(); out+="<h3>"+inline(m[1])+"</h3>"; continue; }
-    if(m=l.match(/^\s*[-*•]\s+(.*)/)){ flushP(); if(list!=="ul"){flushL(); out+="<ul>"; list="ul";} out+="<li>"+inline(m[1])+"</li>"; continue; }
-    if(m=l.match(/^\s*\d+[.)]\s+(.*)/)){ flushP(); if(list!=="ol"){flushL(); out+="<ol>"; list="ol";} out+="<li>"+inline(m[1])+"</li>"; continue; }
+    if(m=l.match(/^#{1,3}\s+(.*)/)){ flushP(); flushL(); sc++; sec=m[1].replace(/[*`#]/g,"").trim(); secId="m-"+sc; out+=`<h3 id="${secId}">${inline(m[1])}</h3>`; continue; }
+    if(m=l.match(/^#{4,6}\s+(.*)/)){ flushP(); flushL(); out+="<h4>"+inline(m[1])+"</h4>"; continue; }
+    if(m=l.match(/^\s*[-*•]\s+(.*)/)){ flushP(); if(list!=="ul"){flushL(); out+="<ul>"; list="ul";} li++; out+=`<li id="${secId}-${li}">`+inline(m[1],R,{id:secId+"-"+li,label:sec+" · point "+li})+"</li>"; continue; }
+    if(m=l.match(/^\s*(\d+)[.)]\s+(.*)/)){ flushP(); if(list!=="ol"){flushL(); out+='<ol class="todo">'; list="ol";} li++; out+=`<li id="${secId}-${li}">`+inline(m[2],R,{id:secId+"-"+li,label:sec+" · step "+m[1]})+"</li>"; continue; }
     if(/^\s*\|/.test(l)){ flushL(); para.push(l.replace(/\|/g," ").replace(/-{3,}/g,"")); continue; }
     flushL(); para.push(l.trim());
   }
@@ -995,100 +1291,145 @@ function md(src){
 
 /* ================= CLAUDE ANALYSIS (inside Claude only) ================= */
 function kbText(){
-  const secs = S.map(x=>`s.${x.n} ${x.h}: ${x.s}${x.g?" [GDPR: "+x.g+"]":""}`).join("\n");
+  const secs = S.map(x=>`s.${x.n} ${x.h} [Act, PDF p.${ACT_PAGES[x.n]}]: ${x.s}${x.g?" [GDPR: "+x.g+"]":""}`).join("\n");
   const regs = REGS.map(x=>`${x.l} ${x.h}: ${x.s}`).join("\n");
   const cmp = CMP.map(r=>`${r[0]} — DPA: ${r[1]} GDPR: ${r[2]}`).join("\n");
   return `JAMAICA DATA PROTECTION ACT, 2020 — SECTION SUMMARIES\n${secs}\n\n2024 REGULATIONS\n${regs}\n\nDPA vs GDPR KEY DIFFERENCES\n${cmp}\n\nSTATUS NOTE: The OIC has paused data controller registration for system updates and said no liability for unregistered processing will be imposed while the system is offline. Case law (as reported by Chambers): Morrison v Elephant Group Ltd (t/a Centerfield Jamaica), Supreme Court, held confidential pre-employment background checks were permissible processing.`;
 }
 const RULES = () => `You are a data protection analyst teaching and advising on Jamaica's Data Protection Act, 2020 (DPA) and its 2024 Regulations.
 
-Ground every statement about Jamaican law in the KNOWLEDGE BASE below and cite section numbers in the form s.21(3) or reg. 10(4). If the knowledge base lacks a detail, say so and tell the reader to check the gazetted text on oic.gov.jm. Never invent section numbers, figures or OIC guidance. You may draw on your general knowledge of the EU GDPR, EDPB and UK ICO guidance, ISO/IEC 27001/27701 and the NIST Privacy Framework for the comparison and good-practice parts, naming the article or framework.
+Ground every statement about Jamaican law in the KNOWLEDGE BASE below. If the knowledge base lacks a detail, say so and tell the reader to check the gazetted text on oic.gov.jm. Never invent section numbers, figures or OIC guidance. You may draw on your general knowledge of the EU GDPR, EDPB and UK ICO guidance, ISO/IEC 27001/27701 and the NIST Privacy Framework for the comparison and good-practice parts, naming the source.
+
+CITATIONS. The page turns your citations into numbered links to the source, so cite in exactly these forms and nothing else:
+- The Act: s.21(3) or ss.44–49
+- Data Protection Regulations, 2024: reg. 10(4)
+- Registration Regulations: Registration Regs, reg. 3(1)
+- Disposal Regulations: Disposal Regs, reg. 2(2)
+- The Act's Second Schedule: Second Schedule, para. 1
+- The GDPR: GDPR Art. 33
+Put a citation in brackets at the end of every sentence or bullet that states a legal requirement, deadline, penalty or exemption.
 
 Answer using exactly these markdown headings, in this order:
 ## Short answer
-(2-4 sentences: the bottom line.)
+(2-4 sentences: the bottom line, with citations.)
 ## Applicable provisions
-(bullets: section number, then why it applies)
+(bullets: citation, then why it applies)
 ## Analysis
 (apply each provision to the facts; identify the controller, any processor, whether data is sensitive, the lawful condition, which standards are engaged, any exemption)
 ## What to do now
-(numbered steps with deadlines from the Act where relevant)
+(numbered steps with deadlines and citations)
 ## GDPR comparison
-(how the GDPR would treat this, and where the outcome differs)
+(how the GDPR would treat this, citing GDPR articles, and where the outcome differs)
 ## Good practice
-(practical measures beyond the legal minimum)
+(practical measures beyond the legal minimum, naming the framework)
 ## Gaps and assumptions
-(facts you assumed, points needing the full text or legal advice)
+(facts you assumed, points needing the full text or legal advice, and anything that may have changed since 5 November 2026, such as OIC guidance, Gazette notices, adequacy orders, court decisions or the registration pause)
 
-Under "Gaps and assumptions", also name any point that may have changed since 5 November 2026 (for example OIC guidance, Gazette notices, adequacy orders, court decisions or the registration pause) so the reader knows what to check in live sources. You cannot browse, so never claim to have checked anything online. Use plain English. No tables. Keep it focused on the facts given. If the question is a follow-up, answer it directly but keep citing sections; you may drop headings that do not fit a short follow-up.
+You cannot browse, so never claim to have checked anything online. Use plain English. No tables. Keep to the facts given. For a follow-up question, answer directly and keep citing; you may drop headings that do not fit.
 
 KNOWLEDGE BASE
 ${kbText()}`;
 
-let sample = null, turns = [], ctl = null, mode = "guide", busy = false;
+let sample = null, turns = [], ctl = null, mode = "guide", busy = false, history = [], current = null;
 const segBtns = [...document.querySelectorAll(".seg button")];
 segBtns.forEach(b=>b.onclick=()=>{ mode=b.dataset.mode; segBtns.forEach(x=>x.setAttribute("aria-pressed", x===b)); });
-
 const ERR = {
-  not_granted:"Claude wasn't given permission on this page, so the written analysis is off. The instant guide still works.",
-  sampling_disabled:"Claude isn't available on this account, so the written analysis is off. The instant guide still works.",
+  not_granted:"Claude wasn't given permission on this page, so the written analysis is off. The instant guide is shown instead.",
+  sampling_disabled:"Claude isn't available on this account, so the written analysis is off. The instant guide is shown instead.",
   rate_limited:"Too many questions in a short time. Wait a minute, then submit again.",
   session_expired:"Your session has expired. Sign in again, then submit.",
   refused:"Claude declined this question. Rephrase it as a data protection scenario and try again.",
-  prompt_too_large:"The conversation is too long. Clear the results and start a new question.",
+  prompt_too_large:"The conversation is too long. Start a new question.",
   empty_completion:"No answer came back. Try rewording the question."
 };
 const HIDE = new Set(["not_granted","sampling_disabled","not_declared","capability_disabled","capability_removed"]);
 function disableClaude(){ segBtns.filter(b=>b.dataset.mode!=="guide").forEach(b=>b.hidden=true); segBtns[0].click(); }
-
 function setBusy(b){
   busy=b; $("#go").disabled=b; $("#stop").hidden=!b;
   $("#go").innerHTML = b ? "Working…" : `Submit scenario <svg class="i"><use href="#i-send"/></svg>`;
 }
-function answerShell(q, ctx, badge, alt){
-  const qEl = document.createElement("div"); qEl.className="q-bubble"; qEl.textContent=q;
-  const small = document.createElement("small"); small.textContent = ctx; qEl.append(small);
-  const aEl = document.createElement("article"); aEl.className="card ans";
-  aEl.innerHTML = `<div class="ans-head"><span class="badge${alt?" alt":""}"><svg class="i"><use href="#${alt?"i-spark":"i-bolt"}"/></svg>${badge}</span><button class="btn ghost small" type="button" data-copy><svg class="i"><use href="#i-copy"/></svg>Copy</button></div><div class="md" data-body></div><div class="ans-foot"><span>Learning aid, not legal advice. Check citations against the gazetted text.</span></div>`;
-  $("#results").prepend(aEl); $("#results").prepend(qEl);
-  $("#examples-wrap").hidden = true;
-  qEl.scrollIntoView({block:"start",behavior:"smooth"});
-  return aEl.querySelector("[data-body]");
+
+/* answer zone */
+function stamp(){ try{ return new Date().toLocaleString("en-JM",{dateStyle:"medium",timeStyle:"short"}); }catch(_){ return new Date().toLocaleString(); } }
+function showAnswer(a){
+  current = a;
+  $("#az-empty").hidden = true; $("#az-body").hidden = false;
+  $("#az-badge").innerHTML = `<svg class="i"><use href="#${a.kind==="guide"?"i-bolt":"i-spark"}"/></svg>${esc(a.badge)}`;
+  $("#az-badge").className = "badge" + (a.kind==="guide"?"":" alt");
+  $("#az-time").textContent = a.time;
+  $("#az-q").textContent = a.q;
+  $("#az-ctx").textContent = a.ctx;
+  $("#az-main").innerHTML = a.main;
+  $("#az-refs").innerHTML = refsHTML(a.R);
+  $("#az-count").textContent = a.R.order.length ? `${a.R.order.length} source${a.R.order.length>1?"s":""}` : "";
+  $("#az-live").innerHTML = a.live || "";
 }
-document.addEventListener("click", async e=>{
-  const b=e.target.closest("[data-copy]"); if(!b) return;
-  const text = b.closest(".ans").querySelector("[data-body]").innerText;
-  try{ await navigator.clipboard.writeText(text); toast("Copied"); }
-  catch(_){ const r=document.createRange(); r.selectNodeContents(b.closest(".ans").querySelector("[data-body]")); const s=getSelection(); s.removeAllRanges(); s.addRange(r); toast("Selected — press Ctrl+C to copy"); }
+function renderHistory(){
+  $("#history").hidden = !history.length;
+  $("#hist-list").innerHTML = history.map((h,i)=>`<li><button type="button" class="hist" data-hist="${i}"><span class="badge${h.kind==="guide"?"":" alt"}">${esc(h.badge)}</span><span class="hq">${esc(h.q)}</span><span class="small muted">${esc(h.time)}</span></button></li>`).join("");
+}
+function pushCurrent(){ if(current && !current.example){ history.unshift(current); history = history.slice(0,10); renderHistory(); } }
+document.addEventListener("click", e=>{
+  const h = e.target.closest("[data-hist]"); if(h){ const a = history[+h.dataset.hist]; history.splice(+h.dataset.hist,1); pushCurrent(); showAnswer(a); renderHistory(); $("#answer-zone").scrollIntoView({block:"start",behavior:"smooth"}); return; }
+  const c = e.target.closest(".cite[data-ref]");
+  if(c){
+    const card = document.getElementById("rc-"+c.dataset.ref); if(!card) return;
+    card.scrollIntoView({block:"nearest",behavior:"smooth"});
+    card.classList.remove("flash"); void card.offsetWidth; card.classList.add("flash");
+    return;
+  }
+  const j = e.target.closest("[data-jump]");
+  if(j){ const el=document.getElementById(j.dataset.jump); if(el){ el.scrollIntoView({block:"center",behavior:"smooth"}); el.classList.remove("flash"); void el.offsetWidth; el.classList.add("flash"); } }
 });
+function plainText(){
+  if(!current) return "";
+  const refs = current.R.order.map(k=>{const s=srcOf(k), e=current.R.map[k]; return `[${e.num}] ${s.doc.name}, ${s.head}${s.page!=null?" (PDF p. "+s.page+")":""}. ${s.doc.url}`;}).join("\n");
+  return `SCENARIO\n${current.q}\n(${current.ctx})\n\nANSWER\n${$("#az-main").innerText.replace(/(\S)(\d+)(?=[\s).,;])/g,"$1[$2]")}\n\nREFERENCES\n${refs}\n\nLearning aid, not legal advice. DPA 2020 Learning Hub.`;
+}
+$("#az-copy").onclick = async () => {
+  const t = plainText();
+  try{ await navigator.clipboard.writeText(t); toast("Answer and references copied"); }
+  catch(_){ const r=document.createRange(); r.selectNodeContents($("#az-body")); const s=getSelection(); s.removeAllRanges(); s.addRange(r); toast("Selected. Press Ctrl+C to copy"); }
+};
 
 async function submit(){
   const q = $("#q").value.trim();
   if(!q){ $("#q").focus(); toast("Describe your scenario first"); return; }
   if(busy) return;
-  const role = $("#role").value, sector = $("#sector").value;
-  const ctx = `${role} · ${sector}`;
+  const role = $("#role").value, sector = $("#sector").value, ctx = `${role} · ${sector}`;
+  const topics = TOPICS.filter(x=>x.re.test((q+" "+sector).toLowerCase()));
+  pushCurrent();
+  const goZone = () => $("#answer-zone").scrollIntoView({block:"start",behavior:"smooth"});
   if(mode==="guide" || !sample){
-    const body = answerShell(q, ctx, "Instant guide", false);
-    body.innerHTML = guideHTML(guide(q+" "+sector, role));
-    return;
+    const g = guide(q+" "+sector, role), b = buildGuide(g);
+    showAnswer({kind:"guide",badge:"Instant guide",q,ctx,time:stamp(),main:b.main,R:b.R,live:liveBlock(q, g.topics)});
+    goZone(); return;
   }
-  const body = answerShell(q, ctx, mode==="deep"?"In-depth analysis":"Written analysis", true);
-  body.innerHTML = `<div class="thinking"><span class="dots"><i></i><i></i><i></i></span>Reading the Act and working through your facts${mode==="deep"?". In-depth answers can take a minute or two.":"…"}</div>`;
+  const a = {kind:"claude",badge:mode==="deep"?"In-depth analysis":"Written analysis",q,ctx,time:stamp(),R:newRefs(),live:"",
+    main:`<div class="thinking"><span class="dots"><i></i><i></i><i></i></span>Reading the Act and working through your facts${mode==="deep"?". In-depth answers can take a minute or two.":"…"}</div>`};
+  showAnswer(a); goZone();
   turns.push({role:"user", content:`[Asker: ${role}. Sector: ${sector}.]\n${q}`});
   ctl = new AbortController(); setBusy(true);
+  let pending = null;
+  const paint = text => { a.R = newRefs(); a.main = finalize(a.R, md(text, a.R)); $("#az-main").innerHTML = a.main; $("#az-refs").innerHTML = refsHTML(a.R); $("#az-count").textContent = a.R.order.length?`${a.R.order.length} sources`:""; };
   try{
     const r = await sample([{role:"user",content:RULES()}, ...turns.slice(-8)], {
       signal: ctl.signal, cache:false, modelTier: mode==="deep" ? "complex" : "default",
-      onText: ({text}) => { body.innerHTML = md(text); }
+      onText: ({text}) => { pending = text; requestAnimationFrame(()=>{ if(pending!==null){ paint(pending); pending=null; } }); }
     });
     turns.push({role:"assistant", content:r.text});
-    body.innerHTML = md(r.text) + (r.truncated?'<p class="small muted">The answer was cut short. Ask about one part at a time.</p>':"") + liveBlock(q, TOPICS.filter(x=>x.re.test(q.toLowerCase())));
+    paint(r.text);
+    if(r.truncated) { a.main += '<p class="small muted">The answer was cut short. Ask about one part at a time.</p>'; $("#az-main").innerHTML=a.main; }
+    a.live = liveBlock(q, topics); $("#az-live").innerHTML = a.live;
   }catch(e){
     turns.pop();
-    if(e && e.code==="cancelled"){ body.innerHTML = (e.text?md(e.text):"")+'<p class="small muted">Stopped.</p>'; }
-    else if(e && HIDE.has(e.code)){ disableClaude(); body.innerHTML = `<p class="err">${esc(ERR[e.code]||"The written analysis isn't available here.")}</p>` + guideHTML(guide(q+" "+sector, role)); }
-    else { body.innerHTML = (e&&e.text?md(e.text):"") + `<p class="err">${esc(ERR[e&&e.code]||"The connection dropped before the answer finished. Submit again to retry.")}</p>`; }
+    if(e && e.code==="cancelled"){ if(e.text) paint(e.text); a.main += '<p class="small muted">Stopped.</p>'; $("#az-main").innerHTML = a.main; }
+    else if(e && HIDE.has(e.code)){
+      disableClaude();
+      const g = guide(q+" "+sector, role), b = buildGuide(g);
+      showAnswer({kind:"guide",badge:"Instant guide",q,ctx,time:stamp(),R:b.R,live:liveBlock(q,g.topics),main:`<p class="err">${esc(ERR[e.code]||"The written analysis isn't available here.")}</p>`+b.main});
+    }
+    else { if(e && e.text) paint(e.text); a.main += `<p class="err">${esc(ERR[e&&e.code]||"The connection dropped before the answer finished. Submit again to retry.")}</p>`; $("#az-main").innerHTML = a.main; }
   }finally{ setBusy(false); }
 }
 $("#composer").addEventListener("submit", e => { e.preventDefault(); submit(); });
@@ -1101,12 +1442,14 @@ $("#q").addEventListener("keydown", e => { if(e.key==="Enter" && (e.metaKey||e.c
 })();
 
 window.__live=true; renderFinder();
-/* first view: show the guide working on a sample scenario */
+/* first view: an example answer so the layout is visible */
 (function(){
-  const sampleQ = "Sample: A medical lab discovers on Saturday night that ransomware has encrypted its patient database, and logs show files were copied out.";
-  const body = answerShell(sampleQ, "Private-sector organisation · Health", "Instant guide · example", false);
-  body.innerHTML = guideHTML(guide(sampleQ+" Health","Private-sector organisation"));
-  $("#examples-wrap").hidden = false;
-  window.scrollTo(0,0);
+  const q = "A medical lab discovers on Saturday night that ransomware has encrypted its patient database, and logs show files were copied out. What must it do, and by when?";
+  const g = guide(q+" Health","Private-sector organisation"), b = buildGuide(g);
+  showAnswer({kind:"guide",badge:"Example answer",q,ctx:"Private-sector organisation · Health",time:"",main:b.main,R:b.R,live:liveBlock(q,g.topics),example:true});
 })();
+
 </script>
+
+</body>
+</html>
