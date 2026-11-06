@@ -1,0 +1,824 @@
+<title>DPA 2020 Learning Hub</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Serif:ital,wght@0,500;0,600;1,500&display=swap">
+<style>
+/* Layout: statute-book reference tool. Sticky tab bar, single reading column, sidebar index on wide screens. */
+:root{
+  --bg:#f6f7f5; --surface:#ffffff; --sunk:#eceeea; --line:#d6dbd5;
+  --fg:#17211e; --muted:#566360; --ink:#0d5247; --ink-soft:#dcebe6;
+  --gold:#9a6b0b; --gold-soft:#f5ead2;
+  --ok:#1f7a4a; --warn:#a15c00; --crit:#b3261e; --crit-soft:#f8e1de;
+  --display:"IBM Plex Serif",Georgia,"Times New Roman",serif;
+  --body:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+  --r:6px;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0f1514; --surface:#161e1c; --sunk:#1c2624; --line:#2c3a37;
+  --fg:#e3ebe8; --muted:#97a6a2; --ink:#6cc4b1; --ink-soft:#183530;
+  --gold:#e0b45a; --gold-soft:#33291a;
+  --ok:#5cc28c; --warn:#e3a14a; --crit:#f08c82; --crit-soft:#3a1e1b; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0f1514; --surface:#161e1c; --sunk:#1c2624; --line:#2c3a37;
+  --fg:#e3ebe8; --muted:#97a6a2; --ink:#6cc4b1; --ink-soft:#183530;
+  --gold:#e0b45a; --gold-soft:#33291a;
+  --ok:#5cc28c; --warn:#e3a14a; --crit:#f08c82; --crit-soft:#3a1e1b; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:15px;line-height:1.55}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--surface)}
+.wrap{max-width:1120px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+h1,h2,h3{font-family:var(--display);font-weight:600;text-wrap:balance;line-height:1.2;margin:0}
+a{color:var(--ink)}
+button,select,textarea,input{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.mono{font-family:var(--mono)}
+.eyebrow{font-family:var(--mono);font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+
+/* masthead */
+header.mast{background:var(--surface);border-bottom:1px solid var(--line)}
+header.mast .wrap{padding-block:22px 16px;display:flex;flex-wrap:wrap;gap:12px 28px;align-items:flex-end;justify-content:space-between}
+.mast h1{font-size:clamp(24px,4vw,32px)}
+.mast h1 em{font-style:italic;color:var(--ink);font-weight:500}
+.mast p{margin:6px 0 0;color:var(--muted);max-width:62ch}
+.cite-line{font-family:var(--mono);font-size:12px;color:var(--muted);display:flex;gap:14px;flex-wrap:wrap}
+.cite-line b{color:var(--fg);font-weight:500}
+
+nav.tabs{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--surface);border-bottom:1px solid var(--line)}
+nav.tabs .wrap{display:flex;gap:2px;overflow-x:auto;scrollbar-width:none}
+nav.tabs a{display:block;padding:12px 14px 11px;text-decoration:none;color:var(--muted);font-weight:500;white-space:nowrap;border-bottom:2px solid transparent}
+nav.tabs a[aria-current="page"]{color:var(--fg);border-bottom-color:var(--ink)}
+nav.tabs a:hover{color:var(--fg)}
+
+main .wrap{padding-block:28px 64px}
+section.view[hidden]{display:none}
+.lede{color:var(--muted);max-width:68ch;margin:6px 0 22px}
+
+/* ask view */
+.ask-grid{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:28px}
+@media (max-width:860px){.ask-grid{grid-template-columns:1fr}}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:var(--r)}
+.composer{padding:16px}
+.composer label{display:block;font-weight:600;margin-bottom:6px}
+textarea#q{width:100%;min-height:130px;resize:vertical;padding:12px;border:1px solid var(--line);border-radius:var(--r);background:var(--bg);line-height:1.5}
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.ctx{margin-top:12px;display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}
+.ctx label{font-size:12.5px;font-weight:500;color:var(--muted);margin:0 0 4px}
+select{width:100%;padding:8px 10px;border:1px solid var(--line);border-radius:var(--r);background:var(--bg)}
+.actions{margin-top:14px;justify-content:space-between}
+.btn{border:1px solid var(--line);background:var(--surface);padding:9px 16px;border-radius:var(--r);cursor:pointer;font-weight:500}
+.btn:hover{border-color:var(--ink)}
+.btn.primary{background:var(--ink);border-color:var(--ink);color:var(--bg)}
+.btn.primary:hover{filter:brightness(1.08)}
+.btn[disabled]{opacity:.55;cursor:default}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+.seg button{border:0;background:transparent;padding:7px 12px;cursor:pointer;color:var(--muted)}
+.seg button[aria-pressed="true"]{background:var(--ink-soft);color:var(--fg);font-weight:600}
+.note{font-size:12.5px;color:var(--muted)}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.chip{border:1px dashed var(--line);background:transparent;border-radius:999px;padding:5px 11px;font-size:13px;cursor:pointer;color:var(--fg);text-align:left}
+.chip:hover{border-color:var(--ink);border-style:solid}
+
+.thread{margin-top:22px;display:flex;flex-direction:column;gap:18px}
+.msg-q{align-self:flex-end;max-width:85%;background:var(--ink-soft);border-radius:var(--r);padding:10px 14px;white-space:pre-wrap}
+.answer{padding:18px 20px}
+.answer .meta{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:8px}
+.md{min-width:0;overflow-wrap:anywhere}
+.md h2{font-size:18px;margin:20px 0 6px;padding-top:12px;border-top:1px solid var(--line)}
+.md h2:first-child{margin-top:0;padding-top:0;border-top:0}
+.md h3{font-size:15.5px;margin:14px 0 4px}
+.md p{margin:6px 0;max-width:72ch}
+.md ul,.md ol{margin:6px 0;padding-left:22px;max-width:72ch}
+.md li{margin:3px 0}
+.md code,.sref{font-family:var(--mono);font-size:12.5px;background:var(--gold-soft);color:var(--fg);padding:1px 5px;border-radius:3px;white-space:nowrap}
+.thinking{color:var(--muted);font-style:italic}
+.err{color:var(--crit)}
+
+.side h3{font-size:15px;margin-bottom:8px}
+.side .panel{padding:14px 16px}
+.side .panel + .panel{margin-top:14px}
+.finder-hit{display:block;width:100%;text-align:left;background:none;border:0;border-top:1px solid var(--line);padding:9px 0;cursor:pointer}
+.finder-hit:first-of-type{border-top:0}
+.finder-hit .sref{margin-right:6px}
+.finder-hit span.h{font-weight:500}
+.finder-hit:hover span.h{color:var(--ink)}
+
+/* act explorer */
+.explore{display:grid;grid-template-columns:230px minmax(0,1fr);gap:28px}
+@media (max-width:860px){.explore{grid-template-columns:1fr}}
+.parts{position:sticky;top:calc(env(safe-area-inset-top,0px) + 60px);align-self:start;display:flex;flex-direction:column;gap:2px}
+@media (max-width:860px){.parts{position:static;flex-direction:row;flex-wrap:wrap;gap:6px}}
+.parts button{text-align:left;background:none;border:0;padding:7px 10px;border-radius:var(--r);cursor:pointer;color:var(--muted)}
+@media (max-width:860px){.parts button{border:1px solid var(--line);padding:5px 10px;font-size:13px}}
+.parts button[aria-pressed="true"]{background:var(--ink-soft);color:var(--fg);font-weight:600}
+.parts .pn{font-family:var(--mono);font-size:11.5px;display:block;letter-spacing:.06em}
+input#search{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:var(--r);background:var(--surface);margin-bottom:16px}
+.sec{border-top:1px solid var(--line);padding:16px 0}
+.sec:first-child{border-top:0;padding-top:0}
+.sec-head{display:flex;gap:12px;align-items:baseline}
+.sec-head .num{font-family:var(--mono);font-weight:500;color:var(--ink);min-width:44px;font-size:14px}
+.sec-head h3{font-size:17px}
+.sec-body{margin-left:56px}
+@media (max-width:520px){.sec-body{margin-left:0}}
+.sec-body p{margin:6px 0;max-width:70ch}
+.sec-tags{display:flex;flex-wrap:wrap;gap:6px 14px;margin-top:8px;font-size:13px}
+.tag-g{color:var(--muted)}
+.tag-g b{font-family:var(--mono);font-weight:500;color:var(--fg);font-size:12px}
+.bp{margin-top:8px;font-size:13.5px;background:var(--sunk);border-radius:var(--r);padding:8px 12px;max-width:70ch}
+.bp b{color:var(--gold)}
+.askthis{background:none;border:0;padding:0;color:var(--ink);cursor:pointer;font-size:13px;text-decoration:underline;text-underline-offset:3px}
+.part-title{font-size:20px;margin:6px 0 4px}
+.part-blurb{color:var(--muted);margin:0 0 14px;max-width:68ch}
+.empty{color:var(--muted);padding:20px 0}
+
+/* compare */
+.tbl-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:var(--r);background:var(--surface)}
+table{border-collapse:collapse;width:100%;min-width:720px}
+th,td{text-align:left;vertical-align:top;padding:11px 14px;border-bottom:1px solid var(--line);font-size:14px}
+th{font-family:var(--mono);font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:500;background:var(--sunk)}
+tr:last-child td{border-bottom:0}
+td:first-child{font-weight:600;width:16%}
+.delta{display:inline-block;font-family:var(--mono);font-size:11px;padding:2px 7px;border-radius:999px;white-space:nowrap}
+.delta.stricter{background:var(--crit-soft);color:var(--crit)}
+.delta.similar{background:var(--ink-soft);color:var(--ink)}
+.delta.lighter{background:var(--gold-soft);color:var(--gold)}
+.legend{display:flex;gap:14px;flex-wrap:wrap;margin:0 0 12px;font-size:13px;color:var(--muted);align-items:center}
+
+/* reference */
+.ref-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,460px),1fr));gap:24px}
+.clock{display:grid;grid-template-columns:96px minmax(0,1fr);gap:4px 14px;padding:10px 0;border-top:1px solid var(--line)}
+.clock:first-of-type{border-top:0}
+.clock .t{font-family:var(--mono);font-weight:500;font-size:15px;color:var(--ink);font-variant-numeric:tabular-nums}
+.clock .w b{font-weight:600}
+.clock .w .sref{margin-left:4px}
+.ref-grid .panel{padding:16px 18px}
+.ref-grid h2{font-size:19px;margin-bottom:8px}
+.pen{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 14px;padding:10px 0;border-top:1px solid var(--line)}
+.pen:first-of-type{border-top:0}
+.pen .amt{font-family:var(--mono);font-size:13px;text-align:right;font-variant-numeric:tabular-nums}
+.pen .amt small{display:block;color:var(--muted)}
+.fees td,.fees th{font-variant-numeric:tabular-nums}
+.fees table{min-width:0}
+.status{border-left:3px solid var(--warn);background:var(--gold-soft);padding:10px 14px;border-radius:0 var(--r) var(--r) 0;margin-bottom:24px;max-width:80ch}
+
+/* cases */
+.cases{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:18px}
+.case{padding:16px 18px;display:flex;flex-direction:column;gap:8px}
+.case h3{font-size:17px}
+.case .facts{color:var(--muted);margin:0}
+.case details summary{cursor:pointer;color:var(--ink);font-weight:500}
+.case details ul{padding-left:20px;margin:8px 0}
+.case details li{margin:4px 0}
+.risk{font-family:var(--mono);font-size:11px;letter-spacing:.05em;text-transform:uppercase;padding:2px 8px;border-radius:999px;align-self:flex-start}
+.risk.high{background:var(--crit-soft);color:var(--crit)}
+.risk.med{background:var(--gold-soft);color:var(--gold)}
+.risk.low{background:var(--ink-soft);color:var(--ink)}
+.case .foot{margin-top:auto;padding-top:6px}
+
+/* quiz */
+.quiz{max-width:760px}
+.qbar{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap}
+.track{flex:1;min-width:120px;height:6px;background:var(--sunk);border-radius:99px;overflow:hidden}
+.track i{display:block;height:100%;background:var(--ink);transition:width .3s}
+.qcard{padding:20px}
+.qcard h3{font-family:var(--body);font-size:17px;font-weight:600;line-height:1.4}
+.opts{display:flex;flex-direction:column;gap:8px;margin:16px 0}
+.opt{text-align:left;border:1px solid var(--line);background:var(--bg);border-radius:var(--r);padding:11px 14px;cursor:pointer}
+.opt:hover:not([disabled]){border-color:var(--ink)}
+.opt.right{border-color:var(--ok);background:var(--ink-soft)}
+.opt.wrong{border-color:var(--crit);background:var(--crit-soft)}
+.opt[disabled]{cursor:default}
+.explain{background:var(--sunk);border-radius:var(--r);padding:12px 14px}
+
+/* sources */
+.src{max-width:78ch}
+.src h2{font-size:19px;margin:22px 0 8px}
+.src ul{padding-left:20px}
+.src li{margin:5px 0}
+footer{border-top:1px solid var(--line);color:var(--muted);font-size:12.5px}
+footer .wrap{padding-block:18px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+
+<header class="mast">
+  <div class="wrap">
+    <div>
+      <div class="eyebrow">Jamaica · Data Protection Act, 2020 (Act No. 7 of 2020)</div>
+      <h1>DPA 2020 <em>Learning Hub</em></h1>
+      <p>Analyse the Act and its 2024 Regulations, test how they apply to real situations, and see where Jamaican law departs from the GDPR and recognised good practice.</p>
+    </div>
+    <div class="cite-line"><span><b>77</b> sections</span><span><b>8</b> standards</span><span><b>3</b> regulation sets</span><span>Checked against OIC texts</span></div>
+  </div>
+</header>
+
+<nav class="tabs" aria-label="Sections">
+  <div class="wrap">
+    <a href="#ask">Ask a scenario</a>
+    <a href="#act">The Act</a>
+    <a href="#compare">DPA vs GDPR</a>
+    <a href="#reference">Deadlines &amp; penalties</a>
+    <a href="#cases">Worked cases</a>
+    <a href="#practice">Practice quiz</a>
+    <a href="#sources">Sources</a>
+  </div>
+</nav>
+
+<main>
+<div class="wrap">
+
+<!-- ASK -->
+<section class="view" id="v-ask">
+  <h2 style="font-size:24px">Apply the Act to a situation</h2>
+  <p class="lede">Describe what is happening, who holds the data and what you need to decide. The analyser reads the Act, the 2024 Regulations and the GDPR mapping in this hub, then sets out the applicable sections, the analysis, next steps and how the GDPR would treat it.</p>
+  <div class="ask-grid">
+    <div style="min-width:0">
+      <div class="panel composer">
+        <label for="q">Your scenario or question</label>
+        <textarea id="q" placeholder="e.g. A medical lab in Montego Bay discovers ransomware encrypted its patient database on Saturday night. Backups exist. What must it do and by when?"></textarea>
+        <div class="ctx">
+          <div><label for="role">Who is asking</label>
+            <select id="role">
+              <option>Private-sector data controller</option>
+              <option>Public authority (ministry, department, agency)</option>
+              <option>Data processor / service provider</option>
+              <option>Data subject (individual)</option>
+              <option>Regulator / OIC officer</option>
+              <option>Adviser, DPO or student</option>
+            </select></div>
+          <div><label for="sector">Sector</label>
+            <select id="sector">
+              <option>General / not specified</option>
+              <option>Health</option><option>Financial services</option><option>Education</option>
+              <option>Employment / HR</option><option>Retail &amp; marketing</option><option>Telecoms &amp; technology</option>
+              <option>Faith-based or non-profit</option><option>Government services</option><option>Media &amp; journalism</option>
+            </select></div>
+        </div>
+        <div class="row actions">
+          <div class="row" style="gap:8px">
+            <span class="note">Depth</span>
+            <div class="seg" role="group" aria-label="Depth">
+              <button type="button" id="d-std" aria-pressed="true">Standard</button>
+              <button type="button" id="d-deep" aria-pressed="false">In-depth</button>
+            </div>
+          </div>
+          <div class="row" style="gap:8px">
+            <button class="btn" id="stop" type="button" hidden>Stop</button>
+            <button class="btn" id="newthread" type="button" hidden>New question</button>
+            <button class="btn primary" id="go" type="button">Analyse</button>
+          </div>
+        </div>
+        <div class="chips" id="examples" aria-label="Example scenarios"></div>
+      </div>
+      <div class="thread" id="thread" aria-live="polite"></div>
+      <p class="note" id="ai-off" hidden>The live analyser isn't available in this view. The provision finder on the right still works, and the Worked cases tab has full analyses of common situations.</p>
+    </div>
+    <aside class="side">
+      <div class="panel">
+        <h3>Provision finder</h3>
+        <p class="note" style="margin:0 0 6px">Sections that match the words in your scenario. Updates as you type.</p>
+        <div id="finder"><p class="note">Type a scenario to see matching sections.</p></div>
+      </div>
+      <div class="panel">
+        <h3>How answers are grounded</h3>
+        <p class="note" style="margin:0">Each analysis is built from the section summaries in this hub, drawn from the Act as published by the OIC and Parliament. Section numbers are cited so you can check them against the gazetted text. This is a learning aid, not legal advice.</p>
+      </div>
+    </aside>
+  </div>
+</section>
+
+<!-- ACT -->
+<section class="view" id="v-act" hidden>
+  <h2 style="font-size:24px">The Act, section by section</h2>
+  <p class="lede">Plain-language summaries of every section, with the nearest GDPR provision and a good-practice note where it adds something. Select a Part or search across the whole Act.</p>
+  <div class="explore">
+    <div class="parts" id="parts" role="group" aria-label="Parts of the Act"></div>
+    <div style="min-width:0">
+      <input id="search" type="search" placeholder="Search sections, e.g. breach, consent, transfer, CCTV" aria-label="Search the Act">
+      <div id="secs"></div>
+    </div>
+  </div>
+</section>
+
+<!-- COMPARE -->
+<section class="view" id="v-compare" hidden>
+  <h2 style="font-size:24px">Where the DPA departs from the GDPR</h2>
+  <p class="lede">The DPA borrows its structure from the UK Data Protection Act 1998 and much of its substance from the GDPR, but several obligations are heavier in Jamaica. A GDPR-compliant programme is a good start, not a finished one.</p>
+  <div class="legend"><span class="delta stricter">DPA stricter</span><span class="delta similar">broadly aligned</span><span class="delta lighter">DPA lighter or narrower</span></div>
+  <div class="tbl-wrap"><table id="cmp"><thead><tr><th>Topic</th><th>Jamaica DPA 2020</th><th>EU GDPR</th><th>Difference</th></tr></thead><tbody></tbody></table></div>
+</section>
+
+<!-- REFERENCE -->
+<section class="view" id="v-reference" hidden>
+  <h2 style="font-size:24px">Deadlines, penalties and fees</h2>
+  <p class="lede">The numbers practitioners are asked about most. Money is in Jamaican dollars.</p>
+  <div class="status" id="status"></div>
+  <div class="ref-grid">
+    <div class="panel"><h2>Statutory clocks</h2><div id="clocks"></div></div>
+    <div>
+      <div class="panel"><h2>Offences and penalties</h2><div id="pens"></div></div>
+      <div class="panel fees" style="margin-top:24px"><h2>Registration fees</h2>
+        <div class="tbl-wrap" style="border:0"><table><thead><tr><th>Controller type</th><th>First registration</th><th>Annual renewal</th></tr></thead>
+        <tbody><tr><td>Company or public authority</td><td class="mono">$25,000</td><td class="mono">$15,000</td></tr>
+        <tr><td>Partnership</td><td class="mono">$15,000</td><td class="mono">$10,000</td></tr>
+        <tr><td>Sole trader or individual</td><td class="mono">$7,500</td><td class="mono">$5,000</td></tr></tbody></table></div>
+        <p class="note">Certified copy of a register entry: $500 plus $100 per page. Particulars are re-submitted each year by 1 December and changes notified within 14 days (Registration Regulations).</p>
+      </div>
+      <div class="panel fees" style="margin-top:24px"><h2>Data subject and assessment fees</h2>
+        <div class="tbl-wrap" style="border:0"><table><thead><tr><th>Item</th><th>Fee</th></tr></thead>
+        <tbody><tr><td>Copy of personal data, electronic</td><td class="mono">Free</td></tr>
+        <tr><td>Copy of personal data, paper</td><td class="mono">$100 / page</td></tr>
+        <tr><td>Copy by audio or video</td><td class="mono">$1,000</td></tr>
+        <tr><td>Logic of automated decisions</td><td class="mono">$1,000 / 5 MB</td></tr>
+        <tr><td>Transmission to another controller</td><td class="mono">Free (electronic)</td></tr>
+        <tr><td>Commissioner's assessment, s.4(8)</td><td class="mono">$50,000</td></tr></tbody></table></div>
+        <p class="note">Data Protection Regulations, 2024, Second Schedule. Controllers may waive fees on written request (reg. 5).</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CASES -->
+<section class="view" id="v-cases" hidden>
+  <h2 style="font-size:24px">Worked cases</h2>
+  <p class="lede">Common Jamaican situations worked through against the Act. Open a case for the analysis, or send it to the analyser to explore a variation.</p>
+  <div class="cases" id="caselist"></div>
+</section>
+
+<!-- PRACTICE -->
+<section class="view" id="v-practice" hidden>
+  <h2 style="font-size:24px">Practice quiz</h2>
+  <p class="lede">Twelve questions on the points most often misunderstood. Each answer cites the section or regulation.</p>
+  <div class="quiz" id="quiz"></div>
+</section>
+
+<!-- SOURCES -->
+<section class="view" id="v-sources" hidden>
+  <div class="src">
+    <h2 style="font-size:24px;margin-top:0">Sources and how to use them</h2>
+    <p>Section and regulation summaries paraphrase the Data Protection Act, 2020 and the three 2024 Regulations as published by the Office of the Information Commissioner. Always confirm against the gazetted text before relying on a point.</p>
+    <h2>Primary law (Office of the Information Commissioner)</h2>
+    <ul>
+      <li><a href="https://www.oic.gov.jm/page/data-protection-act" target="_blank" rel="noopener">The Data Protection Act, 2020</a></li>
+      <li><a href="https://www.oic.gov.jm/page/data-protection-act-ministers-regulations-2024" target="_blank" rel="noopener">The Data Protection Regulations, 2024 (Minister's Regulations)</a></li>
+      <li><a href="https://www.oic.gov.jm/publications/gazette/data-protection-data-controller-registration-regulations-2024" target="_blank" rel="noopener">Data Protection (Data Controller Registration) Regulations, 2024</a></li>
+      <li><a href="https://www.oic.gov.jm/publications/disposal-personal-data-regulations-2024" target="_blank" rel="noopener">Disposal of Personal Data Regulations, 2024</a></li>
+      <li><a href="https://www.oic.gov.jm/page/data-protection-standards" target="_blank" rel="noopener">OIC: The Data Protection Standards</a></li>
+      <li><a href="https://japarliament.gov.jm/attachments/article/339/The%20Data%20Protection%20Act,%202020.pdf" target="_blank" rel="noopener">Parliament of Jamaica copy of the Act (PDF)</a></li>
+    </ul>
+    <h2>Comparative law and good practice</h2>
+    <ul>
+      <li><a href="https://eur-lex.europa.eu/eli/reg/2016/679/oj" target="_blank" rel="noopener">Regulation (EU) 2016/679, the GDPR</a></li>
+      <li><a href="https://www.edpb.europa.eu/our-work-tools/general-guidance/guidelines-recommendations-best-practices_en" target="_blank" rel="noopener">European Data Protection Board guidelines</a> (consent, breach notification, DPIAs, transfers)</li>
+      <li><a href="https://ico.org.uk/for-organisations/" target="_blank" rel="noopener">UK Information Commissioner's Office guidance</a>, the closest analogue given the DPA's UK lineage</li>
+      <li>ISO/IEC 27001 and ISO/IEC 27701 (information security and privacy information management)</li>
+      <li><a href="https://www.nist.gov/privacy-framework" target="_blank" rel="noopener">NIST Privacy Framework</a></li>
+    </ul>
+    <h2>Secondary commentary</h2>
+    <ul>
+      <li><a href="https://practiceguides.chambers.com/practice-guides/data-protection-privacy-2026/jamaica" target="_blank" rel="noopener">Chambers, Data Protection &amp; Privacy 2026: Jamaica</a></li>
+      <li><a href="https://www.recordinglaw.com/world-laws/world-data-privacy-laws/jamaica-data-privacy-laws/" target="_blank" rel="noopener">RecordingLaw, Jamaica Data Privacy Laws guide</a></li>
+      <li><a href="https://jis.gov.jm/?p=356161" target="_blank" rel="noopener">JIS, Registration fees established for data controllers</a></li>
+    </ul>
+    <h2>Limits</h2>
+    <p>This hub is a learning and analysis aid. It does not replace the gazetted text, OIC guidance or legal advice. Section and regulation summaries were checked against the OIC copies of the Act, the Data Protection Regulations, 2024, the Data Controller Registration Regulations, 2024 and the Disposal of Personal Data Regulations, 2024 (Gazette, 17 September 2025). The only point resting on commentary is the Morrison v Elephant Group case report.</p>
+  </div>
+</section>
+
+</div>
+</main>
+<footer><div class="wrap">Built for learning about the Data Protection Act, 2020 of Jamaica. Not legal advice. Check every citation against the gazetted text published by the Office of the Information Commissioner.</div></footer>
+
+<script>
+/* ================= KNOWLEDGE BASE ================= */
+const PARTS = [
+  {id:"I", t:"Preliminary", r:[1,4], b:"Commencement, definitions, territorial reach and the Information Commissioner."},
+  {id:"II", t:"Rights of data subjects", r:[5,13], b:"Access, consent, direct marketing, objection, automated decisions and rectification."},
+  {id:"III", t:"Requirements for data controllers", r:[14,20], b:"Registration, the public register, high-risk processing assessments and data protection officers."},
+  {id:"IV", t:"The data protection standards", r:[21,31], b:"The eight standards every controller must meet, lawful conditions, security and cross-border transfers."},
+  {id:"V", t:"Exemptions", r:[32,43], b:"National security, law enforcement, regulation, journalism, research, domestic use and others."},
+  {id:"VI", t:"Enforcement", r:[44,55], b:"Enforcement, assessment and information notices, the annual DPIA, appeals and inspection."},
+  {id:"VII", t:"Miscellaneous and general", r:[56,77], b:"Reports, the data-sharing code, offences, penalties, compensation and regulations."},
+  {id:"R", t:"2024 Regulations", r:null, b:"Subsidiary legislation made under section 74."}
+];
+
+const S = [
+ {n:"1",h:"Short title and commencement",s:"Names the Act and lets the Minister bring provisions into force by Gazette notice on different days. Most obligations took effect on 1 December 2023.",k:"commencement in force date"},
+ {n:"2",h:"Interpretation and objects",s:"Defines the key terms. Personal data covers information about a living individual, or one dead for under 30 years, who can be identified from it alone or with other information the controller holds or is likely to hold, including opinions and intentions. Sensitive personal data covers genetic and biometric data, filiation, racial or ethnic origin, political, philosophical or religious beliefs, trade union membership, physical or mental health, sex life, and alleged offences or related proceedings. A data controller decides the purposes and manner of processing; a data processor processes on its behalf but is not its employee.",g:"Art. 4, Art. 9, Art. 10",bp:"The DPA covers people who died within the last 30 years, which the GDPR does not. Keep this in mind when handling estate, health or archive records.",k:"definition personal data sensitive biometric genetic health religion deceased controller processor identifiable"},
+ {n:"3",h:"Application of Act",s:"Applies to controllers established in Jamaica processing in that context, and to controllers outside Jamaica that use equipment in Jamaica or that target or monitor people in Jamaica. A foreign controller caught this way must name a representative in Jamaica.",g:"Art. 3, Art. 27",k:"territorial scope foreign overseas representative offshore website targeting monitoring"},
+ {n:"4",h:"Information Commissioner",s:"Creates the Information Commissioner as an independent body corporate overseen by the Data Protection Oversight Committee. The Commissioner monitors compliance, advises the Minister, promotes good practice, issues guidelines, can assess a controller's processing on request for a fee, and may intervene in court proceedings.",g:"Arts. 51–59",k:"commissioner OIC regulator oversight committee guidelines independence"},
+ {n:"5",h:"Who may exercise rights",s:"A parent or guardian may exercise a minor's rights, or the minor where the law recognises their capacity. The nearest relative may act for a person with a mental impairment; others may act through a legal personal representative or a written delegate.",g:"Art. 8 (no Jamaican age threshold)",bp:"The DPA sets no digital age of consent. For services used by children, follow age-appropriate design practice and verify parental authority before acting on a request.",k:"child children minor parent guardian student school representative"},
+ {n:"6",h:"Right of access",s:"On written request a person is told whether their data is processed, what it is, why, who receives it, the source, and the logic of any automated decision. The controller must comply within 30 days of the request and any fee (s.6(4)). It may extend by up to 45 more days for complex or high-volume requests or third-party consultation, if it tells the requester in writing before day 30 (reg. 4(3)–(4)). Electronic copies are free; paper copies cost $100 a page and audio or video $1,000 (Regs, Second Schedule). The Commissioner can order compliance.",g:"Art. 15, Art. 20",bp:"Log every request on receipt, verify identity proportionately, and keep a request register showing the 30-day clock and any extension notice.",k:"access request subject access copy portability 30 days DSAR extension 45 fee"},
+ {n:"7",h:"How information is supplied",s:"Information is given as a permanent copy unless that is impossible or disproportionate or the person agrees otherwise. Unintelligible terms must be explained, with provision for people with disabilities.",g:"Art. 12",k:"format copy intelligible disability"},
+ {n:"8",h:"Limits on access",s:"The controller may verify identity and refuse repeat requests made at unreasonable intervals. Information about third parties needs their consent or must be reasonable to disclose. Logic that is a trade secret may be withheld. Any refusal must be given in writing within 30 days.",g:"Art. 12(5)–(6), Art. 15(4)",k:"refuse access third party trade secret identity verification repeated"},
+ {n:"9",h:"Consent",s:"Consent must be an informed, specific, unequivocal and freely given expression of will. It can be withdrawn in the same way it was given. It is not freely given where goods or services are made conditional on consent beyond what they reasonably require.",g:"Art. 4(11), Art. 7",bp:"Use unticked boxes, separate consents per purpose, and record when, how and to what text each consent was given.",k:"consent withdraw freely given bundled conditional"},
+ {n:"10",h:"Direct marketing",s:"Direct marketing needs the person's consent, or the existing-customer route. Consent may be requested only once, using Form 6 (reg. 7). The customer route applies only where the contact details were obtained in a sale of goods or services, the marketing is for the controller's own similar goods or services, and the person had a free, simple chance to object both when the data was collected and in every message. Every message must identify the sender and give a contact for stopping messages. Direct marketing includes promoting goods or services and asking for donations of any kind.",g:"Art. 21(2)–(3); ePrivacy soft opt-in",k:"marketing sms email whatsapp promotion opt out newsletter customer donation fundraising form 6"},
+ {n:"11",h:"Right to prevent processing",s:"A person may give written notice requiring a controller to stop, or not begin, processing, for example where it causes unwarranted substantial damage or distress, the data is incomplete or irrelevant, the processing is unlawful, or the data is kept too long. The controller must respond in writing within 21 days, and the Commissioner can order compliance.",g:"Art. 17, Art. 18, Art. 21",bp:"The DPA has no free-standing right to erasure. This section, with s.13 and s.44, is how a person gets data stopped or deleted.",k:"object stop processing erasure delete right to be forgotten distress 21 days"},
+ {n:"12",h:"Automated decision-taking",s:"A person may require that significant decisions about them are not based solely on automated processing. Where such a decision is made, the controller must tell them, and they may ask for it to be reconsidered within 30 days. The controller must respond within 30 days.",g:"Art. 22",bp:"Keep a human reviewer with real authority to change the outcome, and document the logic, inputs and testing of any scoring model.",k:"automated decision AI algorithm credit scoring profiling loan machine learning"},
+ {n:"13",h:"Rectification",s:"A person may ask for inaccurate data, including errors and omissions, to be corrected. The controller must decide within 30 days and either correct or annotate the record, and where practicable tell anyone it disclosed the data to in the last 12 months. The person may appeal to the Commissioner.",g:"Art. 16, Art. 19",k:"correct rectify inaccurate error update"},
+ {n:"14",h:"Interpretation for Part III",s:"Defines registration particulars by reference to s.16(2) and sets address rules for companies and other entities.",k:"registration particulars"},
+ {n:"15",h:"No processing without registration",s:"A controller may not process personal data unless its particulars are on the register. The Minister may exempt specified processing or controllers by order, after consulting the Commissioner.",g:"No equivalent (GDPR abolished registration; see Art. 30 records)",bp:"Treat the registration particulars as a living record of processing, aligned with your internal processing inventory.",k:"register registration OIC must register"},
+ {n:"16",h:"Registration particulars",s:"Controllers must give and keep current their name and contacts, any representative, the DPO, categories of data and data subjects, purposes, recipients, overseas transfer destinations and whether they are a public authority. The Registration Regulations add trade name, TRN, locations, estimated number of data subjects, joint controllers, processors and where they operate, the lawful conditions relied on, any sensitive data, and any solely automated decision-making (reg. 3(1)). A controller exempt from registration must still give its particulars free of charge within 30 days to anyone who asks in writing; failing to do so is an offence, fine up to $1 million, with a due diligence defence.",g:"Art. 30",k:"particulars registration details update TRN processors"},
+ {n:"17",h:"The register",s:"The Commissioner keeps a public register. Controllers pay an annual fee and an entry lapses after 12 months unless it is paid. Inspection is free; certified copies carry a fee.",k:"public register annual fee renewal lapse"},
+ {n:"18",h:"Offence of unregistered processing",s:"Processing without registration is an offence, with a due diligence defence. On summary conviction: fine up to $2 million or up to 6 months' imprisonment.",k:"unregistered offence penalty"},
+ {n:"19",h:"Assessment of specified processing",s:"For processing the Minister designates as high-risk, the Commissioner assesses compliance within 30 days of receiving information, extendable once by up to 14 days. Processing may not start until then. Breach is an offence: summary conviction up to $5 million or 5 years; on indictment, a fine or up to 10 years.",g:"Art. 36 (prior consultation)",k:"high risk prior assessment specified processing"},
+ {n:"20",h:"Data protection officers",s:"A DPO is required for public authorities, controllers processing sensitive or criminal-conviction data, large-scale processing and classes the Commissioner prescribes by Gazette notice. Controllers processing only for a public register, and non-profit political, philosophical, religious or trade union bodies, are exempt. The DPO must be qualified and free of conflicts, monitor compliance, consult the Commissioner, assist data subjects, and report to the Commissioner any contravention the controller has not fixed in reasonable time. Under reg. 9 the DPO may be staff or a contractor, must report to senior or executive management, needs a Jamaican-resident representative if based abroad, and may serve several controllers only if accessible to each and free of conflicts.",g:"Arts. 37–39",bp:"Give the DPO a direct line to senior management, a budget, and protection from dismissal for doing the job.",k:"DPO data protection officer appoint conflict church union outsourced shared"},
+ {n:"21",h:"Duty to comply with the standards",s:"Controllers must comply with the eight standards. Breach, or failing to make a required report or notification, is an offence: summary conviction up to $2 million or 2 years; on indictment, a fine or up to 7 years. Any contravention or security breach must be reported to the Commissioner within 72 hours of becoming aware of it, using Form 7 (reg. 10(1)), with any later information sent as an additional report. Form 7 asks for reasons if the report is late. Affected data subjects must be notified within 72 hours (reg. 10(4)).",g:"Art. 5(2), Art. 33, Art. 34",bp:"Run a breach playbook: contain, assess, log, notify the OIC within 72 hours using Form 7, notify individuals, then review.",k:"breach notification 72 hours report incident ransomware hack leak lost laptop contravention form 7"},
+ {n:"22",h:"First standard: fair and lawful",s:"Processing must be fair and lawful, meet a condition in s.23 and, for sensitive data, a condition in s.24. People must be told the controller's identity, the DPO, the purposes, third-party recipients, the legal basis and the retention period, at collection or, for indirect collection, before processing or disclosure where practicable.",g:"Art. 5(1)(a), Arts. 13–14",bp:"Publish a layered privacy notice and give a short notice at the point of collection (forms, CCTV signs, apps).",k:"fair lawful transparency privacy notice inform CCTV sign"},
+ {n:"23",h:"Conditions for processing",s:"Processing is lawful only if one condition applies: consent not withdrawn; necessary for a contract or steps before one; a legal obligation; vital interests; justice, statutory or public functions; legitimate interests not overridden by the person's rights; or the person published the data. A controller relying on legitimate interests must keep a written assessment naming the interest, why the processing is necessary, and why it does not unduly prejudice the person, including safeguards (reg. 11(2)).",g:"Art. 6",bp:"Record the condition relied on for each purpose; these also go in your registration particulars (Registration Regs, reg. 3(1)(m)).",k:"lawful basis legal ground contract legitimate interest legal obligation vital interest LIA assessment"},
+ {n:"24",h:"Conditions for sensitive data",s:"Sensitive data also needs one of: written consent; employment or social security obligations; vital interests; processing by non-profit political, religious or similar bodies; data made public by the person; legal proceedings or advice; justice or statutory functions; fraud prevention through anti-fraud organisations; medical purposes by health professionals or those under an equivalent duty; equality monitoring of racial or ethnic origin; or circumstances set by Ministerial order. Consent may be withdrawn at any time.",g:"Art. 9, Art. 10",bp:"Note that consent for sensitive data must be in writing, a higher bar than the GDPR's 'explicit' consent.",k:"sensitive health medical biometric religion church written consent criminal fraud"},
+ {n:"25",h:"Second standard: purpose limitation",s:"Data must be obtained for specified, lawful purposes and not further processed in a way incompatible with them.",g:"Art. 5(1)(b)",k:"purpose limitation reuse secondary use sell share"},
+ {n:"26",h:"Third standard: data minimisation",s:"Data must be adequate, relevant and limited to what is necessary for the purposes.",g:"Art. 5(1)(c)",k:"minimisation excessive necessary collect too much"},
+ {n:"27",h:"Fourth standard: accuracy",s:"Data must be accurate and, where necessary, kept up to date. A controller is not in breach where it took reasonable steps and the inaccuracy came from the person or a third party.",g:"Art. 5(1)(d)",k:"accuracy accurate up to date"},
+ {n:"28",h:"Fifth standard: storage limitation",s:"Data must not be kept longer than needed for its purpose and must be disposed of in line with regulations under s.74.",g:"Art. 5(1)(e)",bp:"Adopt a retention schedule tied to legal retention periods and evidence secure disposal.",k:"retention storage keep delete disposal destroy"},
+ {n:"29",h:"Sixth standard: data subject rights",s:"Processing must respect data subject rights. Failing to give access under s.6, marketing without consent under s.10, or ignoring notices under ss.11 or 12 breaches this standard.",g:"Chapter III",k:"rights compliance"},
+ {n:"30",h:"Seventh standard: security",s:"Controllers must take appropriate technical and organisational measures against unauthorised or unlawful processing and accidental loss, destruction or damage, and must ensure the Commissioner is told without undue delay of any breach of security measures. Measures must suit the possible harm and the nature of the data, and include pseudonymisation and encryption, confidentiality, integrity, availability and resilience, timely restoration after an incident, and regular testing. Staff with access must know and follow the measures. Processors must give sufficient guarantees and act under a written contract, only on the controller's instructions. Wilfully breaking pseudonymisation or encryption without lawful authority is an offence (up to $2 million in a Parish Court).",g:"Art. 32, Art. 28, Art. 33",bp:"Map controls to ISO/IEC 27001 Annex A; use MFA, encryption at rest and in transit, least-privilege access, tested backups and a written processor agreement.",k:"security encryption technical organisational measures processor contract vendor cloud backup password access control"},
+ {n:"31",h:"Eighth standard: cross-border transfers",s:"Data may leave Jamaica only for a place with adequate protection, judged by the nature of the data, its origin and destination, purpose and duration, local law, international obligations, codes and security measures. Exceptions include consent, contract performance, substantial public interest, legal claims, vital interests, public registers, Commissioner-approved terms or authorisation, and national security. The Minister may designate adequate countries by order; otherwise the Commissioner decides.",g:"Arts. 44–49",bp:"Keep a transfer inventory. For cloud providers abroad, use contractual clauses modelled on EU SCCs and record a transfer risk assessment.",k:"transfer overseas cloud abroad international adequacy United States outsourcing offshore"},
+ {n:"32",h:"Interpretation for Part V",s:"Disclosure duties to data subjects apply despite other laws restricting disclosure, except as Part V provides.",k:"exemption interpretation"},
+ {n:"33",h:"National security",s:"A Minister may certify that data is exempt from specified provisions for national security. Anyone affected may appeal to the Court, which can quash a certificate issued without reasonable grounds.",g:"Art. 23; Art. 2(2)",k:"national security certificate"},
+ {n:"34",h:"Crime, taxation and statutory functions",s:"Data processed to prevent or detect crime, prosecute offenders or assess and collect tax is exempt from certain standards and from s.6, to the extent compliance would prejudice those purposes.",g:"Art. 23; Law Enforcement Directive",k:"crime police tax investigation prosecution TAJ"},
+ {n:"35",h:"Regulatory activity",s:"Data processed for prescribed regulatory functions such as public safety, professional ethics, financial regulation, maladministration, competition and child protection is exempt from access requirements where compliance would prejudice those functions.",g:"Art. 23",k:"regulator regulatory investigation"},
+ {n:"36",h:"Journalism, literature and art",s:"Data processed only for these special purposes, with a view to publication in the public interest, is exempt from most standards other than security, where compliance is incompatible with those purposes. Court proceedings may be stayed pending the Commissioner's determination under s.50.",g:"Art. 85",k:"journalism media press newspaper publication art literature"},
+ {n:"37",h:"Research, history and statistics",s:"Further processing for research is compatible with the original purpose if it does not support decisions about individuals or cause substantial damage or distress. Such data may be kept indefinitely and is exempt from access where results do not identify anyone. Archival disclosure is allowed for records over 30 years old or about people dead 30 years.",g:"Art. 89",k:"research statistics history archive academic study"},
+ {n:"38",h:"Information required to be public",s:"Data a controller must publish under another law (other than the Access to Information Act) is exempt from access, accuracy and non-disclosure provisions.",k:"public register published by law"},
+ {n:"39",h:"Disclosures required by law or for legal proceedings",s:"Disclosure is exempt from the non-disclosure provisions where required by law or court order, or necessary for legal proceedings, legal advice, or establishing or defending legal rights.",k:"court order subpoena police request legal proceedings lawyer disclosure"},
+ {n:"40",h:"Parliamentary privilege",s:"Exempts data where needed to avoid infringing the privileges of either House.",k:"parliament privilege"},
+ {n:"41",h:"Domestic purposes",s:"An individual processing data only for personal, family or household affairs, including recreation, is exempt from the standards and Parts II and III.",g:"Art. 2(2)(c)",k:"personal household family domestic WhatsApp group"},
+ {n:"42",h:"Miscellaneous exemptions",s:"The Second Schedule exempts: confidential references given by the controller (from access); data that would prejudice the combat effectiveness of the JDF; judicial appointments, Queen's Counsel and national honours; public-service and ministerial appointments where the Minister so orders; management forecasts and planning; corporate finance services that could affect prices; records of the controller's intentions in negotiations with the person; exam scripts, with an extended timetable for exam marks; legal professional privilege; self-incrimination; and confidential reports on inmates of correctional institutions.",k:"second schedule references exam marks scripts negotiations privilege corporate finance JDF honours"},
+ {n:"43",h:"Further exemptions by order",s:"After consulting the Commissioner, the Minister may by order exempt data from access where other legal prohibitions should prevail, and exempt certain disclosures.",k:"ministerial order exemption"},
+ {n:"44",h:"Enforcement notice",s:"Where satisfied a controller has contravened or is contravening the standards, the Commissioner may require specified steps, a stop to processing or restrictions, taking account of any damage or distress. A notice may require rectification, blocking, erasure or destruction, and telling third parties. Compliance waits for the appeal period unless the notice states urgency, which still allows at least 7 days.",g:"Art. 58(2)",k:"enforcement notice order stop processing erasure"},
+ {n:"45",h:"Data protection impact assessment",s:"Unless a Gazette notice says otherwise, every controller must submit to the Commissioner, within 90 days after the end of each calendar year, a DPIA covering all personal data it holds, in the prescribed form. It covers the processing, necessity and proportionality, risks to data subjects and safeguards. The Commissioner reviews it and may direct changes.",g:"Art. 35 (only for high-risk processing)",bp:"Run project-level DPIAs for new high-risk processing as well, and roll their findings into the annual submission due by 31 March.",k:"DPIA impact assessment annual risk assessment 90 days"},
+ {n:"46",h:"Request for assessment",s:"A person directly affected by processing, or someone for them, may ask the Commissioner to assess whether it is likely to comply. The Commissioner must do so unless identity or the processing is not adequately shown, and must report back.",g:"Art. 77",k:"complaint request assessment"},
+ {n:"47",h:"Assessment notices",s:"The Commissioner may require entry to premises, access to documents and equipment, copies, observation of processing and staff interviews, each within a stated period, to test compliance. A code of practice governs how these are used.",g:"Art. 58(1)",k:"audit inspection assessment notice"},
+ {n:"48",h:"Limits on assessment notices",s:"Compliance cannot be required before the appeal period ends except in urgent cases (minimum 7 days). Privileged communications are protected, and notices cannot be served on judges or listed security bodies.",k:"privilege limits"},
+ {n:"49",h:"Information notices",s:"The Commissioner may require information to assess a request under s.46, check compliance, or test special-purpose claims, with privilege and self-incrimination protections.",g:"Art. 58(1)(a)",k:"information notice request documents"},
+ {n:"50",h:"Determination on special purposes",s:"The Commissioner may determine that data is not processed only for journalism, literature or art, or not with a view to publication. It takes effect after the appeal period.",k:"journalism determination"},
+ {n:"51",h:"Restrictions on enforcement for special purposes",s:"Enforcement against special-purpose processing needs a s.50 determination and the Court's leave, granted only for matters of substantial public importance.",k:"journalism enforcement leave court"},
+ {n:"52",h:"Failure to comply with a notice",s:"Ignoring an enforcement, assessment or information notice, or knowingly or recklessly giving false information in response, is an offence: fine up to $1 million in the Parish Court, with a due diligence defence.",k:"failure comply notice offence false statement"},
+ {n:"53",h:"Rights of appeal",s:"Controllers may appeal to the Court against enforcement, assessment and information notices, refusals to vary them, urgency statements, and special-purpose determinations.",g:"Art. 78",k:"appeal court"},
+ {n:"54",h:"Determination of appeals",s:"The Court allows an appeal if the notice was not lawful or discretion was wrongly exercised, and may substitute another notice or review the facts.",k:"appeal court decision"},
+ {n:"55",h:"Powers of entry and inspection",s:"The Third Schedule sets out powers of entry and inspection, including by warrant.",g:"Art. 58(1)(f)",k:"entry search warrant inspection premises"},
+ {n:"56",h:"Reports and guidelines to Parliament",s:"The Commissioner lays an annual report and any guidelines before both Houses.",k:"annual report parliament"},
+ {n:"57",h:"Data-sharing code",s:"The Commissioner prepares a code of practical guidance on sharing personal data, after consultation, approved by Parliament. It is reviewed within 18 months of commencement and at least every 3 years.",g:"Art. 40 (codes of conduct)",k:"data sharing code government agencies"},
+ {n:"58",h:"Effect of the data-sharing code",s:"Breaching the code is not itself unlawful, but the code is admissible and must be taken into account in proceedings.",k:"code evidence"},
+ {n:"59",h:"Assistance in special-purpose cases",s:"An individual in proceedings involving special-purpose data may get the Commissioner's assistance where the case raises a matter of substantial public importance.",k:"assistance"},
+ {n:"60",h:"International co-operation",s:"The Minister may make regulations for co-operation and information exchange with foreign data protection authorities.",g:"Art. 50",k:"international cooperation"},
+ {n:"61",h:"Unlawfully obtaining or disclosing personal data",s:"A person must not knowingly or recklessly, without the controller's consent, obtain or disclose personal data or procure its disclosure. Defences: required by law or court order, reasonable belief in a legal right or that the controller would consent, or public interest. Selling data obtained this way, or offering it for sale (including by advertisement), is also an offence. Penalty: up to $5 million or 5 years on summary conviction; a fine or up to 10 years on indictment.",g:"UK DPA 2018 s.170",k:"employee leak sell data unauthorised disclosure insider snooping theft advertise"},
+ {n:"62",h:"Fixed penalty",s:"The Commissioner may serve a fixed penalty notice for offences under s.21(2) or s.16(7), or others prescribed, where the contravention was likely to cause substantial damage or distress and was deliberate or the controller knew or ought to have known of the risk. Paying the penalty and fixing the problem within 30 days (or a longer period in the notice) avoids conviction. The amount is set by Ministerial order and paid to the Collector of Taxes.",g:"Art. 83",k:"fixed penalty fine"},
+ {n:"63",h:"Prohibition on requiring certain records",s:"A business or body providing goods, facilities or services to the public may not make it a condition of service that a person produce a relevant record: one obtained through their access right from the Commissioner of Police, court clerks or the Criminal Records (Rehabilitation of Offenders) Board about convictions or similar matters (Fourth Schedule). Defences: required by law or court order, or justified in the public interest. Penalty: up to $2 million or 2 years summarily; a fine or up to 5 years on indictment.",g:"UK DPA 2018 s.184",k:"enforced subject access require records police record criminal conviction landlord insurer"},
+ {n:"64",h:"Health-record terms in contracts",s:"Contract terms requiring a person to supply health records obtained through access rights are void.",k:"health records contract insurance"},
+ {n:"65",h:"Disclosure of information",s:"A person must give the Commissioner or the Appeal Tribunal information they require for their functions, unless another law prevents it. No one has to give self-incriminating or legally privileged information.",k:"disclosure commissioner tribunal"},
+ {n:"66",h:"Confidentiality of information",s:"The Commissioner, staff and agents must not disclose non-public information about an identifiable individual or business obtained under this Act or the Access to Information Act, unless with consent, for functions or treaty obligations, for proceedings, or in the public interest. Knowing or reckless breach is an offence: up to $2 million or 2 years summarily; up to 10 years on indictment.",k:"confidentiality OIC staff"},
+ {n:"67",h:"Prosecutions",s:"Only the Director of Public Prosecutions, or the Commissioner with the DPP's consent, may prosecute offences under the Act. On conviction for certain offences (ss.18, 19, 61, 63, or ignoring an enforcement notice) the court may order material connected with the offence forfeited, destroyed or erased.",k:"prosecution DPP forfeiture"},
+ {n:"68",h:"Liability of body corporate and directors",s:"A body corporate convicted of an offence under the Act may be fined up to 4% of its annual gross worldwide turnover for the preceding year of assessment under the Income Tax Act. The court considers the economic cost to consumers and others, the benefit to the company, how long the contravention lasted, other offences, and any other relevant factors. Directors, managers, secretaries and similar officers are also liable where the offence involved their consent, connivance or neglect.",g:"Art. 83(5)",k:"penalty fine 4% turnover company corporate director officer personal liability board"},
+ {n:"69",h:"Compensation",s:"A person who suffers damage from a contravention may claim compensation from the controller. Distress alone is recoverable only where there is also damage, or the processing is for journalism, literature or art. It is a defence that the controller took all reasonable care to comply.",g:"Art. 82",k:"compensation damages sue claim distress"},
+ {n:"70",h:"Appeals",s:"Other decisions of the Commissioner (not enforcement, assessment or information notices, which go to the Court under s.53) are appealed to the Appeal Tribunal. The Tribunal has five members appointed by the Governor-General after consulting the Prime Minister and Leader of the Opposition, chaired by a retired Supreme Court or Court of Appeal judge (Fifth Schedule). Procedure is in reg. 12: Form 8 within 21 days.",g:"Art. 78",k:"appeal tribunal form 8"},
+ {n:"71",h:"Service of notices",s:"The Commissioner may serve notices by hand or registered post to a person's home or business, or to an officer at a body's principal office.",k:"service notice"},
+ {n:"72",h:"Application to the Crown",s:"The Act binds the Crown, and each public authority is a separate person. A public authority cannot be prosecuted under the Act, though notices and other enforcement still apply.",k:"government ministry crown public authority prosecution"},
+ {n:"73",h:"Application to Parliament",s:"The Act applies to processing by or for either House of Parliament. The Clerk to the Houses is the data controller.",k:"parliament clerk"},
+ {n:"74",h:"Regulations",s:"The Minister may make regulations to give effect to the Act, including extra safeguards for sensitive data, retention periods, fees, disposal methods, and offences with penalties up to $5 million. Several instruments, including disposal regulations, need affirmative resolution of Parliament.",k:"regulations minister retention periods"},
+ {n:"75",h:"Amendment of penalties",s:"The Minister may amend monetary and fixed penalties by order subject to affirmative resolution.",k:"amend penalties"},
+ {n:"76",h:"Transitional provisions",s:"Controllers had two years from the first commencement date to reach full compliance. No proceedings may be taken for processing done in good faith during that period.",k:"transition grace period two years"},
+ {n:"77",h:"Review of Act",s:"The Act must be reviewed every five years from the first commencement date.",k:"review five years"}
+];
+
+const REGS = [
+ {n:"R1",l:"regs. 2–4",h:"Making and answering rights requests",s:"Data Protection Regulations, 2024, in force 1 March 2024. Someone acting for a minor, an impaired person or as a representative or delegate must supply ID and proof of authority; written delegations use Form 1A, witnessed by a JP (reg. 2). Requests may use Forms 2–5 (access, stop processing, automated decisions, rectification) and must be made by a method that creates a written record (reg. 3). Controllers must help people who cannot write a request in English or have a disability, answer in clear plain language, and may extend an access response by up to 45 days with written notice before day 30 (reg. 4).",k:"form 2 3 4 5 request representative delegation JP extension 45 days plain language disability"},
+ {n:"R2",l:"reg. 5",h:"Fees and waivers",s:"Fees are in the Second Schedule of the Regulations: electronic copies of personal data free; paper $100 per page; audio or video $1,000; logic of automated decisions $1,000 per 5 MB; transmission to another controller electronically free; Commissioner's assessment under s.4(8) $50,000. Controllers may waive fees on written request; public authorities must consider hardship. Information need not be given until fees are paid.",k:"fee waiver paper copy access cost assessment"},
+ {n:"R3",l:"regs. 6–8",h:"Consent delegation, marketing consent and rectification",s:"A delegate to give or withhold consent uses Form 1B, valid for the period stated, with both IDs; a non-conforming form must not be acted on (reg. 6). Requests for direct-marketing consent use Form 6 (reg. 7). On rectification, controllers must promptly ask for any further information needed and give reasons and appeal rights in their decision (reg. 8).",k:"form 1b form 6 consent marketing delegate rectification"},
+ {n:"R4",l:"reg. 9",h:"Data protection officers",s:"A DPO may be staff or a contractor, must report to senior or executive management, needs a resident representative in Jamaica if based abroad, and may serve more than one controller only if accessible to each and free of conflicts.",k:"DPO shared outsourced representative"},
+ {n:"R5",l:"reg. 10",h:"Breach reports and notifying individuals",s:"Reports to the Commissioner under s.21(3) use Form 7, with further information sent forthwith as an additional report. Affected data subjects must be notified within 72 hours of awareness, directly in writing or, if that would cause undue hardship or contact details are missing, by public or other indirect means. The notice must explain in plain language what happened and when, likely consequences and data affected, mitigation steps, steps the person can take, and the DPO's contact details.",k:"breach form 7 notify individuals 72 hours public notice"},
+ {n:"R6",l:"reg. 11",h:"Fair processing information and legitimate interests",s:"Privacy information must be enough for people to understand the purposes, likely consequences, nature and extent of processing and likely disclosures. A controller relying on legitimate interests must keep a written assessment of the interest, necessity and balancing, linked to the data concerned.",k:"privacy notice legitimate interest assessment LIA written"},
+ {n:"R7",l:"regs. 12–13",h:"Appeals to the Appeal Tribunal",s:"File Form 8 within 21 days of being told of the decision (an extension may be requested), with supporting documents, and serve the Commissioner within 5 days. The Commissioner gives written reasons within 14 days. Parties exchange evidence lists at least 14 days before the hearing; the Tribunal decides in writing within 60 days after the hearing. A Commissioner's decision takes effect pending appeal unless ordered otherwise.",k:"appeal tribunal form 8 21 days"},
+ {n:"R8",l:"Registration Regs",h:"Data Protection (Data Controller Registration) Regulations, 2024",s:"Made by the Commissioner with the Minister's approval (Gazette, 1 April 2024). Adds registration particulars such as TRN, locations, estimated data subjects, processors abroad, lawful conditions, sensitive data and automated decisions (reg. 3(1)). Particulars are filed on the OIC website at first registration and annually by 1 December, and changes notified within 14 days (regs. 3–4). Fees: first registration $25,000 company or public authority, $15,000 partnership, $7,500 sole trader or individual; annual $15,000, $10,000 and $5,000. Certified register copy: $500 plus $100 per page. Fees are refunded if the application is withdrawn or registration proves unnecessary.",k:"registration fee renewal december 14 days TRN"},
+ {n:"R9",l:"Disposal Regs",h:"Data Protection (Disposal of Personal Data) Regulations, 2024",s:"Made 4 March 2024 and affirmed by both Houses (Gazette, 17 September 2025). Controllers must regularly review their data and dispose of anything no longer needed for its purpose, legal retention, legal claims or a legitimate purpose recognised by sector standards; adopt retention and disposal policies setting minimum and maximum periods; and keep data used to make a decision about someone long enough for them to request access. Disposal must make the data impossible to process further or link to the person, and be permanent having regard to foreseeable technology, especially for electronic data.",k:"disposal destroy shred delete retention schedule policy wipe"}
+];
+
+const CMP = [
+ ["Registration","Every controller must register with the OIC and pay an annual fee before processing (ss.15–18). Unregistered processing is a criminal offence.","No registration. Controllers keep internal records of processing (Art. 30).","stricter"],
+ ["Impact assessments","Annual DPIA covering all personal data, filed with the Commissioner within 90 days after each calendar year (s.45).","DPIA only for processing likely to result in high risk; not filed unless prior consultation is needed (Arts. 35–36).","stricter"],
+ ["Breach notification","Any contravention or security breach reported to the Commissioner within 72 hours on Form 7 (s.21(3), reg. 10). Affected individuals notified within 72 hours, directly or by public notice (reg. 10(4)–(6)). No risk threshold.","Notify the authority within 72 hours unless unlikely to result in risk; individuals only where high risk, without undue delay (Arts. 33–34).","stricter"],
+ ["Legitimate interests","Available (s.23), but a written assessment must be kept for each use (reg. 11(2)).","Available (Art. 6(1)(f)); a documented balancing test is expected under accountability (Art. 5(2)) but not prescribed.","stricter"],
+ ["Deceased persons","Covers people dead for less than 30 years (s.2).","Does not cover the deceased (Recital 27).","stricter"],
+ ["Sensitive data","Includes alleged offences and filiation; consent must be written (s.24).","Special categories plus separate rules for criminal data; consent must be explicit (Arts. 9–10).","stricter"],
+ ["Criminal liability","Most breaches are offences with imprisonment (e.g. up to 7 years for breaching the standards on indictment, s.21). Prosecution needs the DPP (s.67). Public authorities cannot be prosecuted (s.72(3)).","Administrative fines; criminal sanctions left to member states (Art. 84). Member states may exempt public bodies from fines (Art. 83(7)).","stricter"],
+ ["Lawful bases","Consent, contract, legal obligation, vital interests, public functions, legitimate interests, or data made public by the person (s.23).","Six bases, no separate 'made public' basis for ordinary data (Art. 6).","similar"],
+ ["Consent standard","Informed, specific, unequivocal, freely given; no bundling beyond what the service needs (s.9). Consent may be given through a delegate on Form 1B (reg. 6).","Freely given, specific, informed, unambiguous; conditionality presumed invalid (Arts. 4(11), 7).","similar"],
+ ["Access requests","30 days, extendable by up to 45 days with notice before day 30 (s.6(4), reg. 4(3)). Electronic copies free; paper $100 a page (Regs, Second Schedule).","One month, extendable by two; normally free (Arts. 12, 15).","similar"],
+ ["Right to erasure","No stand-alone right; achieved through objection (s.11), rectification (s.13), enforcement notices (s.44) and the duty to dispose of data no longer needed (Disposal Regs).","Express right to erasure (Art. 17).","lighter"],
+ ["Data portability","Part of the access right where technically feasible; electronic transmission to another controller is free (s.6, Regs Second Schedule).","Free-standing right, free of charge (Art. 20).","similar"],
+ ["Direct marketing","Consent (asked only once, on Form 6), or the customer route: details obtained in a sale, own similar products, opt-out at collection and in every message (s.10). Includes donation requests.","Absolute right to object (Art. 21); electronic marketing rules sit in the ePrivacy Directive's similar soft opt-in.","similar"],
+ ["Automated decisions","Right to require a human decision and to request reconsideration within 30 days (s.12).","Right not to be subject to solely automated decisions with legal or similar effect (Art. 22).","similar"],
+ ["Data protection officer","Required for public authorities, any sensitive or criminal data processing, large-scale processing and Gazetted classes (s.20). Must report to senior management; needs a local representative if based abroad (reg. 9). Religious and similar non-profits exempt.","Required for public bodies and where core activities involve large-scale monitoring or special-category data (Art. 37).","stricter"],
+ ["Children","No age threshold; a parent or guardian acts for a minor with proof such as a birth certificate (s.5, reg. 2).","Member states set 13–16 for information society services (Art. 8).","lighter"],
+ ["International transfers","Adequacy, with exceptions including consent, contract and Commissioner-approved terms (s.31). No filing or localisation.","Adequacy decisions, appropriate safeguards (SCCs, BCRs) or derogations (Arts. 44–49).","similar"],
+ ["Maximum fine","Body corporate up to 4% of annual gross worldwide turnover (s.68); individuals up to $5 million and prison (e.g. s.61).","Up to €20 million or 4% of worldwide annual turnover, whichever is higher (Art. 83).","similar"],
+ ["Territorial reach","Controllers in Jamaica, and foreign controllers using equipment in, targeting or monitoring people in Jamaica, who must appoint a local representative (s.3).","Establishment in the EU, or targeting or monitoring people in the EU (Art. 3).","similar"]
+];
+
+const CLOCKS = [
+ ["72 hours","Report a contravention or security breach to the Commissioner (Form 7)","s.21(3), reg. 10"],
+ ["72 hours","Notify affected data subjects of a breach","reg. 10(4)"],
+ ["21 days","Respond in writing to a notice to stop processing","s.11(4)"],
+ ["30 days","Comply with an access request (from request and fee)","s.6(4)"],
+ ["+45 days","Extension for complex or high-volume access requests, notified before day 30","reg. 4(3)–(4)"],
+ ["30 days","Decide on a rectification request","s.13"],
+ ["30 days","Respond to a request to reconsider an automated decision","s.12(4)"],
+ ["30 days","Exempt controller gives its particulars to a written requester","s.16(5)"],
+ ["30 + 14 days","Commissioner's assessment of designated high-risk processing","s.19"],
+ ["30 days","Pay and remedy to avoid prosecution under a fixed penalty notice","s.62(5)"],
+ ["90 days","File the annual DPIA after the calendar year ends (by 31 March)","s.45"],
+ ["1 Dec","Re-submit registration particulars each year","Reg. Regs 3(3)(b)"],
+ ["14 days","Notify changes to registration particulars","Reg. Regs 3(4)"],
+ ["12 months","Register entry lapses if the annual fee is unpaid","s.17"],
+ ["21 days","File an appeal (Form 8) with the Appeal Tribunal; serve the Commissioner within 5 days","reg. 12"],
+ ["60 days","Appeal Tribunal's written decision after the hearing","reg. 12(8)"],
+ ["7 days min.","Earliest compliance with an urgent notice","ss.44, 48, 49"],
+ ["30 years","Deceased persons still covered; archive release threshold","ss.2, 37"],
+ ["5 years","Statutory review of the Act","s.77"]
+];
+
+const PENS = [
+ ["Processing without registration","s.18","$2,000,000","or 6 months"],
+ ["Exempt controller not giving particulars on request","s.16(7)","$1,000,000",""],
+ ["Breaching the standards or failing to report","s.21(2)","$2,000,000 or 2 yrs","indictment: 7 yrs"],
+ ["Processing before a required high-risk assessment","s.19","$5,000,000 or 5 yrs","indictment: 10 yrs"],
+ ["Breaking pseudonymisation or encryption","s.30(7)","$2,000,000","Circuit Court: fine"],
+ ["Ignoring or giving false information to a notice","s.52","$1,000,000",""],
+ ["Unlawfully obtaining, disclosing or selling data","s.61","$5,000,000 or 5 yrs","indictment: 10 yrs"],
+ ["Requiring someone to produce criminal records","s.63","$2,000,000 or 2 yrs","indictment: 5 yrs"],
+ ["OIC staff disclosing confidential information","s.66","$2,000,000 or 2 yrs","indictment: 10 yrs"],
+ ["Any offence by a body corporate","s.68","up to 4% turnover","annual gross worldwide"]
+];
+
+const CASES = [
+ {t:"Ransomware at a private clinic",r:"high",f:"A clinic finds its patient database encrypted on a Saturday night. Backups are intact but logs show data was copied out.",a:["Health data is sensitive personal data (s.2), so the clinic must already have a DPO (s.20).","This is a security breach under the seventh standard (s.30). The 72-hour clock to report to the Commissioner runs from awareness, weekends included (s.21(3)). Use Form 7 and send new findings as additional reports (reg. 10(1)–(3)).","Each affected patient must be told within 72 hours, in writing, what happened and when, the likely consequences, what the clinic is doing, what they can do, and the DPO's contacts (reg. 10(4), (7)). If the clinic lacks contact details, a public notice is allowed (reg. 10(5)–(6)).","Check whether the IT provider was bound by a written processor contract with security guarantees (s.30(4)–(5)).","GDPR: notify the authority in 72 hours and patients because the risk is high (Arts. 33–34). Good practice: preserve evidence, engage incident response, reset credentials, and document every decision."]},
+ {t:"CCTV in an office and staff kitchen",r:"med",f:"A firm installs cameras covering entrances, the open office and the staff kitchen, recording audio and video for 90 days.",a:["Video of identifiable people is personal data (s.2). Legitimate interests (security) is the likely condition for entrances (s.23), and needs a written assessment (reg. 11(2)).","Covering the kitchen and recording audio is hard to justify as necessary: risk of breaching data minimisation (s.26) and fairness (s.22).","Signs must tell people who is recording, why, and how to contact the DPO (s.22, reg. 11(1)). Retention should be set in a written retention policy and footage securely disposed of (s.28, Disposal Regs).","Staff can request footage of themselves (s.6). Include the system in the annual DPIA (s.45).","GDPR and ICO guidance: document a legitimate interests assessment, avoid audio, and restrict access to footage."]},
+ {t:"SMS promotions to customers and a bought list",r:"med",f:"A hardware store wants to text loyalty-card customers about a sale on its own tools, and to buy a list of numbers from a marketing agency.",a:["The customer route works only if the numbers were collected in a sale, the texts promote the store's own similar goods, and customers could opt out free and easily at collection and can do so in every message (s.10(1)(b), (4)).","Each text must identify the store and give a contact for stopping messages (s.10(5)).","The bought list needs consent. The store may ask each person only once, on Form 6 (s.10(2)–(3), reg. 7).","If the agency obtained the numbers without a controller's consent, selling them is an offence (s.61(4)–(5)).","GDPR: the ePrivacy soft opt-in for customers, and an absolute right to object to marketing (Art. 21(3))."]},
+ {t:"Payroll in a US cloud service",r:"med",f:"A Kingston company moves HR and payroll records to a US-hosted software provider.",a:["This is a cross-border transfer under the eighth standard (s.31). With no list of designated adequate countries, the company must assess adequacy or rely on an exception.","Practical routes: contract performance for payroll, or Commissioner-approved terms (s.31(4)). Employee consent is weak because it is rarely freely given (s.9).","The provider is a processor: a written contract, acting only on instructions, with equivalent security obligations (s.30(5)). The processor and its country go in the registration particulars (Registration Regs, reg. 3(1)(l)).","GDPR: SCCs plus a transfer impact assessment, or the EU-US Data Privacy Framework where the provider is certified."]},
+ {t:"Background checks on job applicants",r:"low",f:"A BPO runs confidential background checks, including references and police records, on shortlisted applicants.",a:["Alleged offences and proceedings are sensitive personal data (s.2), so a s.24 condition is needed, for example written consent.","Applicants must be told what checks are run and why (s.22, reg. 11). Collect only what the role justifies (s.26).","s.63 does not apply here: it covers providers of goods or services to the public who demand criminal records as a condition of service. The employer should still obtain police certificates through the proper process, not by asking applicants to make access requests.","References the BPO gives in confidence are exempt from access (Second Schedule, para. 1).","The Supreme Court in Morrison v Elephant Group (Centerfield Jamaica) treated confidential pre-employment background checks as permissible processing (as reported by Chambers).","GDPR: criminal data only under Art. 10 with legal authorisation."]},
+ {t:"Church membership and giving records",r:"low",f:"A church keeps members' contact details, baptism records and giving history, and wants to share the list with a partner charity.",a:["Religious belief is sensitive data (s.2). The church can rely on the s.24 condition for non-profit religious bodies for processing about its own members.","Religious non-profits are exempt from appointing a DPO (s.20(6)) but must still register and meet every standard; without a DPO, registration names an authorised officer (Registration Regs, reg. 3(1)(f)).","Sharing with the charity is a new purpose: members need to be told and to consent (s.25). Donation appeals from the charity are direct marketing (s.10(6)(b)).","GDPR: Art. 9(2)(d) covers the church but not disclosure outside it without consent."]},
+ {t:"Bank declines an access request",r:"med",f:"A customer asks a bank for all records, including internal notes about a fraud review. The bank wants to refuse.",a:["The bank must respond within 30 days (s.6(4)), or extend by up to 45 days with written notice before day 30 if the request is complex (reg. 4(3)–(4)). Electronic copies are free; paper costs $100 a page.","Notes from a fraud investigation may be withheld to the extent disclosure would prejudice crime prevention (s.34), item by item, not the whole file. Records of the bank's intentions in negotiations with the customer may also be exempt (Second Schedule, para. 7).","Third-party information needs consent or must be reasonable to release (s.8). Any refusal must be in writing within 30 days (s.8(9)).","The customer can complain to the Commissioner, who can order compliance (s.6(6)) or assess under s.46."]},
+ {t:"AI loan approvals",r:"high",f:"A credit union uses a machine-learning model to approve or reject small loans with no human review.",a:["A loan rejection is a significant decision. Members may require that it is not made solely by automated means (s.12).","Where it is, the credit union must tell the member, who may ask for reconsideration within 30 days; it must respond within 30 days.","Members can request the logic involved; the regulated fee is $1,000 per 5 MB (Regs, Second Schedule). Logic may be withheld only where it is a trade secret (s.8).","Solely automated decision-making must be declared in the registration particulars (Registration Regs, reg. 3(1)(o)) and covered in the annual DPIA (s.45).","GDPR: Art. 22 safeguards and meaningful information about the logic (Arts. 13–15). Good practice: bias testing and model documentation."]}
+];
+
+const QUIZ = [
+ {q:"A company discovers a breach at 6 p.m. on Friday. By when must it report to the Commissioner?",o:["Within 72 working hours","By 6 p.m. Monday","Only if the breach is likely to cause harm","Within 30 days"],a:1,e:"s.21(3) requires a report within 72 hours of becoming aware, on Form 7 (reg. 10). There is no weekend exclusion and, unlike GDPR Art. 33, no risk threshold."},
+ {q:"A complex access request arrives. What is the longest the controller can take?",o:["30 days","45 days","75 days, if it gives written notice of the extension before day 30","Three months"],a:2,e:"s.6(4) sets 30 days; reg. 4(3)–(4) allows up to 45 more days in listed cases, with written notice before the initial period ends."},
+ {q:"Which person is NOT protected by the DPA?",o:["A tourist whose data is processed in Jamaica","A person who died 35 years ago","A minor","A foreign national targeted by a Jamaican website"],a:1,e:"s.2 covers living individuals and people dead for less than 30 years."},
+ {q:"When is the annual DPIA due?",o:["Before any new project starts","Within 90 days after the end of each calendar year","Only for high-risk processing","With the registration renewal on 1 December"],a:1,e:"s.45: every controller files a DPIA covering all personal data within 90 days after each calendar year, unless a Gazette notice says otherwise."},
+ {q:"A church processes members' religious affiliation. Which is true?",o:["It needs no lawful condition","It must appoint a DPO","It may rely on the condition for non-profit religious bodies, and is exempt from the DPO requirement","It is exempt from registration"],a:2,e:"s.24 has a condition for non-profit religious bodies; s.20(6) exempts them from appointing a DPO. Registration still applies (s.15)."},
+ {q:"A company relies on legitimate interests for CCTV. What do the Regulations require?",o:["OIC approval","Consent from everyone filmed","A written assessment of the interest, necessity and balancing","Nothing beyond a sign"],a:2,e:"reg. 11(2) requires a written legitimate interests assessment, kept so it can be associated with the data."},
+ {q:"Within how many days must a controller respond to a notice to stop processing?",o:["7","21","30","60"],a:1,e:"s.11(4): a written response within 21 days."},
+ {q:"A store texts existing customers about a sale. Which is NOT a condition of the customer route in s.10?",o:["The number was obtained in the context of a sale","The texts promote the store's own similar goods","The customer could opt out at collection and in every message","The customer signed Form 6"],a:3,e:"Form 6 is for consent requests (reg. 7). The customer route in s.10(4) needs a sale context, own similar goods, and opt-out at collection and in each message."},
+ {q:"Which right does the DPA NOT contain as a stand-alone right?",o:["Access","Rectification","Erasure (right to be forgotten)","Objection to automated decisions"],a:2,e:"Erasure is reached through s.11, s.13, enforcement notices under s.44 and the Disposal Regulations, unlike GDPR Art. 17."},
+ {q:"A ministry breaches the standards. Which is true?",o:["It can be fined 4% of its budget","It cannot be prosecuted, but enforcement notices still apply","It is exempt from the Act","Only its DPO can be prosecuted"],a:1,e:"s.72 binds the Crown, but s.72(3) says a public authority is not liable to prosecution. The Commissioner's notices still apply."},
+ {q:"Which section sets the 4% of turnover fine for companies?",o:["s.21","s.62","s.67","s.68"],a:3,e:"s.68(1): up to 4% of annual gross worldwide turnover for the preceding year of assessment. s.67 deals with who may prosecute."},
+ {q:"What do the Disposal Regulations require when data is destroyed?",o:["Shredding by a licensed contractor","OIC notification","That it can no longer be processed or linked to the person, permanently","Deletion within 30 days of the purpose ending"],a:2,e:"Disposal Regs, reg. 2(2): disposal must prevent further processing or identification and be permanent having regard to foreseeable technology. The method is the controller's choice."}
+];
+
+/* ================= HELPERS ================= */
+const $ = s => document.querySelector(s);
+const esc = t => String(t).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const secById = Object.fromEntries(S.map(x => [x.n, x]));
+function partOf(n){const i=parseInt(n,10);return PARTS.find(p=>p.r&&i>=p.r[0]&&i<=p.r[1]);}
+
+/* routing */
+const VIEWS = ["ask","act","compare","reference","cases","practice","sources"];
+function route(){
+  const v = VIEWS.includes(location.hash.slice(1)) ? location.hash.slice(1) : "ask";
+  VIEWS.forEach(id => { $("#v-"+id).hidden = id !== v; });
+  document.querySelectorAll("nav.tabs a").forEach(a => a.setAttribute("aria-current", a.getAttribute("href") === "#"+v ? "page" : "false"));
+}
+window.addEventListener("hashchange", () => { route(); window.scrollTo(0,0); });
+route();
+
+/* ================= ACT EXPLORER ================= */
+let curPart = "IV";
+function renderParts(){
+  $("#parts").innerHTML = PARTS.map(p => `<button type="button" data-p="${p.id}" aria-pressed="${p.id===curPart}"><span class="pn">${p.id==="R"?"REGS":"PART "+p.id}</span>${esc(p.t)}</button>`).join("");
+}
+function secHTML(x, isReg){
+  const num = isReg ? x.l : "s."+x.n;
+  return `<div class="sec" id="s-${x.n}">
+    <div class="sec-head"><span class="num"${isReg?' style="min-width:auto;font-size:12.5px"':""}>${esc(num)}</span><h3>${esc(x.h)}</h3></div>
+    <div class="sec-body"><p>${esc(x.s)}</p>
+    ${x.bp?`<div class="bp"><b>Good practice.</b> ${esc(x.bp)}</div>`:""}
+    <div class="sec-tags">${x.g?`<span class="tag-g">GDPR <b>${esc(x.g)}</b></span>`:""}
+    <button class="askthis" type="button" data-ask="${esc(isReg?x.h:"s."+x.n+" "+x.h)}">Ask how this applies</button></div></div></div>`;
+}
+function renderSecs(){
+  const q = $("#search").value.trim().toLowerCase();
+  let html = "";
+  if(q){
+    const terms = q.split(/\s+/);
+    const hits = [...S.map(x=>[x,false]), ...REGS.map(x=>[x,true])].filter(([x]) => {
+      const hay = (x.n+" "+x.h+" "+x.s+" "+(x.k||"")+" "+(x.g||"")).toLowerCase();
+      return terms.every(t => hay.includes(t));
+    });
+    html = hits.length ? `<p class="note" style="margin-top:0">${hits.length} matching section${hits.length>1?"s":""}</p>`+hits.map(([x,r])=>secHTML(x,r)).join("") : `<p class="empty">No section matches “${esc(q)}”. Try a broader word such as breach, consent or transfer.</p>`;
+  } else {
+    const p = PARTS.find(p=>p.id===curPart);
+    const list = p.id==="R" ? REGS.map(x=>secHTML(x,true)) : S.filter(x=>partOf(x.n)===p).map(x=>secHTML(x,false));
+    html = `<div class="eyebrow">${p.id==="R"?"Subsidiary legislation":"Part "+p.id+" · ss."+p.r[0]+"–"+p.r[1]}</div><h3 class="part-title">${esc(p.t)}</h3><p class="part-blurb">${esc(p.b)}</p>`+list.join("");
+  }
+  $("#secs").innerHTML = html;
+}
+$("#parts").addEventListener("click", e => {const b=e.target.closest("button");if(!b)return;curPart=b.dataset.p;$("#search").value="";renderParts();renderSecs();});
+$("#search").addEventListener("input", renderSecs);
+renderParts(); renderSecs();
+
+/* ================= COMPARE / REFERENCE ================= */
+const DL = {stricter:"DPA stricter",similar:"broadly aligned",lighter:"DPA lighter"};
+$("#cmp tbody").innerHTML = CMP.map(r=>`<tr><td>${esc(r[0])}</td><td>${esc(r[1])}</td><td>${esc(r[2])}</td><td><span class="delta ${r[3]}">${DL[r[3]]}</span></td></tr>`).join("");
+$("#clocks").innerHTML = CLOCKS.map(c=>`<div class="clock"><div class="t">${esc(c[0])}</div><div class="w">${esc(c[1])} <span class="sref">${esc(c[2])}</span></div></div>`).join("");
+$("#pens").innerHTML = PENS.map(p=>`<div class="pen"><div>${esc(p[0])} <span class="sref">${esc(p[1])}</span></div><div class="amt">${esc(p[2])}${p[3]?`<small>${esc(p[3])}</small>`:""}</div></div>`).join("");
+$("#status").innerHTML = "<b>Current status.</b> The OIC has temporarily paused data controller registration for system updates and has advised that no liability for unregistered processing will be imposed while the system is offline. Every other obligation, including breach reporting and the annual DPIA, continues to apply.";
+
+/* ================= CASES ================= */
+$("#caselist").innerHTML = CASES.map((c,i)=>`<article class="panel case">
+  <span class="risk ${c.r}">${c.r==="high"?"High risk":c.r==="med"?"Moderate risk":"Lower risk"}</span>
+  <h3>${esc(c.t)}</h3><p class="facts">${esc(c.f)}</p>
+  <details><summary>Analysis</summary><ul>${c.a.map(x=>`<li>${esc(x)}</li>`).join("")}</ul></details>
+  <div class="foot"><button class="askthis" type="button" data-case="${i}">Explore a variation in the analyser</button></div></article>`).join("");
+
+/* ================= QUIZ ================= */
+let qi = 0, score = 0;
+function renderQuiz(){
+  if(qi >= QUIZ.length){
+    $("#quiz").innerHTML = `<div class="panel qcard"><div class="eyebrow">Result</div><h3 style="font-size:22px;margin:6px 0">${score} of ${QUIZ.length}</h3><p class="note">${score>=10?"Strong command of the Act.":score>=7?"Good grounding. Review the sections you missed in The Act tab.":"Worth another pass through Parts II and IV."}</p><button class="btn primary" id="qrestart" type="button">Start again</button></div>`;
+    $("#qrestart").onclick = () => {qi=0;score=0;renderQuiz();};
+    return;
+  }
+  const x = QUIZ[qi];
+  $("#quiz").innerHTML = `<div class="qbar"><span class="eyebrow">Question ${qi+1} of ${QUIZ.length}</span><div class="track"><i style="width:${qi/QUIZ.length*100}%"></i></div><span class="eyebrow">Score ${score}</span></div>
+  <div class="panel qcard"><h3>${esc(x.q)}</h3><div class="opts">${x.o.map((o,j)=>`<button class="opt" type="button" data-j="${j}">${esc(o)}</button>`).join("")}</div><div id="qex"></div></div>`;
+  $("#quiz .opts").onclick = e => {
+    const b = e.target.closest(".opt"); if(!b) return;
+    const j = +b.dataset.j;
+    document.querySelectorAll("#quiz .opt").forEach((el,k)=>{el.disabled=true; if(k===x.a) el.classList.add("right"); else if(k===j) el.classList.add("wrong");});
+    if(j===x.a) score++;
+    $("#qex").innerHTML = `<div class="explain"><b>${j===x.a?"Correct.":"Not quite."}</b> ${esc(x.e)}</div><div style="margin-top:12px"><button class="btn primary" id="qnext" type="button">${qi===QUIZ.length-1?"See result":"Next question"}</button></div>`;
+    $("#qnext").onclick = () => {qi++;renderQuiz();};
+  };
+}
+renderQuiz();
+
+/* ================= PROVISION FINDER ================= */
+const STOP = new Set("a an the and or of to in on for with is are be by at as it its this that what how must do does can we our i my they their from has have will would should if any when who which".split(" "));
+function findSections(text){
+  const words = text.toLowerCase().match(/[a-z0-9%]+/g) || [];
+  const terms = [...new Set(words.filter(w=>w.length>2 && !STOP.has(w)))];
+  if(!terms.length) return [];
+  const all = [...S.map(x=>({x,reg:false})), ...REGS.map(x=>({x,reg:true}))];
+  return all.map(o=>{
+    const k=(o.x.k||"").toLowerCase(), h=o.x.h.toLowerCase(), s=o.x.s.toLowerCase();
+    let sc=0; terms.forEach(t=>{ if(k.includes(t)) sc+=3; if(h.includes(t)) sc+=2; if(s.includes(t)) sc+=0.5; });
+    return {...o,sc};
+  }).filter(o=>o.sc>=3).sort((a,b)=>b.sc-a.sc).slice(0,7);
+}
+function renderFinder(){
+  const hits = findSections($("#q").value);
+  $("#finder").innerHTML = hits.length ? hits.map(o=>`<button class="finder-hit" type="button" data-go="${o.x.n}"><span class="sref">${o.reg?esc(o.x.l):"s."+o.x.n}</span><span class="h">${esc(o.x.h)}</span></button>`).join("") : `<p class="note">${$("#q").value.trim()?"No strong matches yet. Add detail such as the type of data or what went wrong.":"Type a scenario to see matching sections."}</p>`;
+}
+$("#q").addEventListener("input", renderFinder);
+$("#finder").addEventListener("click", e => {
+  const b = e.target.closest("[data-go]"); if(!b) return;
+  const n = b.dataset.go;
+  if(n.startsWith("R")) curPart="R"; else curPart = partOf(n).id;
+  $("#search").value=""; renderParts(); renderSecs();
+  location.hash="act";
+  setTimeout(()=>{const el=document.getElementById("s-"+n); if(el){el.scrollIntoView({block:"start"}); el.style.background="var(--gold-soft)"; setTimeout(()=>el.style.background="",1600);}},60);
+});
+
+/* ================= EXAMPLES / SEND TO ANALYSER ================= */
+const EXAMPLES = [
+ "A school wants to post photos of students at sports day on Facebook. What does it need to do?",
+ "An employee emailed a spreadsheet of 2,000 customers' TRNs to the wrong supplier. Is this reportable?",
+ "Can a hotel keep guests' passport scans for five years?",
+ "A US e-commerce site sells to Jamaicans but has no office here. Does the DPA apply?"
+];
+$("#examples").innerHTML = EXAMPLES.map(x=>`<button class="chip" type="button">${esc(x)}</button>`).join("");
+$("#examples").addEventListener("click", e => {const b=e.target.closest(".chip"); if(!b) return; $("#q").value=b.textContent; renderFinder(); $("#q").focus();});
+document.addEventListener("click", e => {
+  const a = e.target.closest("[data-ask]");
+  if(a){ $("#q").value = `How does ${a.dataset.ask} of the Data Protection Act apply in practice? Give an example scenario and the main compliance steps.`; location.hash="ask"; renderFinder(); $("#q").focus(); return; }
+  const c = e.target.closest("[data-case]");
+  if(c){ const x=CASES[+c.dataset.case]; $("#q").value = `${x.f}\n\nVariation: [describe what is different]`; location.hash="ask"; renderFinder(); $("#q").focus(); }
+});
+
+/* ================= MARKDOWN (small, safe) ================= */
+function inline(t){
+  return esc(t).replace(/\*\*(.+?)\*\*/g,"<strong>$1</strong>").replace(/`([^`]+)`/g,"<code>$1</code>")
+    .replace(/(^|[\s(])(ss?\.\s?\d+[A-Z]?(?:\(\d+\))*(?:\([a-z]\))?)/g,'$1<code>$2</code>');
+}
+function md(src){
+  const lines = src.replace(/\r/g,"").split("\n"); let out="", list=null, para=[];
+  const flushP=()=>{ if(para.length){ out+="<p>"+inline(para.join(" "))+"</p>"; para=[]; } };
+  const flushL=()=>{ if(list){ out+=`</${list}>`; list=null; } };
+  for(const raw of lines){
+    const l = raw.trimEnd();
+    let m;
+    if(!l.trim()){ flushP(); flushL(); continue; }
+    if(m=l.match(/^#{1,2}\s+(.*)/)){ flushP(); flushL(); out+="<h2>"+inline(m[1])+"</h2>"; continue; }
+    if(m=l.match(/^#{3,6}\s+(.*)/)){ flushP(); flushL(); out+="<h3>"+inline(m[1])+"</h3>"; continue; }
+    if(m=l.match(/^\s*[-*•]\s+(.*)/)){ flushP(); if(list!=="ul"){flushL(); out+="<ul>"; list="ul";} out+="<li>"+inline(m[1])+"</li>"; continue; }
+    if(m=l.match(/^\s*\d+[.)]\s+(.*)/)){ flushP(); if(list!=="ol"){flushL(); out+="<ol>"; list="ol";} out+="<li>"+inline(m[1])+"</li>"; continue; }
+    if(/^\s*\|/.test(l)){ flushL(); para.push(l.replace(/\|/g," ").replace(/-{3,}/g,"")); continue; }
+    flushL(); para.push(l.trim());
+  }
+  flushP(); flushL(); return out;
+}
+
+/* ================= ANALYSER ================= */
+function kbText(){
+  const secs = S.map(x=>`s.${x.n} ${x.h}: ${x.s}${x.g?" [GDPR: "+x.g+"]":""}`).join("\n");
+  const regs = REGS.map(x=>`${x.l} ${x.h}: ${x.s}`).join("\n");
+  const cmp = CMP.map(r=>`${r[0]} — DPA: ${r[1]} GDPR: ${r[2]}`).join("\n");
+  return `JAMAICA DATA PROTECTION ACT, 2020 — SECTION SUMMARIES\n${secs}\n\n2024 REGULATIONS\n${regs}\n\nDPA vs GDPR KEY DIFFERENCES\n${cmp}\n\nSTATUS NOTE: The OIC has paused data controller registration for system updates and said no liability for unregistered processing will be imposed while the system is offline. Case law: Morrison v Elephant Group Ltd (t/a Centerfield Jamaica), Supreme Court, held confidential pre-employment background checks were permissible processing.`;
+}
+const RULES = () => `You are a data protection analyst teaching and advising on Jamaica's Data Protection Act, 2020 (DPA) and its 2024 Regulations.
+
+Ground every statement about Jamaican law in the KNOWLEDGE BASE below and cite section numbers in the form s.21(3) or reg. 10(4). If the knowledge base lacks a detail (for example the exact wording of a Schedule), say so and tell the reader to check the gazetted text on oic.gov.jm. Never invent section numbers, figures or OIC guidance. You may draw on your general knowledge of the EU GDPR, EDPB and UK ICO guidance, ISO/IEC 27001/27701 and the NIST Privacy Framework for the comparison and good-practice parts, naming the article or framework.
+
+Answer using exactly these markdown headings, in this order:
+## Short answer
+(2-4 sentences: the bottom line.)
+## Applicable provisions
+(bullets: section number, then why it applies)
+## Analysis
+(apply each provision to the facts; identify the controller, any processor, whether data is sensitive, the lawful condition, which standards are engaged, any exemption)
+## What to do now
+(numbered steps with deadlines from the Act where relevant)
+## GDPR comparison
+(how the GDPR would treat this, and where the outcome differs)
+## Good practice
+(practical measures beyond the legal minimum)
+## Gaps and assumptions
+(facts you assumed, points needing the full text or legal advice)
+
+Use plain English. No tables. Keep it focused on the facts given. If the question is a follow-up, answer it directly but keep citing sections; you may drop headings that do not fit a short follow-up.
+
+KNOWLEDGE BASE
+${kbText()}`;
+
+let sample = null, turns = [], ctl = null, deep = false, busy = false;
+$("#d-std").onclick = () => { deep=false; $("#d-std").setAttribute("aria-pressed","true"); $("#d-deep").setAttribute("aria-pressed","false"); };
+$("#d-deep").onclick = () => { deep=true; $("#d-deep").setAttribute("aria-pressed","true"); $("#d-std").setAttribute("aria-pressed","false"); };
+
+const ERR = {
+  not_granted:"The analyser needs your permission to use Claude. Reload the page and allow it to try again.",
+  sampling_disabled:"Claude isn't available on this account, so the analyser is off. The provision finder and worked cases still work.",
+  rate_limited:"Too many questions in a short time. Wait a minute, then press Analyse again.",
+  session_expired:"Your session has expired. Sign in again, then retry.",
+  refused:"Claude declined this question. Rephrase it as a data protection scenario and try again.",
+  prompt_too_large:"The conversation is too long. Start a new question.",
+  empty_completion:"No answer came back. Try rewording the question."
+};
+const HIDE = new Set(["not_granted","sampling_disabled","not_declared","capability_disabled","capability_removed"]);
+
+function setBusy(b){
+  busy=b; $("#go").disabled=b; $("#stop").hidden=!b;
+  $("#go").textContent = b ? "Analysing…" : (turns.length ? "Ask follow-up" : "Analyse");
+  $("#newthread").hidden = b || !turns.length;
+}
+
+async function ask(){
+  const q = $("#q").value.trim(); if(!q || busy || !sample) return;
+  const context = `[Asker: ${$("#role").value}. Sector: ${$("#sector").value}.]\n`;
+  const qEl = document.createElement("div"); qEl.className="msg-q"; qEl.textContent=q;
+  const aEl = document.createElement("div"); aEl.className="panel answer";
+  aEl.innerHTML = `<div class="meta"><span class="eyebrow">Analysis</span><span class="note" data-m></span></div><div class="md"><p class="thinking">Reading the Act and working through the facts… In-depth answers can take a minute.</p></div>`;
+  $("#thread").append(qEl, aEl);
+  const body = aEl.querySelector(".md");
+  turns.push({role:"user", content: context + q});
+  $("#q").value=""; renderFinder();
+  ctl = new AbortController(); setBusy(true);
+  try{
+    const r = await sample([{role:"user",content:RULES()}, ...turns.slice(-8)], {
+      signal: ctl.signal, cache:false, modelTier: deep ? "complex" : "default",
+      onText: ({text}) => { body.innerHTML = md(text); }
+    });
+    turns.push({role:"assistant", content:r.text});
+    body.innerHTML = md(r.text);
+    aEl.querySelector("[data-m]").textContent = r.truncated ? "Cut short. Ask for one part at a time." : "Learning aid, not legal advice";
+  }catch(e){
+    turns.pop();
+    if(e && e.code==="cancelled"){ body.innerHTML = e.text ? md(e.text)+'<p class="note">Stopped.</p>' : '<p class="note">Stopped.</p>'; }
+    else if(e && HIDE.has(e.code)){ body.innerHTML = `<p class="err">${esc(ERR[e.code]||"The analyser isn't available in this view.")}</p>`; $("#go").hidden=true; $("#ai-off").hidden=false; }
+    else { body.innerHTML = (e&&e.text?md(e.text):"") + `<p class="err">${esc(ERR[e&&e.code]||"The connection dropped before the answer finished. Press Analyse to try again.")}</p>`; }
+  }finally{ setBusy(false); }
+}
+$("#go").onclick = ask;
+$("#stop").onclick = () => ctl && ctl.abort();
+$("#newthread").onclick = () => { turns=[]; $("#thread").innerHTML=""; setBusy(false); $("#q").focus(); };
+$("#q").addEventListener("keydown", e => { if(e.key==="Enter" && (e.metaKey||e.ctrlKey)) ask(); });
+
+(async () => {
+  try{ sample = window.claude ? await window.claude.use("sample") : null; }catch(_){ sample=null; }
+  if(!sample){ $("#go").hidden=true; $("#ai-off").hidden=false; }
+})();
+
+/* sample text in the composer so the first view shows the tool working */
+$("#q").value = "A medical lab in Montego Bay discovers on Saturday night that ransomware has encrypted its patient database. Backups exist, but logs show files were copied out. What must it do, and by when?";
+renderFinder();
+</script>
