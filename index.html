@@ -1,286 +1,416 @@
 <title>DPA 2020 Learning Hub</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Serif:ital,wght@0,500;0,600;1,500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=Figtree:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
 <style>
-/* Layout: statute-book reference tool. Sticky tab bar, single reading column, sidebar index on wide screens. */
+/* Layout: app shell. Sticky top bar with pill navigation; each view is a focused workspace of soft cards. */
 :root{
-  --bg:#f6f7f5; --surface:#ffffff; --sunk:#eceeea; --line:#d6dbd5;
-  --fg:#17211e; --muted:#566360; --ink:#0d5247; --ink-soft:#dcebe6;
-  --gold:#9a6b0b; --gold-soft:#f5ead2;
-  --ok:#1f7a4a; --warn:#a15c00; --crit:#b3261e; --crit-soft:#f8e1de;
-  --display:"IBM Plex Serif",Georgia,"Times New Roman",serif;
-  --body:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
-  --mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
-  --r:6px;
+  --bg:#f3f6f5; --surface:#ffffff; --raised:#f8faf9; --line:#e0e7e4; --line-strong:#c9d4d0;
+  --fg:#11201b; --muted:#5a6a65; --faint:#8a9893;
+  --brand:#0f6b5a; --brand-hover:#0c5a4b; --on-brand:#ffffff; --brand-soft:#e1f1ec; --brand-ink:#0b4f42;
+  --accent:#e59a1f; --accent-soft:#fdf0d9;
+  --ok:#1d7a4b; --ok-soft:#e1f3e8; --warn:#9a5b00; --warn-soft:#fdf0d9; --crit:#b42318; --crit-soft:#fde7e4;
+  --shadow:0 1px 2px rgba(17,32,27,.05),0 4px 16px rgba(17,32,27,.06);
+  --display:"Bricolage Grotesque","Figtree",system-ui,sans-serif;
+  --body:"Figtree",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;
+  --r-lg:16px; --r:12px; --r-sm:8px;
 }
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
-  --bg:#0f1514; --surface:#161e1c; --sunk:#1c2624; --line:#2c3a37;
-  --fg:#e3ebe8; --muted:#97a6a2; --ink:#6cc4b1; --ink-soft:#183530;
-  --gold:#e0b45a; --gold-soft:#33291a;
-  --ok:#5cc28c; --warn:#e3a14a; --crit:#f08c82; --crit-soft:#3a1e1b; color-scheme:dark}}
+  --bg:#0b1210; --surface:#121b18; --raised:#17221f; --line:#24322d; --line-strong:#33443e;
+  --fg:#e5eeeb; --muted:#97a8a2; --faint:#6f817b;
+  --brand:#46c2a3; --brand-hover:#5fd0b3; --on-brand:#06201a; --brand-soft:#123129; --brand-ink:#7fdcc4;
+  --accent:#f2b350; --accent-soft:#2d2414;
+  --ok:#5cc28c; --ok-soft:#14301f; --warn:#f0b04f; --warn-soft:#2d2414; --crit:#f2877b; --crit-soft:#3a1c18;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 6px 20px rgba(0,0,0,.25); color-scheme:dark}}
 :root[data-theme="dark"]{
-  --bg:#0f1514; --surface:#161e1c; --sunk:#1c2624; --line:#2c3a37;
-  --fg:#e3ebe8; --muted:#97a6a2; --ink:#6cc4b1; --ink-soft:#183530;
-  --gold:#e0b45a; --gold-soft:#33291a;
-  --ok:#5cc28c; --warn:#e3a14a; --crit:#f08c82; --crit-soft:#3a1e1b; color-scheme:dark}
+  --bg:#0b1210; --surface:#121b18; --raised:#17221f; --line:#24322d; --line-strong:#33443e;
+  --fg:#e5eeeb; --muted:#97a8a2; --faint:#6f817b;
+  --brand:#46c2a3; --brand-hover:#5fd0b3; --on-brand:#06201a; --brand-soft:#123129; --brand-ink:#7fdcc4;
+  --accent:#f2b350; --accent-soft:#2d2414;
+  --ok:#5cc28c; --ok-soft:#14301f; --warn:#f0b04f; --warn-soft:#2d2414; --crit:#f2877b; --crit-soft:#3a1c18;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 6px 20px rgba(0,0,0,.25); color-scheme:dark}
+
 *{box-sizing:border-box}
-body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:15px;line-height:1.55}
-body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--surface)}
-.wrap{max-width:1120px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
-h1,h2,h3{font-family:var(--display);font-weight:600;text-wrap:balance;line-height:1.2;margin:0}
-a{color:var(--ink)}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:15.5px;line-height:1.6;-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:20;background:var(--surface)}
+.wrap{max-width:1180px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+h1,h2,h3{font-family:var(--display);font-weight:700;letter-spacing:-.01em;text-wrap:balance;line-height:1.2;margin:0}
+p{margin:0}
+a{color:var(--brand-ink)}
 button,select,textarea,input{font:inherit;color:inherit}
-:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
-.mono{font-family:var(--mono)}
-.eyebrow{font-family:var(--mono);font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
+svg.i{width:18px;height:18px;flex:none;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.muted{color:var(--muted)}
+.small{font-size:13px}
+.label{font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.ref{font-family:var(--mono);font-size:12px;font-weight:500;background:var(--brand-soft);color:var(--brand-ink);padding:2px 7px;border-radius:6px;white-space:nowrap}
 
-/* masthead */
-header.mast{background:var(--surface);border-bottom:1px solid var(--line)}
-header.mast .wrap{padding-block:22px 16px;display:flex;flex-wrap:wrap;gap:12px 28px;align-items:flex-end;justify-content:space-between}
-.mast h1{font-size:clamp(24px,4vw,32px)}
-.mast h1 em{font-style:italic;color:var(--ink);font-weight:500}
-.mast p{margin:6px 0 0;color:var(--muted);max-width:62ch}
-.cite-line{font-family:var(--mono);font-size:12px;color:var(--muted);display:flex;gap:14px;flex-wrap:wrap}
-.cite-line b{color:var(--fg);font-weight:500}
+/* top bar */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:10;background:color-mix(in srgb,var(--surface) 92%,transparent);backdrop-filter:saturate(1.4) blur(10px);-webkit-backdrop-filter:saturate(1.4) blur(10px);border-bottom:1px solid var(--line)}
+.top .wrap{display:flex;align-items:center;gap:20px;min-height:64px;flex-wrap:wrap;padding-block:8px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--fg);flex:none}
+.mark{width:36px;height:36px;border-radius:10px;background:var(--brand);color:var(--on-brand);display:grid;place-items:center}
+.mark svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.brand b{font-family:var(--display);font-size:17px;display:block;line-height:1.1}
+.brand span{font-size:12px;color:var(--muted)}
+nav.tabs{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none;flex:1;min-width:0;justify-content:flex-end}
+nav.tabs::-webkit-scrollbar{display:none}
+nav.tabs a{display:inline-flex;align-items:center;gap:7px;padding:8px 13px;border-radius:999px;text-decoration:none;color:var(--muted);font-weight:600;font-size:14px;white-space:nowrap;transition:background .15s,color .15s}
+nav.tabs a:hover{background:var(--raised);color:var(--fg)}
+nav.tabs a[aria-current="page"]{background:var(--brand-soft);color:var(--brand-ink)}
+@media (max-width:900px){.top .wrap{gap:6px}nav.tabs{flex-basis:100%;justify-content:flex-start;margin-inline:-4px}}
 
-nav.tabs{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--surface);border-bottom:1px solid var(--line)}
-nav.tabs .wrap{display:flex;gap:2px;overflow-x:auto;scrollbar-width:none}
-nav.tabs a{display:block;padding:12px 14px 11px;text-decoration:none;color:var(--muted);font-weight:500;white-space:nowrap;border-bottom:2px solid transparent}
-nav.tabs a[aria-current="page"]{color:var(--fg);border-bottom-color:var(--ink)}
-nav.tabs a:hover{color:var(--fg)}
+main .wrap{padding-block:32px 72px}
+.view[hidden]{display:none}
+.head{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap;margin-bottom:24px}
+.head h1{font-size:clamp(26px,3.6vw,36px)}
+.head p{margin-top:8px;color:var(--muted);max-width:64ch}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);box-shadow:var(--shadow)}
 
-main .wrap{padding-block:28px 64px}
-section.view[hidden]{display:none}
-.lede{color:var(--muted);max-width:68ch;margin:6px 0 22px}
+/* buttons */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:1px solid var(--line-strong);background:var(--surface);padding:9px 16px;border-radius:var(--r);cursor:pointer;font-weight:600;font-size:14.5px;transition:background .15s,border-color .15s,transform .05s}
+.btn:hover{background:var(--raised);border-color:var(--faint)}
+.btn:active{transform:translateY(1px)}
+.btn.primary{background:var(--brand);border-color:var(--brand);color:var(--on-brand)}
+.btn.primary:hover{background:var(--brand-hover);border-color:var(--brand-hover)}
+.btn.big{padding:12px 22px;font-size:15.5px;border-radius:var(--r)}
+.btn.ghost{border-color:transparent;background:transparent;color:var(--muted)}
+.btn.ghost:hover{background:var(--raised);color:var(--fg)}
+.btn[disabled]{opacity:.55;cursor:not-allowed}
+.link{background:none;border:0;padding:0;color:var(--brand-ink);font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:6px;font-size:14px}
+.link:hover{text-decoration:underline;text-underline-offset:3px}
 
-/* ask view */
-.ask-grid{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:28px}
-@media (max-width:860px){.ask-grid{grid-template-columns:1fr}}
-.panel{background:var(--surface);border:1px solid var(--line);border-radius:var(--r)}
-.composer{padding:16px}
-.composer label{display:block;font-weight:600;margin-bottom:6px}
-textarea#q{width:100%;min-height:130px;resize:vertical;padding:12px;border:1px solid var(--line);border-radius:var(--r);background:var(--bg);line-height:1.5}
-.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
-.ctx{margin-top:12px;display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}
-.ctx label{font-size:12.5px;font-weight:500;color:var(--muted);margin:0 0 4px}
-select{width:100%;padding:8px 10px;border:1px solid var(--line);border-radius:var(--r);background:var(--bg)}
-.actions{margin-top:14px;justify-content:space-between}
-.btn{border:1px solid var(--line);background:var(--surface);padding:9px 16px;border-radius:var(--r);cursor:pointer;font-weight:500}
-.btn:hover{border-color:var(--ink)}
-.btn.primary{background:var(--ink);border-color:var(--ink);color:var(--bg)}
-.btn.primary:hover{filter:brightness(1.08)}
-.btn[disabled]{opacity:.55;cursor:default}
-.seg{display:inline-flex;border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
-.seg button{border:0;background:transparent;padding:7px 12px;cursor:pointer;color:var(--muted)}
-.seg button[aria-pressed="true"]{background:var(--ink-soft);color:var(--fg);font-weight:600}
-.note{font-size:12.5px;color:var(--muted)}
-.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
-.chip{border:1px dashed var(--line);background:transparent;border-radius:999px;padding:5px 11px;font-size:13px;cursor:pointer;color:var(--fg);text-align:left}
-.chip:hover{border-color:var(--ink);border-style:solid}
+/* ASK */
+.ask-grid{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:24px;align-items:start}
+@media (max-width:920px){.ask-grid{grid-template-columns:1fr}}
+.composer{padding:20px}
+.composer-top{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:10px;flex-wrap:wrap}
+.composer-top label{font-weight:700;font-size:16px}
+textarea#q{display:block;width:100%;min-height:150px;resize:vertical;padding:14px 16px;border:1px solid var(--line-strong);border-radius:var(--r);background:var(--raised);line-height:1.55;font-size:15.5px;transition:border-color .15s,box-shadow .15s}
+textarea#q:focus{outline:none;border-color:var(--brand);box-shadow:0 0 0 4px var(--brand-soft)}
+.fields{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-top:14px}
+.field label{display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:5px}
+select{width:100%;padding:10px 12px;border:1px solid var(--line-strong);border-radius:var(--r);background:var(--surface);cursor:pointer}
+.modes{margin-top:14px}
+.modes .label{display:block;margin-bottom:6px}
+.seg{display:flex;flex-wrap:wrap;gap:6px}
+.seg button{display:flex;flex-direction:column;align-items:flex-start;gap:1px;text-align:left;border:1px solid var(--line-strong);background:var(--surface);padding:9px 14px;border-radius:var(--r);cursor:pointer;min-width:150px;flex:1 1 150px}
+.seg button b{font-size:14px}
+.seg button span{font-size:12.5px;color:var(--muted)}
+.seg button[aria-pressed="true"]{border-color:var(--brand);background:var(--brand-soft);box-shadow:inset 0 0 0 1px var(--brand)}
+.seg button[hidden]{display:none}
+.submit-row{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:18px;padding-top:16px;border-top:1px solid var(--line);flex-wrap:wrap}
+.submit-row .hint{font-size:13px;color:var(--faint)}
+.submit-row .acts{display:flex;gap:8px;margin-left:auto;flex-wrap:wrap}
+kbd{font-family:var(--mono);font-size:11.5px;border:1px solid var(--line-strong);border-bottom-width:2px;border-radius:5px;padding:1px 5px;background:var(--surface)}
 
-.thread{margin-top:22px;display:flex;flex-direction:column;gap:18px}
-.msg-q{align-self:flex-end;max-width:85%;background:var(--ink-soft);border-radius:var(--r);padding:10px 14px;white-space:pre-wrap}
-.answer{padding:18px 20px}
-.answer .meta{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:8px}
+.examples{margin-top:22px}
+.examples h2{font-size:16px;margin-bottom:10px;font-family:var(--body);font-weight:700}
+.ex-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr));gap:10px}
+.ex{display:flex;gap:10px;text-align:left;border:1px solid var(--line);background:var(--surface);border-radius:var(--r);padding:12px 14px;cursor:pointer;font-size:14px;line-height:1.45;transition:border-color .15s,background .15s}
+.ex:hover{border-color:var(--brand);background:var(--raised)}
+.ex svg{color:var(--brand);margin-top:2px}
+
+.side{display:flex;flex-direction:column;gap:16px;position:sticky;top:calc(env(safe-area-inset-top,0px) + 84px)}
+@media (max-width:920px){.side{position:static}}
+.side .card{padding:16px 18px}
+.side h3{font-size:16px;display:flex;align-items:center;gap:8px;margin-bottom:4px}
+.hit{display:flex;gap:10px;align-items:baseline;width:100%;text-align:left;background:none;border:0;border-top:1px solid var(--line);padding:10px 0;cursor:pointer}
+.hit:first-child{border-top:0}
+.hit span.h{font-weight:600;font-size:14px}
+.hit:hover span.h{color:var(--brand-ink)}
+.steps-mini{margin:8px 0 0;padding-left:20px;font-size:14px;color:var(--muted)}
+.steps-mini li{margin:4px 0}
+
+/* results */
+.results{display:flex;flex-direction:column;gap:18px;margin-top:22px}
+.q-bubble{align-self:flex-end;max-width:min(88%,640px);background:var(--brand);color:var(--on-brand);border-radius:var(--r-lg) var(--r-lg) 4px var(--r-lg);padding:12px 16px;white-space:pre-wrap;font-size:15px}
+.q-bubble small{display:block;opacity:.8;font-size:12px;margin-top:6px}
+.ans{padding:20px 22px}
+.ans-head{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:14px}
+.badge{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:700;padding:4px 10px;border-radius:999px;background:var(--brand-soft);color:var(--brand-ink)}
+.badge.alt{background:var(--accent-soft);color:var(--warn)}
+.ans h2{font-size:18px;margin:22px 0 8px;display:flex;align-items:center;gap:8px}
+.ans h2:first-child{margin-top:0}
+.ans h3{font-size:15.5px;margin:14px 0 4px}
+.md p,.ans p{margin:6px 0;max-width:74ch}
+.md ul,.md ol,.ans ul,.ans ol{margin:6px 0;padding-left:22px;max-width:74ch}
+.md li,.ans li{margin:4px 0}
 .md{min-width:0;overflow-wrap:anywhere}
-.md h2{font-size:18px;margin:20px 0 6px;padding-top:12px;border-top:1px solid var(--line)}
+.md code{font-family:var(--mono);font-size:12.5px;background:var(--brand-soft);color:var(--brand-ink);padding:1px 6px;border-radius:5px;white-space:nowrap}
+.md h2{font-size:18px;margin:22px 0 6px;padding-top:16px;border-top:1px solid var(--line)}
 .md h2:first-child{margin-top:0;padding-top:0;border-top:0}
-.md h3{font-size:15.5px;margin:14px 0 4px}
-.md p{margin:6px 0;max-width:72ch}
-.md ul,.md ol{margin:6px 0;padding-left:22px;max-width:72ch}
-.md li{margin:3px 0}
-.md code,.sref{font-family:var(--mono);font-size:12.5px;background:var(--gold-soft);color:var(--fg);padding:1px 5px;border-radius:3px;white-space:nowrap}
-.thinking{color:var(--muted);font-style:italic}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;padding:5px 11px;border-radius:999px;background:var(--raised);border:1px solid var(--line)}
+.prov{border:1px solid var(--line);border-radius:var(--r);padding:12px 14px;margin:8px 0;background:var(--raised)}
+.prov summary{cursor:pointer;display:flex;gap:10px;align-items:baseline;font-weight:600;list-style:none}
+.prov summary::-webkit-details-marker{display:none}
+.prov summary::after{content:"+";margin-left:auto;color:var(--faint);font-weight:500}
+.prov[open] summary::after{content:"–"}
+.prov p{font-size:14.5px;margin-top:8px}
+.prov .g{font-size:13px;color:var(--muted);margin-top:6px}
+ol.todo{counter-reset:t;list-style:none;padding:0}
+ol.todo li{counter-increment:t;position:relative;padding:8px 0 8px 40px;border-top:1px solid var(--line)}
+ol.todo li:first-child{border-top:0}
+ol.todo li::before{content:counter(t);position:absolute;left:0;top:8px;width:26px;height:26px;border-radius:50%;background:var(--brand);color:var(--on-brand);display:grid;place-items:center;font-weight:700;font-size:13px}
+.dl{display:grid;grid-template-columns:110px minmax(0,1fr);gap:4px 14px}
+.dl dt{font-family:var(--mono);font-weight:500;color:var(--brand-ink);font-variant-numeric:tabular-nums}
+.dl dd{margin:0}
+.cmp-mini{border-left:3px solid var(--accent);background:var(--accent-soft);border-radius:0 var(--r-sm) var(--r-sm) 0;padding:10px 14px;margin:8px 0;font-size:14.5px}
+.cmp-mini b{display:block;margin-bottom:2px}
+.ans-foot{margin-top:18px;padding-top:14px;border-top:1px solid var(--line);font-size:13px;color:var(--muted);display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:center}
+.thinking{display:flex;align-items:center;gap:10px;color:var(--muted)}
+.dots{display:inline-flex;gap:4px}
+.dots i{width:6px;height:6px;border-radius:50%;background:var(--brand);animation:b 1s infinite ease-in-out}
+.dots i:nth-child(2){animation-delay:.15s}.dots i:nth-child(3){animation-delay:.3s}
+@keyframes b{0%,80%,100%{opacity:.25;transform:translateY(0)}40%{opacity:1;transform:translateY(-3px)}}
 .err{color:var(--crit)}
 
-.side h3{font-size:15px;margin-bottom:8px}
-.side .panel{padding:14px 16px}
-.side .panel + .panel{margin-top:14px}
-.finder-hit{display:block;width:100%;text-align:left;background:none;border:0;border-top:1px solid var(--line);padding:9px 0;cursor:pointer}
-.finder-hit:first-of-type{border-top:0}
-.finder-hit .sref{margin-right:6px}
-.finder-hit span.h{font-weight:500}
-.finder-hit:hover span.h{color:var(--ink)}
-
-/* act explorer */
-.explore{display:grid;grid-template-columns:230px minmax(0,1fr);gap:28px}
-@media (max-width:860px){.explore{grid-template-columns:1fr}}
-.parts{position:sticky;top:calc(env(safe-area-inset-top,0px) + 60px);align-self:start;display:flex;flex-direction:column;gap:2px}
-@media (max-width:860px){.parts{position:static;flex-direction:row;flex-wrap:wrap;gap:6px}}
-.parts button{text-align:left;background:none;border:0;padding:7px 10px;border-radius:var(--r);cursor:pointer;color:var(--muted)}
-@media (max-width:860px){.parts button{border:1px solid var(--line);padding:5px 10px;font-size:13px}}
-.parts button[aria-pressed="true"]{background:var(--ink-soft);color:var(--fg);font-weight:600}
-.parts .pn{font-family:var(--mono);font-size:11.5px;display:block;letter-spacing:.06em}
-input#search{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:var(--r);background:var(--surface);margin-bottom:16px}
-.sec{border-top:1px solid var(--line);padding:16px 0}
-.sec:first-child{border-top:0;padding-top:0}
+/* ACT */
+.explore{display:grid;grid-template-columns:250px minmax(0,1fr);gap:24px;align-items:start}
+@media (max-width:920px){.explore{grid-template-columns:1fr}}
+.parts{position:sticky;top:calc(env(safe-area-inset-top,0px) + 84px);display:flex;flex-direction:column;gap:4px;padding:8px}
+@media (max-width:920px){.parts{position:static;flex-direction:row;overflow-x:auto;scrollbar-width:none}}
+.parts button{display:flex;flex-direction:column;align-items:flex-start;text-align:left;background:none;border:0;padding:9px 12px;border-radius:var(--r-sm);cursor:pointer;color:var(--fg);font-weight:600;font-size:14px;flex:none}
+.parts button span{font-family:var(--mono);font-size:11px;font-weight:500;color:var(--faint);letter-spacing:.04em}
+.parts button:hover{background:var(--raised)}
+.parts button[aria-pressed="true"]{background:var(--brand-soft);color:var(--brand-ink)}
+.search{position:relative;margin-bottom:16px}
+.search svg{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--faint)}
+input#search{width:100%;padding:12px 14px 12px 42px;border:1px solid var(--line-strong);border-radius:var(--r);background:var(--surface);font-size:15px}
+input#search:focus{outline:none;border-color:var(--brand);box-shadow:0 0 0 4px var(--brand-soft)}
+.part-intro{margin-bottom:14px}
+.part-intro h2{font-size:22px;margin-top:4px}
+.part-intro p{color:var(--muted);margin-top:4px}
+.secs{display:flex;flex-direction:column;gap:12px}
+.sec{padding:16px 18px;scroll-margin-top:100px;transition:box-shadow .3s}
+.sec.flash{box-shadow:0 0 0 3px var(--accent)}
 .sec-head{display:flex;gap:12px;align-items:baseline}
-.sec-head .num{font-family:var(--mono);font-weight:500;color:var(--ink);min-width:44px;font-size:14px}
-.sec-head h3{font-size:17px}
-.sec-body{margin-left:56px}
-@media (max-width:520px){.sec-body{margin-left:0}}
-.sec-body p{margin:6px 0;max-width:70ch}
-.sec-tags{display:flex;flex-wrap:wrap;gap:6px 14px;margin-top:8px;font-size:13px}
-.tag-g{color:var(--muted)}
-.tag-g b{font-family:var(--mono);font-weight:500;color:var(--fg);font-size:12px}
-.bp{margin-top:8px;font-size:13.5px;background:var(--sunk);border-radius:var(--r);padding:8px 12px;max-width:70ch}
-.bp b{color:var(--gold)}
-.askthis{background:none;border:0;padding:0;color:var(--ink);cursor:pointer;font-size:13px;text-decoration:underline;text-underline-offset:3px}
-.part-title{font-size:20px;margin:6px 0 4px}
-.part-blurb{color:var(--muted);margin:0 0 14px;max-width:68ch}
-.empty{color:var(--muted);padding:20px 0}
+.sec-head h3{font-size:16.5px}
+.sec p{margin-top:8px;max-width:76ch}
+.sec .bp{margin-top:10px;font-size:14px;background:var(--accent-soft);border-radius:var(--r-sm);padding:9px 12px;max-width:76ch}
+.sec .bp b{color:var(--warn)}
+.sec-foot{display:flex;flex-wrap:wrap;gap:8px 18px;align-items:center;margin-top:10px;font-size:13.5px}
+.sec-foot .g{color:var(--muted)}
+.sec-foot .g b{font-weight:600;color:var(--fg)}
+.empty{padding:28px;text-align:center;color:var(--muted)}
 
-/* compare */
-.tbl-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:var(--r);background:var(--surface)}
-table{border-collapse:collapse;width:100%;min-width:720px}
-th,td{text-align:left;vertical-align:top;padding:11px 14px;border-bottom:1px solid var(--line);font-size:14px}
-th{font-family:var(--mono);font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:500;background:var(--sunk)}
-tr:last-child td{border-bottom:0}
-td:first-child{font-weight:600;width:16%}
-.delta{display:inline-block;font-family:var(--mono);font-size:11px;padding:2px 7px;border-radius:999px;white-space:nowrap}
-.delta.stricter{background:var(--crit-soft);color:var(--crit)}
-.delta.similar{background:var(--ink-soft);color:var(--ink)}
-.delta.lighter{background:var(--gold-soft);color:var(--gold)}
-.legend{display:flex;gap:14px;flex-wrap:wrap;margin:0 0 12px;font-size:13px;color:var(--muted);align-items:center}
+/* COMPARE */
+.legend{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+.pill{display:inline-flex;align-items:center;font-size:12px;font-weight:700;padding:3px 10px;border-radius:999px;white-space:nowrap}
+.pill.stricter{background:var(--crit-soft);color:var(--crit)}
+.pill.similar{background:var(--brand-soft);color:var(--brand-ink)}
+.pill.lighter{background:var(--accent-soft);color:var(--warn)}
+.filter{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px}
+.filter button{border:1px solid var(--line-strong);background:var(--surface);border-radius:999px;padding:6px 14px;font-weight:600;font-size:13.5px;cursor:pointer}
+.filter button[aria-pressed="true"]{background:var(--fg);border-color:var(--fg);color:var(--bg)}
+.cmp-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,520px),1fr));gap:12px}
+.cmp{padding:16px 18px}
+.cmp-top{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:10px}
+.cmp-top h3{font-size:16.5px}
+.cmp-cols{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media (max-width:560px){.cmp-cols{grid-template-columns:1fr}}
+.cmp-cols .label{display:block;margin-bottom:3px}
+.cmp-cols p{font-size:14.5px}
 
-/* reference */
-.ref-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,460px),1fr));gap:24px}
-.clock{display:grid;grid-template-columns:96px minmax(0,1fr);gap:4px 14px;padding:10px 0;border-top:1px solid var(--line)}
+/* REFERENCE */
+.status{display:flex;gap:12px;align-items:flex-start;border:1px solid color-mix(in srgb,var(--accent) 40%,transparent);background:var(--accent-soft);border-radius:var(--r);padding:14px 16px;margin-bottom:22px;max-width:86ch}
+.status svg{color:var(--warn);margin-top:2px}
+.ref-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,480px),1fr));gap:20px;align-items:start}
+.ref-grid .card{padding:18px 20px}
+.ref-grid h2{font-size:19px;margin-bottom:6px;display:flex;align-items:center;gap:8px}
+.clock{display:grid;grid-template-columns:104px minmax(0,1fr);gap:12px;padding:11px 0;border-top:1px solid var(--line);align-items:baseline}
 .clock:first-of-type{border-top:0}
-.clock .t{font-family:var(--mono);font-weight:500;font-size:15px;color:var(--ink);font-variant-numeric:tabular-nums}
-.clock .w b{font-weight:600}
-.clock .w .sref{margin-left:4px}
-.ref-grid .panel{padding:16px 18px}
-.ref-grid h2{font-size:19px;margin-bottom:8px}
-.pen{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 14px;padding:10px 0;border-top:1px solid var(--line)}
+.clock .t{font-family:var(--mono);font-weight:500;font-size:14.5px;color:var(--brand-ink);font-variant-numeric:tabular-nums}
+.clock .w{font-size:14.5px}
+.clock .w .ref{margin-left:6px}
+.pen{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;padding:11px 0;border-top:1px solid var(--line);align-items:baseline}
 .pen:first-of-type{border-top:0}
-.pen .amt{font-family:var(--mono);font-size:13px;text-align:right;font-variant-numeric:tabular-nums}
-.pen .amt small{display:block;color:var(--muted)}
-.fees td,.fees th{font-variant-numeric:tabular-nums}
-.fees table{min-width:0}
-.status{border-left:3px solid var(--warn);background:var(--gold-soft);padding:10px 14px;border-radius:0 var(--r) var(--r) 0;margin-bottom:24px;max-width:80ch}
+.pen .w{font-size:14.5px}
+.pen .amt{font-family:var(--mono);font-size:13px;text-align:right;font-variant-numeric:tabular-nums;font-weight:500}
+.pen .amt small{display:block;color:var(--muted);font-weight:400}
+.fee{display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-top:1px solid var(--line);font-size:14.5px}
+.fee:first-of-type{border-top:0}
+.fee .v{font-family:var(--mono);font-size:13px;font-weight:500;text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.stack{display:flex;flex-direction:column;gap:20px}
 
-/* cases */
-.cases{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:18px}
-.case{padding:16px 18px;display:flex;flex-direction:column;gap:8px}
-.case h3{font-size:17px}
-.case .facts{color:var(--muted);margin:0}
-.case details summary{cursor:pointer;color:var(--ink);font-weight:500}
-.case details ul{padding-left:20px;margin:8px 0}
-.case details li{margin:4px 0}
-.risk{font-family:var(--mono);font-size:11px;letter-spacing:.05em;text-transform:uppercase;padding:2px 8px;border-radius:999px;align-self:flex-start}
+/* CASES */
+.cases{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,350px),1fr));gap:16px}
+.case{padding:18px 20px;display:flex;flex-direction:column;gap:10px}
+.case h3{font-size:17.5px}
+.case .facts{color:var(--muted);font-size:14.5px}
+.risk{align-self:flex-start;font-size:12px;font-weight:700;padding:3px 10px;border-radius:999px}
 .risk.high{background:var(--crit-soft);color:var(--crit)}
-.risk.med{background:var(--gold-soft);color:var(--gold)}
-.risk.low{background:var(--ink-soft);color:var(--ink)}
-.case .foot{margin-top:auto;padding-top:6px}
+.risk.med{background:var(--accent-soft);color:var(--warn)}
+.risk.low{background:var(--ok-soft);color:var(--ok)}
+.case details{border-top:1px solid var(--line);padding-top:10px}
+.case summary{cursor:pointer;font-weight:600;color:var(--brand-ink);list-style:none;display:flex;align-items:center;gap:6px}
+.case summary::-webkit-details-marker{display:none}
+.case ul{padding-left:20px;margin:8px 0 0;font-size:14.5px}
+.case li{margin:5px 0}
+.case .foot{margin-top:auto;padding-top:4px}
 
-/* quiz */
+/* QUIZ */
 .quiz{max-width:760px}
-.qbar{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap}
-.track{flex:1;min-width:120px;height:6px;background:var(--sunk);border-radius:99px;overflow:hidden}
-.track i{display:block;height:100%;background:var(--ink);transition:width .3s}
-.qcard{padding:20px}
-.qcard h3{font-family:var(--body);font-size:17px;font-weight:600;line-height:1.4}
-.opts{display:flex;flex-direction:column;gap:8px;margin:16px 0}
-.opt{text-align:left;border:1px solid var(--line);background:var(--bg);border-radius:var(--r);padding:11px 14px;cursor:pointer}
-.opt:hover:not([disabled]){border-color:var(--ink)}
-.opt.right{border-color:var(--ok);background:var(--ink-soft)}
+.qbar{display:flex;align-items:center;gap:14px;margin-bottom:14px}
+.track{flex:1;height:8px;background:var(--line);border-radius:99px;overflow:hidden}
+.track i{display:block;height:100%;background:var(--brand);border-radius:99px;transition:width .35s}
+.qcard{padding:24px}
+.qcard h2{font-family:var(--body);font-size:19px;font-weight:700;line-height:1.4}
+.opts{display:flex;flex-direction:column;gap:10px;margin:18px 0}
+.opt{display:flex;gap:12px;align-items:center;text-align:left;border:1px solid var(--line-strong);background:var(--surface);border-radius:var(--r);padding:12px 14px;cursor:pointer;font-size:15px;transition:border-color .15s,background .15s}
+.opt .k{width:26px;height:26px;flex:none;border-radius:8px;display:grid;place-items:center;background:var(--raised);border:1px solid var(--line);font-weight:700;font-size:13px}
+.opt:hover:not([disabled]){border-color:var(--brand);background:var(--raised)}
+.opt.right{border-color:var(--ok);background:var(--ok-soft)}
+.opt.right .k{background:var(--ok);color:var(--surface);border-color:var(--ok)}
 .opt.wrong{border-color:var(--crit);background:var(--crit-soft)}
+.opt.wrong .k{background:var(--crit);color:var(--surface);border-color:var(--crit)}
 .opt[disabled]{cursor:default}
-.explain{background:var(--sunk);border-radius:var(--r);padding:12px 14px}
+.explain{background:var(--raised);border:1px solid var(--line);border-radius:var(--r);padding:12px 14px;font-size:14.5px}
+.score-big{font-family:var(--display);font-size:56px;line-height:1;color:var(--brand-ink)}
 
-/* sources */
-.src{max-width:78ch}
-.src h2{font-size:19px;margin:22px 0 8px}
-.src ul{padding-left:20px}
-.src li{margin:5px 0}
-footer{border-top:1px solid var(--line);color:var(--muted);font-size:12.5px}
-footer .wrap{padding-block:18px}
+/* SOURCES */
+.src{max-width:80ch;padding:24px}
+.src h2{font-size:18px;margin:24px 0 8px}
+.src h2:first-child{margin-top:0}
+.src ul{padding-left:20px;margin:0}
+.src li{margin:6px 0}
+.src p{margin:6px 0}
+
+.live{margin-top:18px;border:1px solid var(--line);border-radius:var(--r);background:var(--raised);padding:14px 16px}
+.live-head{display:flex;align-items:center;gap:8px;font-weight:700;font-size:15px}
+.live-head .dot{width:8px;height:8px;border-radius:50%;background:var(--ok);box-shadow:0 0 0 4px var(--ok-soft)}
+.live p{font-size:13.5px;color:var(--muted);margin-top:4px}
+.live-links{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr));gap:8px;margin-top:10px}
+.live-links a{display:flex;flex-direction:column;gap:1px;text-decoration:none;color:var(--fg);border:1px solid var(--line);background:var(--surface);border-radius:var(--r-sm);padding:9px 12px;transition:border-color .15s}
+.live-links a:hover{border-color:var(--brand)}
+.live-links a b{font-size:14px;display:flex;align-items:center;gap:6px}
+.live-links a span{font-size:12.5px;color:var(--muted)}
+.live-links a svg{width:14px;height:14px}
+.changes{margin-top:10px;font-size:13.5px}
+.changes li{margin:3px 0}
+.side .live{margin-top:0;border:0;background:none;padding:0}
+footer{border-top:1px solid var(--line);color:var(--muted);font-size:13px}
+footer .wrap{padding-block:20px}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--fg);color:var(--bg);padding:10px 16px;border-radius:999px;font-weight:600;font-size:14px;box-shadow:var(--shadow);z-index:30}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
 
-<header class="mast">
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-chat" viewBox="0 0 24 24"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/></symbol>
+  <symbol id="i-book" viewBox="0 0 24 24"><path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z"/><path d="M4 21V5M8 7h7"/></symbol>
+  <symbol id="i-scale" viewBox="0 0 24 24"><path d="M12 3v18M7 21h10M5 7h14M5 7l-3 7a3 3 0 0 0 6 0zM19 7l-3 7a3 3 0 0 0 6 0z"/></symbol>
+  <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+  <symbol id="i-case" viewBox="0 0 24 24"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2M3 13h18"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="4"/><path d="m8 12 3 3 5-6"/></symbol>
+  <symbol id="i-link" viewBox="0 0 24 24"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/></symbol>
+  <symbol id="i-send" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></symbol>
+  <symbol id="i-bolt" viewBox="0 0 24 24"><path d="M13 3 4 14h7l-1 7 9-11h-7z"/></symbol>
+  <symbol id="i-alert" viewBox="0 0 24 24"><path d="M12 3 2 20h20zM12 10v4M12 17h.01"/></symbol>
+  <symbol id="i-copy" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h8"/></symbol>
+  <symbol id="i-list" viewBox="0 0 24 24"><path d="M9 6h11M9 12h11M9 18h11M4 6h.01M4 12h.01M4 18h.01"/></symbol>
+  <symbol id="i-ext" viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></symbol>
+  <symbol id="i-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></symbol>
+  <symbol id="i-spark" viewBox="0 0 24 24"><path d="M12 3v4M12 17v4M3 12h4M17 12h4M6 6l2.5 2.5M15.5 15.5 18 18M6 18l2.5-2.5M15.5 8.5 18 6"/></symbol>
+</svg>
+
+<header class="top">
   <div class="wrap">
-    <div>
-      <div class="eyebrow">Jamaica · Data Protection Act, 2020 (Act No. 7 of 2020)</div>
-      <h1>DPA 2020 <em>Learning Hub</em></h1>
-      <p>Analyse the Act and its 2024 Regulations, test how they apply to real situations, and see where Jamaican law departs from the GDPR and recognised good practice.</p>
-    </div>
-    <div class="cite-line"><span><b>77</b> sections</span><span><b>8</b> standards</span><span><b>3</b> regulation sets</span><span>Checked against OIC texts</span></div>
+    <a class="brand" href="#ask">
+      <span class="mark"><svg viewBox="0 0 24 24"><path d="M12 3 4 6v6c0 5 3.5 8 8 9 4.5-1 8-4 8-9V6z"/><path d="m9 12 2 2 4-4"/></svg></span>
+      <span><b>DPA 2020 Learning Hub</b><span>Jamaica · Data Protection Act &amp; 2024 Regulations</span></span>
+    </a>
+    <nav class="tabs" aria-label="Sections">
+      <a href="#ask"><svg class="i"><use href="#i-chat"/></svg>Ask</a>
+      <a href="#act"><svg class="i"><use href="#i-book"/></svg>The Act</a>
+      <a href="#compare"><svg class="i"><use href="#i-scale"/></svg>DPA vs GDPR</a>
+      <a href="#reference"><svg class="i"><use href="#i-clock"/></svg>Deadlines</a>
+      <a href="#cases"><svg class="i"><use href="#i-case"/></svg>Cases</a>
+      <a href="#practice"><svg class="i"><use href="#i-check"/></svg>Quiz</a>
+      <a href="#sources"><svg class="i"><use href="#i-link"/></svg>Sources</a>
+    </nav>
   </div>
 </header>
 
-<nav class="tabs" aria-label="Sections">
-  <div class="wrap">
-    <a href="#ask">Ask a scenario</a>
-    <a href="#act">The Act</a>
-    <a href="#compare">DPA vs GDPR</a>
-    <a href="#reference">Deadlines &amp; penalties</a>
-    <a href="#cases">Worked cases</a>
-    <a href="#practice">Practice quiz</a>
-    <a href="#sources">Sources</a>
-  </div>
-</nav>
-
-<main>
-<div class="wrap">
+<main><div class="wrap">
 
 <!-- ASK -->
 <section class="view" id="v-ask">
-  <h2 style="font-size:24px">Apply the Act to a situation</h2>
-  <p class="lede">Describe what is happening, who holds the data and what you need to decide. The analyser reads the Act, the 2024 Regulations and the GDPR mapping in this hub, then sets out the applicable sections, the analysis, next steps and how the GDPR would treat it.</p>
+  <div class="head"><div>
+    <h1>What's the situation?</h1>
+    <p>Describe what happened or what you're planning. Submit it to see which sections of the Act apply, what to do and by when, and how the GDPR compares.</p>
+  </div></div>
   <div class="ask-grid">
     <div style="min-width:0">
-      <div class="panel composer">
-        <label for="q">Your scenario or question</label>
-        <textarea id="q" placeholder="e.g. A medical lab in Montego Bay discovers ransomware encrypted its patient database on Saturday night. Backups exist. What must it do and by when?"></textarea>
-        <div class="ctx">
-          <div><label for="role">Who is asking</label>
+      <form class="card composer" id="composer" novalidate>
+        <div class="composer-top">
+          <label for="q">Your scenario or question</label>
+          <button type="button" class="btn ghost small" id="clear">Clear</button>
+        </div>
+        <textarea id="q" placeholder="e.g. A medical lab discovers ransomware has encrypted its patient database. What must it do, and by when?"></textarea>
+        <div class="fields">
+          <div class="field"><label for="role">I am a…</label>
             <select id="role">
-              <option>Private-sector data controller</option>
-              <option>Public authority (ministry, department, agency)</option>
+              <option>Private-sector organisation</option>
+              <option>Public authority (ministry, agency)</option>
               <option>Data processor / service provider</option>
-              <option>Data subject (individual)</option>
+              <option>Individual (data subject)</option>
               <option>Regulator / OIC officer</option>
               <option>Adviser, DPO or student</option>
             </select></div>
-          <div><label for="sector">Sector</label>
+          <div class="field"><label for="sector">Sector</label>
             <select id="sector">
-              <option>General / not specified</option>
-              <option>Health</option><option>Financial services</option><option>Education</option>
+              <option>General</option><option>Health</option><option>Financial services</option><option>Education</option>
               <option>Employment / HR</option><option>Retail &amp; marketing</option><option>Telecoms &amp; technology</option>
               <option>Faith-based or non-profit</option><option>Government services</option><option>Media &amp; journalism</option>
             </select></div>
         </div>
-        <div class="row actions">
-          <div class="row" style="gap:8px">
-            <span class="note">Depth</span>
-            <div class="seg" role="group" aria-label="Depth">
-              <button type="button" id="d-std" aria-pressed="true">Standard</button>
-              <button type="button" id="d-deep" aria-pressed="false">In-depth</button>
-            </div>
-          </div>
-          <div class="row" style="gap:8px">
-            <button class="btn" id="stop" type="button" hidden>Stop</button>
-            <button class="btn" id="newthread" type="button" hidden>New question</button>
-            <button class="btn primary" id="go" type="button">Analyse</button>
+        <div class="modes">
+          <span class="label">Type of answer</span>
+          <div class="seg" role="group" aria-label="Type of answer">
+            <button type="button" data-mode="guide" aria-pressed="true"><b>Instant guide</b><span>Matched sections, steps and deadlines</span></button>
+            <button type="button" data-mode="claude" aria-pressed="false" hidden><b>Written analysis</b><span>Claude applies the Act to your facts</span></button>
+            <button type="button" data-mode="deep" aria-pressed="false" hidden><b>In-depth analysis</b><span>Most thorough, takes longer</span></button>
           </div>
         </div>
-        <div class="chips" id="examples" aria-label="Example scenarios"></div>
+        <div class="submit-row">
+          <span class="hint"><kbd>Ctrl</kbd> + <kbd>Enter</kbd> to submit</span>
+          <div class="acts">
+            <button type="button" class="btn" id="stop" hidden>Stop</button>
+            <button type="submit" class="btn primary big" id="go">Submit scenario <svg class="i"><use href="#i-send"/></svg></button>
+          </div>
+        </div>
+      </form>
+
+      <div class="results" id="results" aria-live="polite"></div>
+
+      <div class="examples" id="examples-wrap">
+        <h2>Try an example</h2>
+        <div class="ex-grid" id="examples"></div>
       </div>
-      <div class="thread" id="thread" aria-live="polite"></div>
-      <p class="note" id="ai-off" hidden>The live analyser isn't available in this view. The provision finder on the right still works, and the Worked cases tab has full analyses of common situations.</p>
     </div>
+
     <aside class="side">
-      <div class="panel">
-        <h3>Provision finder</h3>
-        <p class="note" style="margin:0 0 6px">Sections that match the words in your scenario. Updates as you type.</p>
-        <div id="finder"><p class="note">Type a scenario to see matching sections.</p></div>
+      <div class="card">
+        <h3><svg class="i"><use href="#i-search"/></svg>Matching sections</h3>
+        <p class="small muted">Updates as you type.</p>
+        <div id="finder" style="margin-top:6px"></div>
       </div>
-      <div class="panel">
-        <h3>How answers are grounded</h3>
-        <p class="note" style="margin:0">Each analysis is built from the section summaries in this hub, drawn from the Act as published by the OIC and Parliament. Section numbers are cited so you can check them against the gazetted text. This is a learning aid, not legal advice.</p>
+      <div class="card">
+        <h3><svg class="i"><use href="#i-globe"/></svg>Check live sources</h3>
+        <p class="small muted">Searches built from your scenario. Each opens in a new tab with today's results.</p>
+        <div id="sidelive" style="margin-top:8px"></div>
+      </div>
+      <div class="card">
+        <h3><svg class="i"><use href="#i-list"/></svg>Tips for a good answer</h3>
+        <ul class="steps-mini">
+          <li>Say who holds the data and whose data it is.</li>
+          <li>Name the kind of data (health, contact details, CCTV, ID numbers).</li>
+          <li>Say what happened or what you plan to do, and when.</li>
+          <li>Mention any other country or outside company involved.</li>
+        </ul>
       </div>
     </aside>
   </div>
@@ -288,12 +418,11 @@ footer .wrap{padding-block:18px}
 
 <!-- ACT -->
 <section class="view" id="v-act" hidden>
-  <h2 style="font-size:24px">The Act, section by section</h2>
-  <p class="lede">Plain-language summaries of every section, with the nearest GDPR provision and a good-practice note where it adds something. Select a Part or search across the whole Act.</p>
+  <div class="head"><div><h1>The Act, section by section</h1><p>Plain-language summaries of all 77 sections and the 2024 Regulations, each with the nearest GDPR provision.</p></div></div>
   <div class="explore">
-    <div class="parts" id="parts" role="group" aria-label="Parts of the Act"></div>
+    <div class="card parts" id="parts" role="group" aria-label="Parts of the Act"></div>
     <div style="min-width:0">
-      <input id="search" type="search" placeholder="Search sections, e.g. breach, consent, transfer, CCTV" aria-label="Search the Act">
+      <div class="search"><svg class="i"><use href="#i-search"/></svg><input id="search" type="search" placeholder="Search: breach, consent, CCTV, transfer, fees…" aria-label="Search the Act"></div>
       <div id="secs"></div>
     </div>
   </div>
@@ -301,37 +430,39 @@ footer .wrap{padding-block:18px}
 
 <!-- COMPARE -->
 <section class="view" id="v-compare" hidden>
-  <h2 style="font-size:24px">Where the DPA departs from the GDPR</h2>
-  <p class="lede">The DPA borrows its structure from the UK Data Protection Act 1998 and much of its substance from the GDPR, but several obligations are heavier in Jamaica. A GDPR-compliant programme is a good start, not a finished one.</p>
-  <div class="legend"><span class="delta stricter">DPA stricter</span><span class="delta similar">broadly aligned</span><span class="delta lighter">DPA lighter or narrower</span></div>
-  <div class="tbl-wrap"><table id="cmp"><thead><tr><th>Topic</th><th>Jamaica DPA 2020</th><th>EU GDPR</th><th>Difference</th></tr></thead><tbody></tbody></table></div>
+  <div class="head"><div><h1>DPA vs GDPR</h1><p>Where Jamaican law goes further than the GDPR, where it lines up, and where it is lighter. A GDPR programme is a good start, not a finished one.</p></div></div>
+  <div class="filter" id="cmpfilter" role="group" aria-label="Filter">
+    <button type="button" data-f="all" aria-pressed="true">All</button>
+    <button type="button" data-f="stricter" aria-pressed="false">DPA stricter</button>
+    <button type="button" data-f="similar" aria-pressed="false">Broadly aligned</button>
+    <button type="button" data-f="lighter" aria-pressed="false">DPA lighter</button>
+  </div>
+  <div class="cmp-list" id="cmp"></div>
 </section>
 
 <!-- REFERENCE -->
 <section class="view" id="v-reference" hidden>
-  <h2 style="font-size:24px">Deadlines, penalties and fees</h2>
-  <p class="lede">The numbers practitioners are asked about most. Money is in Jamaican dollars.</p>
-  <div class="status" id="status"></div>
+  <div class="head"><div><h1>Deadlines, penalties and fees</h1><p>The numbers people ask about most. Amounts are in Jamaican dollars.</p></div></div>
+  <div class="status"><svg class="i"><use href="#i-alert"/></svg><div><b>Current status.</b> The OIC has temporarily paused data controller registration for system updates and has said no liability for unregistered processing will be imposed while the system is offline. All other duties, including breach reporting and the annual DPIA, still apply. <span class="muted">Last checked 5 November 2026.</span><div style="margin-top:8px;display:flex;gap:14px;flex-wrap:wrap"><a href="https://www.oic.gov.jm/" target="_blank" rel="noopener">Check the OIC homepage now</a><a href="https://www.oic.gov.jm/press-releases" target="_blank" rel="noopener">OIC press releases</a><a href="https://www.oic.gov.jm/articles-and-news-stories" target="_blank" rel="noopener">OIC news</a></div></div></div>
   <div class="ref-grid">
-    <div class="panel"><h2>Statutory clocks</h2><div id="clocks"></div></div>
-    <div>
-      <div class="panel"><h2>Offences and penalties</h2><div id="pens"></div></div>
-      <div class="panel fees" style="margin-top:24px"><h2>Registration fees</h2>
-        <div class="tbl-wrap" style="border:0"><table><thead><tr><th>Controller type</th><th>First registration</th><th>Annual renewal</th></tr></thead>
-        <tbody><tr><td>Company or public authority</td><td class="mono">$25,000</td><td class="mono">$15,000</td></tr>
-        <tr><td>Partnership</td><td class="mono">$15,000</td><td class="mono">$10,000</td></tr>
-        <tr><td>Sole trader or individual</td><td class="mono">$7,500</td><td class="mono">$5,000</td></tr></tbody></table></div>
-        <p class="note">Certified copy of a register entry: $500 plus $100 per page. Particulars are re-submitted each year by 1 December and changes notified within 14 days (Registration Regulations).</p>
+    <div class="card"><h2><svg class="i"><use href="#i-clock"/></svg>Time limits</h2><div id="clocks"></div></div>
+    <div class="stack">
+      <div class="card"><h2><svg class="i"><use href="#i-alert"/></svg>Offences and penalties</h2><div id="pens"></div></div>
+      <div class="card"><h2>Registration fees</h2>
+        <div class="fee"><span>Company or public authority</span><span class="v">$25,000 · then $15,000 / yr</span></div>
+        <div class="fee"><span>Partnership</span><span class="v">$15,000 · then $10,000 / yr</span></div>
+        <div class="fee"><span>Sole trader or individual</span><span class="v">$7,500 · then $5,000 / yr</span></div>
+        <div class="fee"><span>Certified copy of register entry</span><span class="v">$500 + $100 / page</span></div>
+        <p class="small muted" style="margin-top:8px">Particulars re-filed by 1 December each year; changes within 14 days (Registration Regulations).</p>
       </div>
-      <div class="panel fees" style="margin-top:24px"><h2>Data subject and assessment fees</h2>
-        <div class="tbl-wrap" style="border:0"><table><thead><tr><th>Item</th><th>Fee</th></tr></thead>
-        <tbody><tr><td>Copy of personal data, electronic</td><td class="mono">Free</td></tr>
-        <tr><td>Copy of personal data, paper</td><td class="mono">$100 / page</td></tr>
-        <tr><td>Copy by audio or video</td><td class="mono">$1,000</td></tr>
-        <tr><td>Logic of automated decisions</td><td class="mono">$1,000 / 5 MB</td></tr>
-        <tr><td>Transmission to another controller</td><td class="mono">Free (electronic)</td></tr>
-        <tr><td>Commissioner's assessment, s.4(8)</td><td class="mono">$50,000</td></tr></tbody></table></div>
-        <p class="note">Data Protection Regulations, 2024, Second Schedule. Controllers may waive fees on written request (reg. 5).</p>
+      <div class="card"><h2>Data subject and assessment fees</h2>
+        <div class="fee"><span>Copy of personal data, electronic</span><span class="v">Free</span></div>
+        <div class="fee"><span>Copy of personal data, paper</span><span class="v">$100 / page</span></div>
+        <div class="fee"><span>Copy by audio or video</span><span class="v">$1,000</span></div>
+        <div class="fee"><span>Logic of automated decisions</span><span class="v">$1,000 / 5 MB</span></div>
+        <div class="fee"><span>Transmission to another controller</span><span class="v">Free</span></div>
+        <div class="fee"><span>Commissioner's assessment, s.4(8)</span><span class="v">$50,000</span></div>
+        <p class="small muted" style="margin-top:8px">Data Protection Regulations, 2024, Second Schedule. Fees may be waived on written request (reg. 5).</p>
       </div>
     </div>
   </div>
@@ -339,54 +470,48 @@ footer .wrap{padding-block:18px}
 
 <!-- CASES -->
 <section class="view" id="v-cases" hidden>
-  <h2 style="font-size:24px">Worked cases</h2>
-  <p class="lede">Common Jamaican situations worked through against the Act. Open a case for the analysis, or send it to the analyser to explore a variation.</p>
+  <div class="head"><div><h1>Worked cases</h1><p>Common Jamaican situations worked through against the Act. Open a case to read the analysis, or try your own variation.</p></div></div>
   <div class="cases" id="caselist"></div>
 </section>
 
-<!-- PRACTICE -->
+<!-- QUIZ -->
 <section class="view" id="v-practice" hidden>
-  <h2 style="font-size:24px">Practice quiz</h2>
-  <p class="lede">Twelve questions on the points most often misunderstood. Each answer cites the section or regulation.</p>
+  <div class="head"><div><h1>Practice quiz</h1><p>Twelve questions on the points most often misunderstood. Every answer cites the section or regulation.</p></div></div>
   <div class="quiz" id="quiz"></div>
 </section>
 
 <!-- SOURCES -->
 <section class="view" id="v-sources" hidden>
-  <div class="src">
-    <h2 style="font-size:24px;margin-top:0">Sources and how to use them</h2>
-    <p>Section and regulation summaries paraphrase the Data Protection Act, 2020 and the three 2024 Regulations as published by the Office of the Information Commissioner. Always confirm against the gazetted text before relying on a point.</p>
-    <h2>Primary law (Office of the Information Commissioner)</h2>
+  <div class="head"><div><h1>Sources</h1><p>Where the content comes from, and its limits.</p></div></div>
+  <div class="card src">
+    <h2>Primary law</h2>
+    <p>Section and regulation summaries paraphrase the official texts published by the Office of the Information Commissioner. Always confirm against the gazetted text before relying on a point.</p>
     <ul>
       <li><a href="https://www.oic.gov.jm/page/data-protection-act" target="_blank" rel="noopener">The Data Protection Act, 2020</a></li>
-      <li><a href="https://www.oic.gov.jm/page/data-protection-act-ministers-regulations-2024" target="_blank" rel="noopener">The Data Protection Regulations, 2024 (Minister's Regulations)</a></li>
+      <li><a href="https://www.oic.gov.jm/page/data-protection-act-ministers-regulations-2024" target="_blank" rel="noopener">The Data Protection Regulations, 2024</a></li>
       <li><a href="https://www.oic.gov.jm/publications/gazette/data-protection-data-controller-registration-regulations-2024" target="_blank" rel="noopener">Data Protection (Data Controller Registration) Regulations, 2024</a></li>
-      <li><a href="https://www.oic.gov.jm/publications/disposal-personal-data-regulations-2024" target="_blank" rel="noopener">Disposal of Personal Data Regulations, 2024</a></li>
+      <li><a href="https://www.oic.gov.jm/publications/disposal-personal-data-regulations-2024" target="_blank" rel="noopener">Data Protection (Disposal of Personal Data) Regulations, 2024</a></li>
       <li><a href="https://www.oic.gov.jm/page/data-protection-standards" target="_blank" rel="noopener">OIC: The Data Protection Standards</a></li>
-      <li><a href="https://japarliament.gov.jm/attachments/article/339/The%20Data%20Protection%20Act,%202020.pdf" target="_blank" rel="noopener">Parliament of Jamaica copy of the Act (PDF)</a></li>
     </ul>
     <h2>Comparative law and good practice</h2>
     <ul>
       <li><a href="https://eur-lex.europa.eu/eli/reg/2016/679/oj" target="_blank" rel="noopener">Regulation (EU) 2016/679, the GDPR</a></li>
-      <li><a href="https://www.edpb.europa.eu/our-work-tools/general-guidance/guidelines-recommendations-best-practices_en" target="_blank" rel="noopener">European Data Protection Board guidelines</a> (consent, breach notification, DPIAs, transfers)</li>
-      <li><a href="https://ico.org.uk/for-organisations/" target="_blank" rel="noopener">UK Information Commissioner's Office guidance</a>, the closest analogue given the DPA's UK lineage</li>
-      <li>ISO/IEC 27001 and ISO/IEC 27701 (information security and privacy information management)</li>
+      <li><a href="https://www.edpb.europa.eu/our-work-tools/general-guidance/guidelines-recommendations-best-practices_en" target="_blank" rel="noopener">European Data Protection Board guidelines</a></li>
+      <li><a href="https://ico.org.uk/for-organisations/" target="_blank" rel="noopener">UK Information Commissioner's Office guidance</a></li>
+      <li>ISO/IEC 27001 and ISO/IEC 27701</li>
       <li><a href="https://www.nist.gov/privacy-framework" target="_blank" rel="noopener">NIST Privacy Framework</a></li>
     </ul>
     <h2>Secondary commentary</h2>
     <ul>
-      <li><a href="https://practiceguides.chambers.com/practice-guides/data-protection-privacy-2026/jamaica" target="_blank" rel="noopener">Chambers, Data Protection &amp; Privacy 2026: Jamaica</a></li>
-      <li><a href="https://www.recordinglaw.com/world-laws/world-data-privacy-laws/jamaica-data-privacy-laws/" target="_blank" rel="noopener">RecordingLaw, Jamaica Data Privacy Laws guide</a></li>
-      <li><a href="https://jis.gov.jm/?p=356161" target="_blank" rel="noopener">JIS, Registration fees established for data controllers</a></li>
+      <li><a href="https://practiceguides.chambers.com/practice-guides/data-protection-privacy-2026/jamaica" target="_blank" rel="noopener">Chambers, Data Protection &amp; Privacy 2026: Jamaica</a> (source for the Morrison v Elephant Group case report)</li>
     </ul>
     <h2>Limits</h2>
-    <p>This hub is a learning and analysis aid. It does not replace the gazetted text, OIC guidance or legal advice. Section and regulation summaries were checked against the OIC copies of the Act, the Data Protection Regulations, 2024, the Data Controller Registration Regulations, 2024 and the Disposal of Personal Data Regulations, 2024 (Gazette, 17 September 2025). The only point resting on commentary is the Morrison v Elephant Group case report.</p>
+    <p>This hub is a learning aid. It does not replace the gazetted text, OIC guidance or legal advice. The instant guide matches your words to sections of the Act; it does not weigh facts the way a lawyer would. The written analysis is available when the hub is opened inside Claude. Live-source links open searches of official and news sites in a new tab; the hub itself does not fetch or summarise web pages.</p>
   </div>
 </section>
 
-</div>
-</main>
-<footer><div class="wrap">Built for learning about the Data Protection Act, 2020 of Jamaica. Not legal advice. Check every citation against the gazetted text published by the Office of the Information Commissioner.</div></footer>
+</div></main>
+<footer><div class="wrap">Learning aid on Jamaica's Data Protection Act, 2020 and its 2024 Regulations. Not legal advice. Check citations against the gazetted text published by the Office of the Information Commissioner.</div></footer>
 
 <script>
 /* ================= KNOWLEDGE BASE ================= */
@@ -576,11 +701,14 @@ const QUIZ = [
  {q:"What do the Disposal Regulations require when data is destroyed?",o:["Shredding by a licensed contractor","OIC notification","That it can no longer be processed or linked to the person, permanently","Deletion within 30 days of the purpose ending"],a:2,e:"Disposal Regs, reg. 2(2): disposal must prevent further processing or identification and be permanent having regard to foreseeable technology. The method is the controller's choice."}
 ];
 
+
 /* ================= HELPERS ================= */
 const $ = s => document.querySelector(s);
 const esc = t => String(t).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
-const secById = Object.fromEntries(S.map(x => [x.n, x]));
+const secById = Object.fromEntries([...S, ...REGS].map(x => [x.n, x]));
 function partOf(n){const i=parseInt(n,10);return PARTS.find(p=>p.r&&i>=p.r[0]&&i<=p.r[1]);}
+const refLabel = x => x.l ? x.l : "s."+x.n;
+function toast(msg){const t=document.createElement("div");t.className="toast";t.textContent=msg;document.body.append(t);setTimeout(()=>t.remove(),1800);}
 
 /* routing */
 const VIEWS = ["ask","act","compare","reference","cases","practice","sources"];
@@ -595,129 +723,265 @@ route();
 /* ================= ACT EXPLORER ================= */
 let curPart = "IV";
 function renderParts(){
-  $("#parts").innerHTML = PARTS.map(p => `<button type="button" data-p="${p.id}" aria-pressed="${p.id===curPart}"><span class="pn">${p.id==="R"?"REGS":"PART "+p.id}</span>${esc(p.t)}</button>`).join("");
+  $("#parts").innerHTML = PARTS.map(p => `<button type="button" data-p="${p.id}" aria-pressed="${p.id===curPart}"><span>${p.id==="R"?"REGULATIONS":"PART "+p.id}</span>${esc(p.t)}</button>`).join("");
 }
-function secHTML(x, isReg){
-  const num = isReg ? x.l : "s."+x.n;
-  return `<div class="sec" id="s-${x.n}">
-    <div class="sec-head"><span class="num"${isReg?' style="min-width:auto;font-size:12.5px"':""}>${esc(num)}</span><h3>${esc(x.h)}</h3></div>
-    <div class="sec-body"><p>${esc(x.s)}</p>
+function secHTML(x){
+  return `<article class="card sec" id="s-${x.n}">
+    <div class="sec-head"><span class="ref">${esc(refLabel(x))}</span><h3>${esc(x.h)}</h3></div>
+    <p>${esc(x.s)}</p>
     ${x.bp?`<div class="bp"><b>Good practice.</b> ${esc(x.bp)}</div>`:""}
-    <div class="sec-tags">${x.g?`<span class="tag-g">GDPR <b>${esc(x.g)}</b></span>`:""}
-    <button class="askthis" type="button" data-ask="${esc(isReg?x.h:"s."+x.n+" "+x.h)}">Ask how this applies</button></div></div></div>`;
+    <div class="sec-foot">${x.g?`<span class="g">GDPR: <b>${esc(x.g)}</b></span>`:""}
+    <button class="link" type="button" data-ask="${esc(refLabel(x)+" "+x.h)}">Ask how this applies <svg class="i"><use href="#i-send"/></svg></button></div></article>`;
 }
 function renderSecs(){
   const q = $("#search").value.trim().toLowerCase();
-  let html = "";
+  let html;
   if(q){
     const terms = q.split(/\s+/);
-    const hits = [...S.map(x=>[x,false]), ...REGS.map(x=>[x,true])].filter(([x]) => {
-      const hay = (x.n+" "+x.h+" "+x.s+" "+(x.k||"")+" "+(x.g||"")).toLowerCase();
+    const hits = [...S, ...REGS].filter(x => {
+      const hay = (refLabel(x)+" "+x.h+" "+x.s+" "+(x.k||"")+" "+(x.g||"")).toLowerCase();
       return terms.every(t => hay.includes(t));
     });
-    html = hits.length ? `<p class="note" style="margin-top:0">${hits.length} matching section${hits.length>1?"s":""}</p>`+hits.map(([x,r])=>secHTML(x,r)).join("") : `<p class="empty">No section matches “${esc(q)}”. Try a broader word such as breach, consent or transfer.</p>`;
+    html = hits.length ? `<p class="small muted" style="margin-bottom:10px">${hits.length} matching ${hits.length>1?"entries":"entry"}</p><div class="secs">${hits.map(secHTML).join("")}</div>`
+      : `<div class="card empty">No section matches “${esc(q)}”. Try a broader word such as breach, consent or transfer.</div>`;
   } else {
     const p = PARTS.find(p=>p.id===curPart);
-    const list = p.id==="R" ? REGS.map(x=>secHTML(x,true)) : S.filter(x=>partOf(x.n)===p).map(x=>secHTML(x,false));
-    html = `<div class="eyebrow">${p.id==="R"?"Subsidiary legislation":"Part "+p.id+" · ss."+p.r[0]+"–"+p.r[1]}</div><h3 class="part-title">${esc(p.t)}</h3><p class="part-blurb">${esc(p.b)}</p>`+list.join("");
+    const list = p.id==="R" ? REGS : S.filter(x=>partOf(x.n)===p);
+    html = `<div class="part-intro"><span class="label">${p.id==="R"?"Subsidiary legislation":"Part "+p.id+" · ss."+p.r[0]+"–"+p.r[1]}</span><h2>${esc(p.t)}</h2><p>${esc(p.b)}</p></div><div class="secs">${list.map(secHTML).join("")}</div>`;
   }
   $("#secs").innerHTML = html;
 }
 $("#parts").addEventListener("click", e => {const b=e.target.closest("button");if(!b)return;curPart=b.dataset.p;$("#search").value="";renderParts();renderSecs();});
 $("#search").addEventListener("input", renderSecs);
 renderParts(); renderSecs();
+function openSection(n){
+  curPart = n.startsWith("R") ? "R" : partOf(n).id;
+  $("#search").value=""; renderParts(); renderSecs();
+  location.hash="act";
+  setTimeout(()=>{const el=document.getElementById("s-"+n); if(el){el.scrollIntoView({block:"start",behavior:"smooth"}); el.classList.add("flash"); setTimeout(()=>el.classList.remove("flash"),1800);}},80);
+}
 
 /* ================= COMPARE / REFERENCE ================= */
-const DL = {stricter:"DPA stricter",similar:"broadly aligned",lighter:"DPA lighter"};
-$("#cmp tbody").innerHTML = CMP.map(r=>`<tr><td>${esc(r[0])}</td><td>${esc(r[1])}</td><td>${esc(r[2])}</td><td><span class="delta ${r[3]}">${DL[r[3]]}</span></td></tr>`).join("");
-$("#clocks").innerHTML = CLOCKS.map(c=>`<div class="clock"><div class="t">${esc(c[0])}</div><div class="w">${esc(c[1])} <span class="sref">${esc(c[2])}</span></div></div>`).join("");
-$("#pens").innerHTML = PENS.map(p=>`<div class="pen"><div>${esc(p[0])} <span class="sref">${esc(p[1])}</span></div><div class="amt">${esc(p[2])}${p[3]?`<small>${esc(p[3])}</small>`:""}</div></div>`).join("");
-$("#status").innerHTML = "<b>Current status.</b> The OIC has temporarily paused data controller registration for system updates and has advised that no liability for unregistered processing will be imposed while the system is offline. Every other obligation, including breach reporting and the annual DPIA, continues to apply.";
+const DL = {stricter:"DPA stricter",similar:"Broadly aligned",lighter:"DPA lighter"};
+let cmpF = "all";
+function renderCmp(){
+  $("#cmp").innerHTML = CMP.filter(r=>cmpF==="all"||r[3]===cmpF).map(r=>`<article class="card cmp"><div class="cmp-top"><h3>${esc(r[0])}</h3><span class="pill ${r[3]}">${DL[r[3]]}</span></div>
+  <div class="cmp-cols"><div><span class="label">Jamaica DPA</span><p>${esc(r[1])}</p></div><div><span class="label">EU GDPR</span><p class="muted">${esc(r[2])}</p></div></div></article>`).join("");
+}
+$("#cmpfilter").addEventListener("click", e=>{const b=e.target.closest("button");if(!b)return;cmpF=b.dataset.f;document.querySelectorAll("#cmpfilter button").forEach(x=>x.setAttribute("aria-pressed",x===b));renderCmp();});
+renderCmp();
+$("#clocks").innerHTML = CLOCKS.map(c=>`<div class="clock"><div class="t">${esc(c[0])}</div><div class="w">${esc(c[1])}<span class="ref">${esc(c[2])}</span></div></div>`).join("");
+$("#pens").innerHTML = PENS.map(p=>`<div class="pen"><div class="w">${esc(p[0])} <span class="ref">${esc(p[1])}</span></div><div class="amt">${esc(p[2])}${p[3]?`<small>${esc(p[3])}</small>`:""}</div></div>`).join("");
 
 /* ================= CASES ================= */
-$("#caselist").innerHTML = CASES.map((c,i)=>`<article class="panel case">
-  <span class="risk ${c.r}">${c.r==="high"?"High risk":c.r==="med"?"Moderate risk":"Lower risk"}</span>
+const RISK = {high:"High risk",med:"Moderate risk",low:"Lower risk"};
+$("#caselist").innerHTML = CASES.map((c,i)=>`<article class="card case" id="case-${i}">
+  <span class="risk ${c.r}">${RISK[c.r]}</span>
   <h3>${esc(c.t)}</h3><p class="facts">${esc(c.f)}</p>
-  <details><summary>Analysis</summary><ul>${c.a.map(x=>`<li>${esc(x)}</li>`).join("")}</ul></details>
-  <div class="foot"><button class="askthis" type="button" data-case="${i}">Explore a variation in the analyser</button></div></article>`).join("");
+  <details><summary>Read the analysis</summary><ul>${c.a.map(x=>`<li>${esc(x)}</li>`).join("")}</ul></details>
+  <div class="foot"><button class="link" type="button" data-case="${i}">Try a variation <svg class="i"><use href="#i-send"/></svg></button></div></article>`).join("");
 
 /* ================= QUIZ ================= */
 let qi = 0, score = 0;
 function renderQuiz(){
   if(qi >= QUIZ.length){
-    $("#quiz").innerHTML = `<div class="panel qcard"><div class="eyebrow">Result</div><h3 style="font-size:22px;margin:6px 0">${score} of ${QUIZ.length}</h3><p class="note">${score>=10?"Strong command of the Act.":score>=7?"Good grounding. Review the sections you missed in The Act tab.":"Worth another pass through Parts II and IV."}</p><button class="btn primary" id="qrestart" type="button">Start again</button></div>`;
+    $("#quiz").innerHTML = `<div class="card qcard"><span class="label">Your result</span><div class="score-big" style="margin:10px 0">${score}<span class="muted" style="font-size:28px"> / ${QUIZ.length}</span></div><p class="muted">${score>=10?"Strong command of the Act.":score>=7?"Good grounding. Review the ones you missed in The Act tab.":"Worth another pass through Parts II and IV."}</p><div style="margin-top:16px"><button class="btn primary" id="qrestart" type="button">Start again</button></div></div>`;
     $("#qrestart").onclick = () => {qi=0;score=0;renderQuiz();};
     return;
   }
   const x = QUIZ[qi];
-  $("#quiz").innerHTML = `<div class="qbar"><span class="eyebrow">Question ${qi+1} of ${QUIZ.length}</span><div class="track"><i style="width:${qi/QUIZ.length*100}%"></i></div><span class="eyebrow">Score ${score}</span></div>
-  <div class="panel qcard"><h3>${esc(x.q)}</h3><div class="opts">${x.o.map((o,j)=>`<button class="opt" type="button" data-j="${j}">${esc(o)}</button>`).join("")}</div><div id="qex"></div></div>`;
+  $("#quiz").innerHTML = `<div class="qbar"><span class="label">Question ${qi+1} of ${QUIZ.length}</span><div class="track"><i style="width:${qi/QUIZ.length*100}%"></i></div><span class="label">Score ${score}</span></div>
+  <div class="card qcard"><h2>${esc(x.q)}</h2><div class="opts">${x.o.map((o,j)=>`<button class="opt" type="button" data-j="${j}"><span class="k">${"ABCD"[j]}</span><span>${esc(o)}</span></button>`).join("")}</div><div id="qex"></div></div>`;
   $("#quiz .opts").onclick = e => {
-    const b = e.target.closest(".opt"); if(!b) return;
+    const b = e.target.closest(".opt"); if(!b || b.disabled) return;
     const j = +b.dataset.j;
     document.querySelectorAll("#quiz .opt").forEach((el,k)=>{el.disabled=true; if(k===x.a) el.classList.add("right"); else if(k===j) el.classList.add("wrong");});
     if(j===x.a) score++;
-    $("#qex").innerHTML = `<div class="explain"><b>${j===x.a?"Correct.":"Not quite."}</b> ${esc(x.e)}</div><div style="margin-top:12px"><button class="btn primary" id="qnext" type="button">${qi===QUIZ.length-1?"See result":"Next question"}</button></div>`;
+    $("#qex").innerHTML = `<div class="explain"><b>${j===x.a?"Correct.":"Not quite."}</b> ${esc(x.e)}</div><div style="margin-top:14px"><button class="btn primary" id="qnext" type="button">${qi===QUIZ.length-1?"See my result":"Next question"} <svg class="i"><use href="#i-send"/></svg></button></div>`;
     $("#qnext").onclick = () => {qi++;renderQuiz();};
   };
 }
 renderQuiz();
 
 /* ================= PROVISION FINDER ================= */
-const STOP = new Set("a an the and or of to in on for with is are be by at as it its this that what how must do does can we our i my they their from has have will would should if any when who which".split(" "));
-function findSections(text){
+const STOP = new Set("a an the and or of to in on for with is are be by at as it its this that what how must do does can we our i my they their from has have will would should if any when who which was were been there about into than then them these those also just data hold held years year".split(" "));
+function findSections(text, max=7){
   const words = text.toLowerCase().match(/[a-z0-9%]+/g) || [];
   const terms = [...new Set(words.filter(w=>w.length>2 && !STOP.has(w)))];
   if(!terms.length) return [];
-  const all = [...S.map(x=>({x,reg:false})), ...REGS.map(x=>({x,reg:true}))];
-  return all.map(o=>{
-    const k=(o.x.k||"").toLowerCase(), h=o.x.h.toLowerCase(), s=o.x.s.toLowerCase();
+  return [...S, ...REGS].map(x=>{
+    const k=(x.k||"").toLowerCase(), h=x.h.toLowerCase(), s=x.s.toLowerCase();
     let sc=0; terms.forEach(t=>{ if(k.includes(t)) sc+=3; if(h.includes(t)) sc+=2; if(s.includes(t)) sc+=0.5; });
-    return {...o,sc};
-  }).filter(o=>o.sc>=3).sort((a,b)=>b.sc-a.sc).slice(0,7);
+    return {x,sc};
+  }).filter(o=>o.sc>=3).sort((a,b)=>b.sc-a.sc).slice(0,max);
 }
 function renderFinder(){
+  if(typeof renderSideLive==="function" && window.__live) renderSideLive();
   const hits = findSections($("#q").value);
-  $("#finder").innerHTML = hits.length ? hits.map(o=>`<button class="finder-hit" type="button" data-go="${o.x.n}"><span class="sref">${o.reg?esc(o.x.l):"s."+o.x.n}</span><span class="h">${esc(o.x.h)}</span></button>`).join("") : `<p class="note">${$("#q").value.trim()?"No strong matches yet. Add detail such as the type of data or what went wrong.":"Type a scenario to see matching sections."}</p>`;
+  $("#finder").innerHTML = hits.length ? hits.map(o=>`<button class="hit" type="button" data-go="${o.x.n}"><span class="ref">${esc(refLabel(o.x))}</span><span class="h">${esc(o.x.h)}</span></button>`).join("")
+    : `<p class="small muted">${$("#q").value.trim()?"No strong matches yet. Add details such as the type of data or what went wrong.":"Start typing your scenario."}</p>`;
 }
 $("#q").addEventListener("input", renderFinder);
-$("#finder").addEventListener("click", e => {
-  const b = e.target.closest("[data-go]"); if(!b) return;
-  const n = b.dataset.go;
-  if(n.startsWith("R")) curPart="R"; else curPart = partOf(n).id;
-  $("#search").value=""; renderParts(); renderSecs();
-  location.hash="act";
-  setTimeout(()=>{const el=document.getElementById("s-"+n); if(el){el.scrollIntoView({block:"start"}); el.style.background="var(--gold-soft)"; setTimeout(()=>el.style.background="",1600);}},60);
+document.addEventListener("click", e => {
+  const g = e.target.closest("[data-go]"); if(g){ openSection(g.dataset.go); return; }
+  const a = e.target.closest("[data-ask]");
+  if(a){ $("#q").value = `How does ${a.dataset.ask} of the Data Protection Act apply in practice? Give an example and the main compliance steps.`; location.hash="ask"; renderFinder(); $("#q").focus(); return; }
+  const c = e.target.closest("[data-case]");
+  if(c){ const x=CASES[+c.dataset.case]; $("#q").value = `${x.f}\n\nWhat changes if: `; location.hash="ask"; renderFinder(); const t=$("#q"); t.focus(); t.setSelectionRange(t.value.length,t.value.length); }
 });
 
-/* ================= EXAMPLES / SEND TO ANALYSER ================= */
+/* ================= EXAMPLES ================= */
 const EXAMPLES = [
- "A school wants to post photos of students at sports day on Facebook. What does it need to do?",
+ "A medical lab discovers ransomware encrypted its patient database on Saturday night, and logs show files were copied out. What must it do and by when?",
  "An employee emailed a spreadsheet of 2,000 customers' TRNs to the wrong supplier. Is this reportable?",
- "Can a hotel keep guests' passport scans for five years?",
- "A US e-commerce site sells to Jamaicans but has no office here. Does the DPA apply?"
+ "A school wants to post photos of students from sports day on its Facebook page.",
+ "Can a hotel keep scans of guests' passports for five years?",
+ "We want to move our HR and payroll system to a cloud provider in the United States.",
+ "A customer asked for a copy of all the data we hold on them. How long do we have and can we charge?"
 ];
-$("#examples").innerHTML = EXAMPLES.map(x=>`<button class="chip" type="button">${esc(x)}</button>`).join("");
-$("#examples").addEventListener("click", e => {const b=e.target.closest(".chip"); if(!b) return; $("#q").value=b.textContent; renderFinder(); $("#q").focus();});
-document.addEventListener("click", e => {
-  const a = e.target.closest("[data-ask]");
-  if(a){ $("#q").value = `How does ${a.dataset.ask} of the Data Protection Act apply in practice? Give an example scenario and the main compliance steps.`; location.hash="ask"; renderFinder(); $("#q").focus(); return; }
-  const c = e.target.closest("[data-case]");
-  if(c){ const x=CASES[+c.dataset.case]; $("#q").value = `${x.f}\n\nVariation: [describe what is different]`; location.hash="ask"; renderFinder(); $("#q").focus(); }
-});
+$("#examples").innerHTML = EXAMPLES.map(x=>`<button class="ex" type="button"><svg class="i"><use href="#i-spark"/></svg><span>${esc(x)}</span></button>`).join("");
+$("#examples").addEventListener("click", e => {const b=e.target.closest(".ex"); if(!b) return; $("#q").value=b.textContent.trim(); renderFinder(); $("#q").focus(); $("#composer").scrollIntoView({block:"start",behavior:"smooth"});});
+$("#clear").onclick = () => { $("#q").value=""; renderFinder(); renderSideLive(); $("#q").focus(); };
+
+/* ================= INSTANT GUIDE (works offline) ================= */
+const TOPICS = [
+ {id:"breach",label:"Data breach or security incident",re:/breach|hack|ransom|leak|lost|stolen|phish|exposed|wrong (supplier|person|recipient|address|email)|emailed .* (wrong|incorrect)|unauthori[sz]ed access|malware|cyber|compromis|encrypted (our|their|the|its)/,secs:["21","30","R5"],
+  steps:["Contain the incident: isolate affected systems, revoke access, recall or delete misdirected data where possible.","Report to the Information Commissioner within 72 hours of becoming aware, using Form 7. There is no risk threshold and no weekend exclusion (s.21(3), reg. 10(1)).","Notify each affected person within 72 hours in writing: what happened and when, likely consequences, what you are doing, what they can do, and DPO contact details. Use a public notice only if direct contact would cause undue hardship or you lack contact details (reg. 10(4)–(7)).","Send any new findings to the OIC as an additional Form 7 report (reg. 10(2)–(3)).","Review security measures and processor contracts, and record the incident and your decisions (s.30)."],
+  cmp:["Breach notification"],clocks:["s.21(3), reg. 10","reg. 10(4)"]},
+ {id:"marketing",label:"Direct marketing",re:/market|promot|sms|newsletter|campaign|text message|bulk (text|sms|email)|whatsapp broadcast|donation|fundrais|advert|mailing list|bought (a )?list/,secs:["10","9","25","R3"],
+  steps:["Decide your route: consent, or the existing-customer route (s.10(1)).","For the customer route, check all three: details were obtained in a sale, you are marketing your own similar goods or services, and people could opt out free at collection and can in every message (s.10(4)).","Where consent is needed, ask only once, using Form 6 (s.10(2)–(3), reg. 7).","Put your identity and an opt-out contact in every message (s.10(5)).","Do not buy or use lists unless they were lawfully collected for this purpose (s.25, s.61)."],
+  cmp:["Direct marketing","Consent standard"]},
+ {id:"transfer",label:"Transfer outside Jamaica",re:/overseas|abroad|foreign|outside (of )?jamaica|united states|\busa?\b|canada|\buk\b|offshore|international transfer|cloud|aws|azure|google (drive|workspace)|microsoft 365|dropbox|server in/,secs:["31","30","16"],
+  steps:["Identify every country the data goes to, including where your providers store or access it.","Check adequacy for each destination, or rely on an exception such as contract performance, consent or Commissioner-approved terms (s.31).","Put a written processor contract in place: acts only on your instructions, with equivalent security duties (s.30(5)).","List the destinations and any foreign processors in your registration particulars (s.16, Registration Regs reg. 3(1)(l)).","Keep a transfer inventory and assessment on file."],
+  cmp:["International transfers"]},
+ {id:"access",label:"Request for access to data",re:/access request|subject access|dsar|copy of (all )?(my|the|their|his|her) (data|records|information|file)|copy of all|see (my|their) (data|file|records)|asked for (a copy|their data|all)|what data (you|we) hold/,secs:["6","8","7","R1","R2"],
+  steps:["Log the request and verify identity proportionately (s.8).","Respond within 30 days of the request and any fee (s.6(4)).","If the request is complex or high-volume, extend by up to 45 days, telling the requester in writing before day 30 (reg. 4(3)–(4)).","Charge only the regulated fees: electronic copies free, paper $100 a page, audio or video $1,000 (Regs, Second Schedule).","Withhold only what an exemption covers, and give any refusal in writing within 30 days (s.8(9))."],
+  cmp:["Access requests","Data portability"],clocks:["s.6(4)","reg. 4(3)–(4)"]},
+ {id:"objection",label:"Objection, deletion or correction",re:/delete|erase|remove (my|their|his|her)|stop (using|processing|contacting)|object|right to be forgotten|correct (my|their|the)|inaccurate|wrong (data|information|address|name)/,secs:["11","13","R9","44"],
+  steps:["Treat a written notice to stop processing as a formal request; reply in writing within 21 days saying whether and how you will comply (s.11(4)).","For correction requests, decide within 30 days, then correct or annotate, and tell recipients from the last 12 months where practicable (s.13).","Dispose of data that is no longer needed so it cannot be processed or linked to the person (Disposal Regs, reg. 2(2))."],
+  cmp:["Right to erasure"],clocks:["s.11(4)","s.13"]},
+ {id:"cctv",label:"CCTV or monitoring",re:/cctv|camera|video|surveillance|footage|monitor(ing)? (staff|employees|calls|email)|tracking|gps|dashcam|body ?cam/,secs:["22","23","26","28","R6"],
+  steps:["Identify the lawful condition; for security it is usually legitimate interests, which needs a written assessment (s.23, reg. 11(2)).","Limit coverage to what is necessary; avoid private areas and audio unless clearly justified (s.26).","Put up clear signs saying who is recording, why and who to contact (s.22, reg. 11(1)).","Set a short, documented retention period and dispose of footage securely (s.28, Disposal Regs).","Include the system in your annual DPIA (s.45)."],
+  cmp:["Legitimate interests"]},
+ {id:"sensitive",label:"Sensitive personal data",re:/health|medical|patient|clinic|hospital|doctor|pharmac|biometric|fingerprint|face recognition|genetic|religio|church|faith|union|criminal|police record|conviction|ethnic|race|sex life|mental/,secs:["24","20","2"],
+  steps:["Confirm a s.24 condition applies in addition to a s.23 condition; if relying on consent, it must be in writing (s.24).","Check whether you must appoint a DPO: any processing of sensitive or criminal data triggers it, unless you are a religious or similar non-profit (s.20(6)).","Declare sensitive data and the conditions relied on in your registration particulars (Registration Regs, reg. 3(1)(n)).","Apply stronger security, such as encryption and strict access control (s.30)."],
+  cmp:["Sensitive data","Data protection officer"]},
+ {id:"employment",label:"Employees or job applicants",re:/employee|staff|\bhr\b|payroll|applicant|recruit|hiring|job|background check|employer|worker|personnel/,secs:["23","24","22","26","42"],
+  steps:["Give staff and applicants a privacy notice explaining what you collect and why (s.22, reg. 11).","Identify a lawful condition for each purpose; employee consent is often not freely given, so prefer contract or legal obligation where they fit (s.9, s.23).","Collect only what the role or employment relationship needs (s.26).","Use a s.24 condition for health, union or criminal record data."],
+  cmp:["Lawful bases"]},
+ {id:"children",label:"Children's data",re:/child|children|student|school|minor|pupil|kid|teen|baby|infant|under 18/,secs:["5","22","9"],
+  steps:["A parent or guardian exercises the child's rights unless the law recognises the child's capacity (s.5); ask for proof such as a birth certificate (reg. 2).","Get parental consent before publishing photos or names, and explain how they will be used (s.9, s.22).","Use age-appropriate notices and default to the most private settings."],
+  cmp:["Children"]},
+ {id:"automated",label:"Automated decisions or AI",re:/\bai\b|artificial intelligence|algorithm|automated|scoring|credit score|machine learning|chatbot|profil/,secs:["12","45","8"],
+  steps:["Tell people when a significant decision is made solely by automated means; they may ask for reconsideration within 30 days, and you must respond within 30 days (s.12).","Be ready to explain the logic; the regulated fee is $1,000 per 5 MB (Regs, Second Schedule).","Declare solely automated decision-making in your registration particulars (Registration Regs, reg. 3(1)(o)) and cover it in the annual DPIA (s.45).","Keep a human reviewer who can change the outcome."],
+  cmp:["Automated decisions"],clocks:["s.12(4)"]},
+ {id:"retention",label:"Retention and disposal",re:/retain|retention|keep (it|them|data|records|scans|copies)|how long|dispos|destroy|shred|archive|for (\d+|five|ten|seven|three) years/,secs:["28","R9","26"],
+  steps:["Keep data only as long as needed for its purpose, a legal retention rule, legal claims or a recognised sector standard (s.28, Disposal Regs reg. 2(1)(a)).","Adopt a written retention and disposal policy with minimum and maximum periods (Disposal Regs, reg. 2(1)(b)).","Keep data used to make a decision about someone long enough for them to request access (reg. 2(1)(c)).","Dispose so the data cannot be processed or linked to the person, permanently (reg. 2(2))."],
+  cmp:["Right to erasure"]},
+ {id:"public",label:"Public authority",re:/ministry|government|agency|public authority|department|municipal|parish council|statutory body|public sector/,secs:["20","72","34"],
+  steps:["Appoint a DPO; every public authority must (s.20(6)(a)).","Register with the OIC like any other controller (s.15).","Note that a public authority cannot be prosecuted, but enforcement, assessment and information notices still apply (s.72(3), ss.44–49)."],
+  cmp:["Criminal liability"]},
+ {id:"registration",label:"Registration with the OIC",re:/register|registration|renew|annual fee|registration fee/,secs:["15","16","17","R8"],
+  steps:["Register before processing, unless exempt by Ministerial order (s.15).","Re-file particulars by 1 December each year and report changes within 14 days (Registration Regs, reg. 3).","Pay the fee for your type of controller; see the Deadlines tab."],
+  cmp:["Registration"]},
+ {id:"sharing",label:"Sharing or selling data",re:/share|sharing|sell|selling|disclos|third[- ]part|partner|vendor|supplier|give (the |our )?(data|list|records)|pass (it|them|data) (on|to)/,secs:["25","23","61","30"],
+  steps:["Check the new use is compatible with the purpose you collected the data for; if not, tell people and get consent (s.25).","Identify a lawful condition for the disclosure (s.23).","If the recipient processes on your behalf, sign a written processor contract (s.30(5)).","Never sell data obtained without the controller's consent; that is an offence (s.61)."],
+  cmp:["Lawful bases"]},
+ {id:"special",label:"Journalism or research",re:/journalis|media|newspaper|broadcast|reporter|research|survey|study|statistic|academic/,secs:["36","37"],
+  steps:["Journalism, literature and art intended for publication in the public interest are exempt from most standards except security (s.36).","Research is compatible with the original purpose if it does not support decisions about individuals or cause substantial damage or distress (s.37)."],
+  cmp:[]}
+];
+const ROLE_SECS = {"Public authority (ministry, agency)":["72","20"],"Data processor / service provider":["30"],"Individual (data subject)":["6","11","46","69"]};
+
+function guide(text, role){
+  const t = text.toLowerCase();
+  const topics = TOPICS.filter(x=>x.re.test(t));
+  const ids = [];
+  const add = n => { if(secById[n] && !ids.includes(n)) ids.push(n); };
+  topics.forEach(tp=>tp.secs.forEach(add));
+  (ROLE_SECS[role]||[]).forEach(add);
+  findSections(text,6).filter((o,i)=>!topics.length || (o.sc>=6 && i<2)).forEach(o=>add(o.x.n));
+  if(!topics.length && ids.length) add("22");
+  const provs = ids.slice(0,10).map(n=>secById[n]);
+  let steps = topics.flatMap(tp=>tp.steps);
+  if(role==="Individual (data subject)") steps = ["You can ask the organisation in writing for a copy of your data (s.6), to stop processing (s.11) or to correct it (s.13). Forms 2–5 in the Regulations can be used (reg. 3).","If the organisation does not respond properly, complain to the Information Commissioner (s.46), and consider a compensation claim if you suffered damage (s.69)."].concat(steps);
+  steps = [...new Set(steps)].slice(0,9);
+  const cmpRows = [...new Set(topics.flatMap(tp=>tp.cmp))].map(name=>CMP.find(r=>r[0]===name)).filter(Boolean).slice(0,4);
+  const refs = provs.map(refLabel);
+  const clocks = CLOCKS.filter(c=>refs.some(r=>c[2].includes(r)) || topics.some(tp=>(tp.clocks||[]).some(k=>c[2].includes(k)))).slice(0,6);
+  const caseHits = CASES.map((c,i)=>{const hay=(c.t+" "+c.f).toLowerCase(); const sc=topics.reduce((a,tp)=>a+(tp.re.test(hay)?1:0),0); return {i,sc};}).filter(o=>o.sc>0).sort((a,b)=>b.sc-a.sc).slice(0,2);
+  return {topics,provs,steps,cmpRows,clocks,caseHits,text};
+}
+
+/* ================= LIVE SOURCES ================= */
+const TOPIC_TERMS = {breach:"data breach notification",marketing:"direct marketing",transfer:"cross-border transfer",access:"access request",objection:"prevent processing erasure",cctv:"CCTV surveillance",sensitive:"sensitive personal data",employment:"employee data",children:"children's data",automated:"automated decision",retention:"retention disposal",public:"public authority",registration:"data controller registration",sharing:"data sharing",special:"journalism research"};
+const GDPR_TERMS = {breach:"personal data breach notification",marketing:"direct marketing",transfer:"international transfers",access:"right of access",objection:"right to erasure",cctv:"video devices",sensitive:"special categories",employment:"employment",children:"children",automated:"automated decision-making",retention:"storage limitation",public:"public authorities",registration:"records of processing",sharing:"data sharing",special:"research"};
+const CHANGES = {
+  registration:"Whether OIC registration has reopened, and any change to fees or deadlines.",
+  breach:"New OIC breach-reporting guidance or changes to Form 7 or the online portal.",
+  transfer:"Any Ministerial order designating adequate countries (s.31(5)) or Commissioner-approved transfer terms.",
+  automated:"New OIC or international guidance on AI and automated decisions.",
+  public:"Gazette notices on DPIA forms or classes needing a DPO.",
+  marketing:"OIC enforcement or guidance on marketing consent.",
+  employment:"New court decisions on employee and applicant data."
+};
+const GENERAL_CHANGES = ["New OIC guidance, Gazette notices or orders under the Act.","Court decisions applying the Act.","Whether the registration pause is still in place."];
+function keyTerms(text){
+  const words=(text.toLowerCase().match(/[a-z]+/g)||[]).filter(w=>w.length>3&&!STOP.has(w));
+  const freq={}; words.forEach(w=>freq[w]=(freq[w]||0)+1);
+  return Object.keys(freq).sort((a,b)=>freq[b]-freq[a]).slice(0,3).join(" ");
+}
+function liveLinks(text, topics){
+  const ids = (topics||TOPICS.filter(x=>x.re.test(text.toLowerCase()))).map(t=>t.id).slice(0,1);
+  const jm = ids.length ? ids.map(i=>TOPIC_TERMS[i]).join(" ") : keyTerms(text);
+  const eu = ids.length ? ids.map(i=>GDPR_TERMS[i]).join(" ") : keyTerms(text);
+  const g = q => "https://www.google.com/search?q="+encodeURIComponent(q);
+  const L = [
+    ["OIC website", "Guidance and notices on oic.gov.jm", g(`site:oic.gov.jm ${jm}`)],
+    ["Jamaican news", "Latest reporting on the Act", "https://news.google.com/search?q="+encodeURIComponent(`Jamaica "Data Protection Act" ${jm}`)+"&hl=en-JM&gl=JM&ceid=JM:en"],
+    ["Government notices", "JIS and the Gazette", g(`(site:jis.gov.jm OR site:moj.gov.jm OR site:japarliament.gov.jm) "data protection" ${jm}`)],
+    ["Jamaican court decisions", "Supreme Court judgments", g(`site:supremecourt.gov.jm "Data Protection Act" ${jm}`)],
+    ["EDPB guidance (GDPR)", "European Data Protection Board", g(`site:edpb.europa.eu guidelines ${eu}`)],
+    ["UK ICO guidance", "Closest model for the DPA", g(`site:ico.org.uk ${eu}`)]
+  ];
+  return `<div class="live-links">${L.map(([t,s,u])=>`<a href="${esc(u)}" target="_blank" rel="noopener"><b>${esc(t)} <svg class="i"><use href="#i-ext"/></svg></b><span>${esc(s)}</span></a>`).join("")}</div>`;
+}
+function liveBlock(text, topics){
+  const ids=(topics||[]).map(t=>t.id);
+  const ch=[...new Set(ids.map(i=>CHANGES[i]).filter(Boolean).concat(GENERAL_CHANGES))].slice(0,4);
+  return `<div class="live"><div class="live-head"><span class="dot"></span>Check what may have changed</div><p>The law in this hub was checked against the OIC texts on 5 November 2026. Before you rely on this answer, check today's sources for:</p><ul class="changes">${ch.map(c=>`<li>${esc(c)}</li>`).join("")}</ul>${liveLinks(text, topics)}</div>`;
+}
+function renderSideLive(){
+  const t=$("#q").value.trim();
+  $("#sidelive").innerHTML = t ? `<div class="live">${liveLinks(t)}</div>` : `<div class="live">${liveLinks("Jamaica data protection", [])}</div>`;
+}
+$("#q").addEventListener("input", renderSideLive);
+
+function guideHTML(g){
+  if(!g.provs.length) return `<p>I couldn't match this to specific sections yet. Add a little more detail: what kind of data is involved, who holds it, and what happened or is planned. You can also browse <button class="link" type="button" onclick="location.hash='act'">The Act</button>.</p>`;
+  let h = "";
+  if(g.topics.length) h += `<h2>Issues spotted</h2><div class="chips">${g.topics.map(t=>`<span class="chip">${esc(t.label)}</span>`).join("")}</div>`;
+  h += `<h2>Sections that apply</h2>${g.provs.map((x,i)=>`<details class="prov"${i<2?" open":""}><summary><span class="ref">${esc(refLabel(x))}</span><span>${esc(x.h)}</span></summary><p>${esc(x.s)}</p>${x.g?`<p class="g">GDPR: ${esc(x.g)}</p>`:""}<p><button class="link" type="button" data-go="${x.n}">Open in The Act</button></p></details>`).join("")}`;
+  if(g.steps.length) h += `<h2>What to do</h2><ol class="todo">${g.steps.map(s=>`<li>${esc(s)}</li>`).join("")}</ol>`;
+  if(g.clocks.length) h += `<h2>Time limits</h2><dl class="dl">${g.clocks.map(c=>`<dt>${esc(c[0])}</dt><dd>${esc(c[1])} <span class="ref">${esc(c[2])}</span></dd>`).join("")}</dl>`;
+  if(g.cmpRows.length) h += `<h2>How the GDPR compares</h2>${g.cmpRows.map(r=>`<div class="cmp-mini"><b>${esc(r[0])} · ${DL[r[3]]}</b>DPA: ${esc(r[1])}<br><span class="muted">GDPR: ${esc(r[2])}</span></div>`).join("")}`;
+  if(g.caseHits.length) h += `<h2>Similar worked cases</h2><div class="chips">${g.caseHits.map(o=>`<button class="chip" type="button" style="cursor:pointer" data-opencase="${o.i}">${esc(CASES[o.i].t)}</button>`).join("")}</div>`;
+  h += liveBlock(g.text||"", g.topics);
+  return h;
+}
+document.addEventListener("click", e=>{const b=e.target.closest("[data-opencase]"); if(!b) return; location.hash="cases"; setTimeout(()=>{const el=document.getElementById("case-"+b.dataset.opencase); if(el){el.querySelector("details").open=true; el.scrollIntoView({block:"start",behavior:"smooth"});}},80);});
 
 /* ================= MARKDOWN (small, safe) ================= */
 function inline(t){
   return esc(t).replace(/\*\*(.+?)\*\*/g,"<strong>$1</strong>").replace(/`([^`]+)`/g,"<code>$1</code>")
-    .replace(/(^|[\s(])(ss?\.\s?\d+[A-Z]?(?:\(\d+\))*(?:\([a-z]\))?)/g,'$1<code>$2</code>');
+    .replace(/(^|[\s(])((?:ss?|reg|regs)\.\s?\d+[A-Z]?(?:\(\d+\))*(?:\([a-z]\))?)/g,'$1<code>$2</code>');
 }
 function md(src){
   const lines = src.replace(/\r/g,"").split("\n"); let out="", list=null, para=[];
   const flushP=()=>{ if(para.length){ out+="<p>"+inline(para.join(" "))+"</p>"; para=[]; } };
   const flushL=()=>{ if(list){ out+=`</${list}>`; list=null; } };
   for(const raw of lines){
-    const l = raw.trimEnd();
-    let m;
+    const l = raw.trimEnd(); let m;
     if(!l.trim()){ flushP(); flushL(); continue; }
     if(m=l.match(/^#{1,2}\s+(.*)/)){ flushP(); flushL(); out+="<h2>"+inline(m[1])+"</h2>"; continue; }
     if(m=l.match(/^#{3,6}\s+(.*)/)){ flushP(); flushL(); out+="<h3>"+inline(m[1])+"</h3>"; continue; }
@@ -729,16 +993,16 @@ function md(src){
   flushP(); flushL(); return out;
 }
 
-/* ================= ANALYSER ================= */
+/* ================= CLAUDE ANALYSIS (inside Claude only) ================= */
 function kbText(){
   const secs = S.map(x=>`s.${x.n} ${x.h}: ${x.s}${x.g?" [GDPR: "+x.g+"]":""}`).join("\n");
   const regs = REGS.map(x=>`${x.l} ${x.h}: ${x.s}`).join("\n");
   const cmp = CMP.map(r=>`${r[0]} — DPA: ${r[1]} GDPR: ${r[2]}`).join("\n");
-  return `JAMAICA DATA PROTECTION ACT, 2020 — SECTION SUMMARIES\n${secs}\n\n2024 REGULATIONS\n${regs}\n\nDPA vs GDPR KEY DIFFERENCES\n${cmp}\n\nSTATUS NOTE: The OIC has paused data controller registration for system updates and said no liability for unregistered processing will be imposed while the system is offline. Case law: Morrison v Elephant Group Ltd (t/a Centerfield Jamaica), Supreme Court, held confidential pre-employment background checks were permissible processing.`;
+  return `JAMAICA DATA PROTECTION ACT, 2020 — SECTION SUMMARIES\n${secs}\n\n2024 REGULATIONS\n${regs}\n\nDPA vs GDPR KEY DIFFERENCES\n${cmp}\n\nSTATUS NOTE: The OIC has paused data controller registration for system updates and said no liability for unregistered processing will be imposed while the system is offline. Case law (as reported by Chambers): Morrison v Elephant Group Ltd (t/a Centerfield Jamaica), Supreme Court, held confidential pre-employment background checks were permissible processing.`;
 }
 const RULES = () => `You are a data protection analyst teaching and advising on Jamaica's Data Protection Act, 2020 (DPA) and its 2024 Regulations.
 
-Ground every statement about Jamaican law in the KNOWLEDGE BASE below and cite section numbers in the form s.21(3) or reg. 10(4). If the knowledge base lacks a detail (for example the exact wording of a Schedule), say so and tell the reader to check the gazetted text on oic.gov.jm. Never invent section numbers, figures or OIC guidance. You may draw on your general knowledge of the EU GDPR, EDPB and UK ICO guidance, ISO/IEC 27001/27701 and the NIST Privacy Framework for the comparison and good-practice parts, naming the article or framework.
+Ground every statement about Jamaican law in the KNOWLEDGE BASE below and cite section numbers in the form s.21(3) or reg. 10(4). If the knowledge base lacks a detail, say so and tell the reader to check the gazetted text on oic.gov.jm. Never invent section numbers, figures or OIC guidance. You may draw on your general knowledge of the EU GDPR, EDPB and UK ICO guidance, ISO/IEC 27001/27701 and the NIST Privacy Framework for the comparison and good-practice parts, naming the article or framework.
 
 Answer using exactly these markdown headings, in this order:
 ## Short answer
@@ -756,69 +1020,93 @@ Answer using exactly these markdown headings, in this order:
 ## Gaps and assumptions
 (facts you assumed, points needing the full text or legal advice)
 
-Use plain English. No tables. Keep it focused on the facts given. If the question is a follow-up, answer it directly but keep citing sections; you may drop headings that do not fit a short follow-up.
+Under "Gaps and assumptions", also name any point that may have changed since 5 November 2026 (for example OIC guidance, Gazette notices, adequacy orders, court decisions or the registration pause) so the reader knows what to check in live sources. You cannot browse, so never claim to have checked anything online. Use plain English. No tables. Keep it focused on the facts given. If the question is a follow-up, answer it directly but keep citing sections; you may drop headings that do not fit a short follow-up.
 
 KNOWLEDGE BASE
 ${kbText()}`;
 
-let sample = null, turns = [], ctl = null, deep = false, busy = false;
-$("#d-std").onclick = () => { deep=false; $("#d-std").setAttribute("aria-pressed","true"); $("#d-deep").setAttribute("aria-pressed","false"); };
-$("#d-deep").onclick = () => { deep=true; $("#d-deep").setAttribute("aria-pressed","true"); $("#d-std").setAttribute("aria-pressed","false"); };
+let sample = null, turns = [], ctl = null, mode = "guide", busy = false;
+const segBtns = [...document.querySelectorAll(".seg button")];
+segBtns.forEach(b=>b.onclick=()=>{ mode=b.dataset.mode; segBtns.forEach(x=>x.setAttribute("aria-pressed", x===b)); });
 
 const ERR = {
-  not_granted:"The analyser needs your permission to use Claude. Reload the page and allow it to try again.",
-  sampling_disabled:"Claude isn't available on this account, so the analyser is off. The provision finder and worked cases still work.",
-  rate_limited:"Too many questions in a short time. Wait a minute, then press Analyse again.",
-  session_expired:"Your session has expired. Sign in again, then retry.",
+  not_granted:"Claude wasn't given permission on this page, so the written analysis is off. The instant guide still works.",
+  sampling_disabled:"Claude isn't available on this account, so the written analysis is off. The instant guide still works.",
+  rate_limited:"Too many questions in a short time. Wait a minute, then submit again.",
+  session_expired:"Your session has expired. Sign in again, then submit.",
   refused:"Claude declined this question. Rephrase it as a data protection scenario and try again.",
-  prompt_too_large:"The conversation is too long. Start a new question.",
+  prompt_too_large:"The conversation is too long. Clear the results and start a new question.",
   empty_completion:"No answer came back. Try rewording the question."
 };
 const HIDE = new Set(["not_granted","sampling_disabled","not_declared","capability_disabled","capability_removed"]);
+function disableClaude(){ segBtns.filter(b=>b.dataset.mode!=="guide").forEach(b=>b.hidden=true); segBtns[0].click(); }
 
 function setBusy(b){
   busy=b; $("#go").disabled=b; $("#stop").hidden=!b;
-  $("#go").textContent = b ? "Analysing…" : (turns.length ? "Ask follow-up" : "Analyse");
-  $("#newthread").hidden = b || !turns.length;
+  $("#go").innerHTML = b ? "Working…" : `Submit scenario <svg class="i"><use href="#i-send"/></svg>`;
 }
+function answerShell(q, ctx, badge, alt){
+  const qEl = document.createElement("div"); qEl.className="q-bubble"; qEl.textContent=q;
+  const small = document.createElement("small"); small.textContent = ctx; qEl.append(small);
+  const aEl = document.createElement("article"); aEl.className="card ans";
+  aEl.innerHTML = `<div class="ans-head"><span class="badge${alt?" alt":""}"><svg class="i"><use href="#${alt?"i-spark":"i-bolt"}"/></svg>${badge}</span><button class="btn ghost small" type="button" data-copy><svg class="i"><use href="#i-copy"/></svg>Copy</button></div><div class="md" data-body></div><div class="ans-foot"><span>Learning aid, not legal advice. Check citations against the gazetted text.</span></div>`;
+  $("#results").prepend(aEl); $("#results").prepend(qEl);
+  $("#examples-wrap").hidden = true;
+  qEl.scrollIntoView({block:"start",behavior:"smooth"});
+  return aEl.querySelector("[data-body]");
+}
+document.addEventListener("click", async e=>{
+  const b=e.target.closest("[data-copy]"); if(!b) return;
+  const text = b.closest(".ans").querySelector("[data-body]").innerText;
+  try{ await navigator.clipboard.writeText(text); toast("Copied"); }
+  catch(_){ const r=document.createRange(); r.selectNodeContents(b.closest(".ans").querySelector("[data-body]")); const s=getSelection(); s.removeAllRanges(); s.addRange(r); toast("Selected — press Ctrl+C to copy"); }
+});
 
-async function ask(){
-  const q = $("#q").value.trim(); if(!q || busy || !sample) return;
-  const context = `[Asker: ${$("#role").value}. Sector: ${$("#sector").value}.]\n`;
-  const qEl = document.createElement("div"); qEl.className="msg-q"; qEl.textContent=q;
-  const aEl = document.createElement("div"); aEl.className="panel answer";
-  aEl.innerHTML = `<div class="meta"><span class="eyebrow">Analysis</span><span class="note" data-m></span></div><div class="md"><p class="thinking">Reading the Act and working through the facts… In-depth answers can take a minute.</p></div>`;
-  $("#thread").append(qEl, aEl);
-  const body = aEl.querySelector(".md");
-  turns.push({role:"user", content: context + q});
-  $("#q").value=""; renderFinder();
+async function submit(){
+  const q = $("#q").value.trim();
+  if(!q){ $("#q").focus(); toast("Describe your scenario first"); return; }
+  if(busy) return;
+  const role = $("#role").value, sector = $("#sector").value;
+  const ctx = `${role} · ${sector}`;
+  if(mode==="guide" || !sample){
+    const body = answerShell(q, ctx, "Instant guide", false);
+    body.innerHTML = guideHTML(guide(q+" "+sector, role));
+    return;
+  }
+  const body = answerShell(q, ctx, mode==="deep"?"In-depth analysis":"Written analysis", true);
+  body.innerHTML = `<div class="thinking"><span class="dots"><i></i><i></i><i></i></span>Reading the Act and working through your facts${mode==="deep"?". In-depth answers can take a minute or two.":"…"}</div>`;
+  turns.push({role:"user", content:`[Asker: ${role}. Sector: ${sector}.]\n${q}`});
   ctl = new AbortController(); setBusy(true);
   try{
     const r = await sample([{role:"user",content:RULES()}, ...turns.slice(-8)], {
-      signal: ctl.signal, cache:false, modelTier: deep ? "complex" : "default",
+      signal: ctl.signal, cache:false, modelTier: mode==="deep" ? "complex" : "default",
       onText: ({text}) => { body.innerHTML = md(text); }
     });
     turns.push({role:"assistant", content:r.text});
-    body.innerHTML = md(r.text);
-    aEl.querySelector("[data-m]").textContent = r.truncated ? "Cut short. Ask for one part at a time." : "Learning aid, not legal advice";
+    body.innerHTML = md(r.text) + (r.truncated?'<p class="small muted">The answer was cut short. Ask about one part at a time.</p>':"") + liveBlock(q, TOPICS.filter(x=>x.re.test(q.toLowerCase())));
   }catch(e){
     turns.pop();
-    if(e && e.code==="cancelled"){ body.innerHTML = e.text ? md(e.text)+'<p class="note">Stopped.</p>' : '<p class="note">Stopped.</p>'; }
-    else if(e && HIDE.has(e.code)){ body.innerHTML = `<p class="err">${esc(ERR[e.code]||"The analyser isn't available in this view.")}</p>`; $("#go").hidden=true; $("#ai-off").hidden=false; }
-    else { body.innerHTML = (e&&e.text?md(e.text):"") + `<p class="err">${esc(ERR[e&&e.code]||"The connection dropped before the answer finished. Press Analyse to try again.")}</p>`; }
+    if(e && e.code==="cancelled"){ body.innerHTML = (e.text?md(e.text):"")+'<p class="small muted">Stopped.</p>'; }
+    else if(e && HIDE.has(e.code)){ disableClaude(); body.innerHTML = `<p class="err">${esc(ERR[e.code]||"The written analysis isn't available here.")}</p>` + guideHTML(guide(q+" "+sector, role)); }
+    else { body.innerHTML = (e&&e.text?md(e.text):"") + `<p class="err">${esc(ERR[e&&e.code]||"The connection dropped before the answer finished. Submit again to retry.")}</p>`; }
   }finally{ setBusy(false); }
 }
-$("#go").onclick = ask;
+$("#composer").addEventListener("submit", e => { e.preventDefault(); submit(); });
 $("#stop").onclick = () => ctl && ctl.abort();
-$("#newthread").onclick = () => { turns=[]; $("#thread").innerHTML=""; setBusy(false); $("#q").focus(); };
-$("#q").addEventListener("keydown", e => { if(e.key==="Enter" && (e.metaKey||e.ctrlKey)) ask(); });
+$("#q").addEventListener("keydown", e => { if(e.key==="Enter" && (e.metaKey||e.ctrlKey)){ e.preventDefault(); submit(); } });
 
 (async () => {
-  try{ sample = window.claude ? await window.claude.use("sample") : null; }catch(_){ sample=null; }
-  if(!sample){ $("#go").hidden=true; $("#ai-off").hidden=false; }
+  try{ sample = (window.claude && window.claude.use) ? await window.claude.use("sample") : null; }catch(_){ sample=null; }
+  if(sample){ segBtns.forEach(b=>b.hidden=false); }
 })();
 
-/* sample text in the composer so the first view shows the tool working */
-$("#q").value = "A medical lab in Montego Bay discovers on Saturday night that ransomware has encrypted its patient database. Backups exist, but logs show files were copied out. What must it do, and by when?";
-renderFinder();
+window.__live=true; renderFinder();
+/* first view: show the guide working on a sample scenario */
+(function(){
+  const sampleQ = "Sample: A medical lab discovers on Saturday night that ransomware has encrypted its patient database, and logs show files were copied out.";
+  const body = answerShell(sampleQ, "Private-sector organisation · Health", "Instant guide · example", false);
+  body.innerHTML = guideHTML(guide(sampleQ+" Health","Private-sector organisation"));
+  $("#examples-wrap").hidden = false;
+  window.scrollTo(0,0);
+})();
 </script>
